@@ -1,9 +1,12 @@
+// functions/api/auth.js
 export async function onRequest(context) {
   const url = new URL(context.request.url);
   const path = url.pathname;
+
   const client_id = context.env.GITHUB_CLIENT_ID;
   const client_secret = context.env.GITHUB_CLIENT_SECRET;
 
+  // Stap 1: redirect naar GitHub OAuth
   if (path.endsWith("/api/auth") || path.endsWith("/api/auth/")) {
     const redirect = new URL("https://github.com/login/oauth/authorize");
     redirect.searchParams.set("client_id", client_id);
@@ -12,29 +15,38 @@ export async function onRequest(context) {
     return Response.redirect(redirect.toString(), 302);
   }
 
+  // Stap 2: callback -> token ophalen
   if (path.endsWith("/api/auth/callback")) {
     const code = url.searchParams.get("code");
     if (!code) return new Response("Missing code", { status: 400 });
+
     const tokenRes = await fetch("https://github.com/login/oauth/access_token", {
       method: "POST",
-      headers: { "Accept": "application/json", "Content-Type": "application/json" },
-      body: JSON.stringify({ client_id, client_secret, code })
+      headers: { Accept: "application/json", "Content-Type": "application/json" },
+      body: JSON.stringify({ client_id, client_secret, code }),
     });
+
     const tokenJson = await tokenRes.json();
     if (!tokenJson.access_token) {
-      return new Response(JSON.stringify(tokenJson), { status: 400, headers: { "Content-Type":"application/json" } });
+      return new Response(JSON.stringify(tokenJson), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
     }
-    const html = `<!doctype html><html><body><script>
-      (function(){
-        if(window.opener){
-          window.opener.postMessage(${JSON.stringify({token:"${"${tokenJson.access_token}"}"})},"*");
-          window.close();
-        } else {
-          document.body.innerText = 'Login gelukt. Sluit dit venster.';
-        }
-      })();
-    </script></body></html>`;
-    return new Response(html, { headers: { "Content-Type":"text/html" } });
+
+    // Geen geneste template strings meer
+    const tokenLiteral = JSON.stringify(tokenJson.access_token);
+    const html =
+      "<!doctype html><html><body><script>" +
+      "(function(){ " +
+      "var token = " + tokenLiteral + "; " +
+      "var msg = { token: token }; " +
+      "if (window.opener) { window.opener.postMessage(msg, '*'); window.close(); } " +
+      "else { document.body.textContent = 'Login gelukt. Je kunt dit venster sluiten.'; }" +
+      "})();" +
+      "</script></body></html>";
+
+    return new Response(html, { headers: { "Content-Type": "text/html" } });
   }
 
   return new Response("Not found", { status: 404 });
