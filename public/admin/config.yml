@@ -1,0 +1,41 @@
+backend:
+  name: github
+  repo: 070stickershop/070stickershopnl
+  branch: main
+  auth_scope: repo
+  auth_endpoint: /api/auth
+
+media_folder: "public/img/uploads"
+public_folder: "/img/uploads"
+
+publish_mode: editorial_workflow
+
+collections:
+  - name: "products"
+    label: "Producten"
+    files:
+      - file: "public/products.json"
+        label: "Productenlijst"
+        name: "products_json"
+        editor: { preview: false }
+        fields:
+          - label: "Producten"
+            name: "items"
+            widget: list
+            collapsed: true
+            summary: "{{fields.title}} ({{fields.id}})"
+            fields:
+              - { label: "ID", name: "id", widget: "string" }
+              - { label: "Titel", name: "title", widget: "string" }
+              - { label: "Afbeelding", name: "img", widget: "image" }
+              - label: "Varianten"
+                name: "variants"
+                widget: list
+                fields:
+                  - { label: "Variant ID", name: "id", widget: "string" }
+                  - { label: "Label", name: "label", widget: "string" }
+                  - { label: "Prijs (EUR)", name: "price", widget: number, value_type: float, min: 0 }
+              - { label: "Tags (optioneel)", name: "tags", widget: list, required: false }
+              - { label: "Groep (optioneel)", name: "group", widget: "string", required: false }
+              - { label: "Badge (optioneel)", name: "badge", widget: "string", required: false }
+              - { label: "Extra (optioneel)", name: "extra", widget: "text", required: false }
