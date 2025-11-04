@@ -6,7 +6,7 @@ export async function onRequest(context) {
   const client_id = context.env.GITHUB_CLIENT_ID;
   const client_secret = context.env.GITHUB_CLIENT_SECRET;
 
-  // Stap 1: redirect naar GitHub OAuth
+  // Start OAuth: redirect naar GitHub
   if (path.endsWith("/api/auth") || path.endsWith("/api/auth/")) {
     const redirect = new URL("https://github.com/login/oauth/authorize");
     redirect.searchParams.set("client_id", client_id);
@@ -15,7 +15,7 @@ export async function onRequest(context) {
     return Response.redirect(redirect.toString(), 302);
   }
 
-  // Stap 2: callback -> token ophalen
+  // Callback: code -> access_token
   if (path.endsWith("/api/auth/callback")) {
     const code = url.searchParams.get("code");
     if (!code) return new Response("Missing code", { status: 400 });
@@ -34,7 +34,7 @@ export async function onRequest(context) {
       });
     }
 
-    // Geen geneste template strings meer
+    // Token zonder geneste template strings
     const tokenLiteral = JSON.stringify(tokenJson.access_token);
     const html =
       "<!doctype html><html><body><script>" +
