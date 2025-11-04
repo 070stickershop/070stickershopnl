@@ -2,33 +2,39 @@ backend:
   name: github
   repo: 070stickershop/070stickershopnl
   branch: main
-  base_url: https://070stickershop.nl
   auth_endpoint: /api/auth
 
 media_folder: "public/img/uploads"
 public_folder: "/img/uploads"
 
+publish_mode: editorial_workflow
+
 collections:
   - name: "products"
     label: "Producten"
-    label_singular: "Product"
-    folder: "public/products"
-    create: true
-    slug: "{{slug}}"
-    extension: "json"
-    format: "json"
-    fields:
-      - { label: "ID", name: "id", widget: "string" }
-      - { label: "Titel", name: "title", widget: "string" }
-      - { label: "Afbeelding", name: "img", widget: "image" }
-      - { label: "Tags", name: "tags", widget: "list" }
-      - { label: "Badge", name: "badge", widget: "string", required: false }
-      - { label: "Extra info", name: "extra", widget: "string", required: false }
-      - { label: "Groep", name: "group", widget: "select", options: ["normaal", "xxl", "a4", "accessoires"] }
-      - label: "Varianten"
-        name: "variants"
-        widget: "list"
+    files:
+      - file: "public/products.json"
+        label: "Productenlijst"
+        name: "products_json"
+        editor: { preview: false }
         fields:
-          - { label: "ID", name: "id", widget: "string" }
-          - { label: "Label", name: "label", widget: "string" }
-          - { label: "Prijs (€)", name: "price", widget: "number", value_type: "float" }
+          - label: "Producten"
+            name: "items"
+            widget: list
+            collapsed: true
+            summary: "{{fields.title}} ({{fields.id}})"
+            fields:
+              - { label: "ID", name: "id", widget: "string" }
+              - { label: "Titel", name: "title", widget: "string" }
+              - { label: "Afbeelding", name: "img", widget: "image" }
+              - label: "Varianten"
+                name: "variants"
+                widget: list
+                fields:
+                  - { label: "Variant ID", name: "id", widget: "string" }
+                  - { label: "Label", name: "label", widget: "string" }
+                  - { label: "Prijs (EUR)", name: "price", widget: number, value_type: float, min: 0 }
+              - { label: "Tags (optioneel)", name: "tags", widget: list, required: false }
+              - { label: "Groep (optioneel)", name: "group", widget: "select", options: ["normaal", "xxl", "a4", "accessoires"], required: false }
+              - { label: "Badge (optioneel)", name: "badge", widget: "string", required: false }
+              - { label: "Extra (optioneel)", name: "extra", widget: "text", required: false }
