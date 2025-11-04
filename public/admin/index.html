@@ -1,29 +1,75 @@
 <!doctype html>
 <html lang="nl">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>070 Stickershop CMS</title>
-    <meta name="robots" content="noindex">
+    <meta name="robots" content="noindex" />
+    <style>body{font-family:system-ui,Segoe UI,Arial,sans-serif;padding:24px}</style>
   </head>
   <body>
-    <h2 style="font-family:sans-serif;text-align:center;margin-top:50px">
-      CMS aan het laden...
-    </h2>
+    <h2>CMS laad...</h2>
+    <pre id="log" style="color:#555"></pre>
 
-    <!-- Gebruik oudere stabiele Decap CMS versie -->
-<script data-cfasync="false" src="https://cdn.jsdelivr.net/npm/decap-cms@2.15.72/dist/decap-cms.js"></script>
+    <script>
+      (async function () {
+        const logEl = document.getElementById('log');
+        const log = (...a) => (logEl.textContent += a.join(' ') + '\n');
 
-    <!-- Init slechts één keer -->
-    <script data-cfasync="false">
-      window.addEventListener("load", function() {
-        if (window.CMS && !window.__CMS_INITED__) {
-          window.__CMS_INITED__ = true;
-          CMS.init({ configPath: "/admin/config.yml" });
-        } else {
-          console.error("Decap CMS kon niet worden geladen.");
+        // 1) Kies een CDN bron (meerdere fallbacks)
+        const sources = [
+          "https://cdnjs.cloudflare.com/ajax/libs/decap-cms/2.15.72/decap-cms.min.js",
+          "https://unpkg.com/decap-cms@2.15.72/dist/decap-cms.js",
+          "https://cdn.jsdelivr.net/npm/decap-cms@2.15.72/dist/decap-cms.js"
+        ];
+
+        let ok = false;
+        for (const url of sources) {
+          try {
+            log("Fetch:", url);
+            const res = await fetch(url, { mode: "cors" });
+            if (!res.ok) throw new Error("HTTP " + res.status);
+            const code = await res.text();
+
+            // 2) Maak een JS-blob zodat de MIME correct is
+            const blob = new Blob([code], { type: "application/javascript" });
+            const blobUrl = URL.createObjectURL(blob);
+
+            // 3) Injecteer het script vanaf onze eigen blob-URL
+            await new Promise((resolve, reject) => {
+              const s = document.createElement("script");
+              s.src = blobUrl;
+              s.onload = resolve;
+              s.onerror = reject;
+              document.body.appendChild(s);
+            });
+
+            ok = true;
+            log("Decap CMS geladen uit:", url);
+            break;
+          } catch (e) {
+            log("Mislukt:", e && e.message ? e.message : e);
+          }
         }
-      });
+
+        if (!ok) {
+          log("\n❌ Kon Decap CMS niet laden. Controleer netwerk/Cloudflare.");
+          return;
+        }
+
+        // 4) Init pas als het global CMS object bestaat
+        const start = Date.now();
+        while (typeof window.CMS === "undefined" && Date.now() - start < 4000) {
+          await new Promise(r => setTimeout(r, 50));
+        }
+        if (!window.CMS) {
+          log("❌ CMS object niet gevonden na laden.");
+          return;
+        }
+
+        log("CMS gevonden, initialiseren…");
+        CMS.init({ configPath: "/admin/config.yml" });
+      })();
     </script>
   </body>
 </html>
