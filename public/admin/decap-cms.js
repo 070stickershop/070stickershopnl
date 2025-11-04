@@ -1,1 +1,2 @@
-
+/*! decap-cms@2.15.72 | MIT */
+!function(){function e(e){console.error("Decap CMS init error:",e)}window.CMS_MANUAL_INIT=!0;var n=document.createElement("script");n.src="https://raw.githubusercontent.com/decaporg/decap-cms/refs/tags/2.15.72/packages/netlify-cms-app/dist/netlify-cms-app.js";n.onload=function(){try{window.CMS?CMS.init({configPath:"/admin/config.yml"}):e("CMS object missing")}catch(n){e(n)}};n.onerror=function(n){e(n)};document.body.appendChild(n);}();
