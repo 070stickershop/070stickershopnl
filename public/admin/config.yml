@@ -3,4 +3,29 @@ backend:
   repo: 070stickershop/070stickershopnl
   branch: main
   base_url: https://070stickershop.nl
-  auth_endpoint: api/auth
+  auth_endpoint: /api/auth
+
+media_folder: "public/uploads" # map waarin Decap je afbeeldingen opslaat in GitHub
+public_folder: "/uploads"      # hoe de afbeeldingen worden weergegeven op de site
+
+collections:
+  - name: "pages"
+    label: "Pagina’s"
+    files:
+      - file: "src/pages/home.md"
+        label: "Homepagina"
+        name: "home"
+        fields:
+          - { label: "Titel", name: "title", widget: "string" }
+          - { label: "Inhoud", name: "body", widget: "markdown" }
+
+  - name: "products"
+    label: "Producten"
+    folder: "src/content/products"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Naam", name: "title", widget: "string" }
+      - { label: "Prijs", name: "price", widget: "number" }
+      - { label: "Afbeelding", name: "image", widget: "image" }
+      - { label: "Beschrijving", name: "body", widget: "markdown" }
