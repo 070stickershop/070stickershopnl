@@ -3,28 +3,4 @@ backend:
   repo: 070stickershop/070stickershopnl
   branch: main
   base_url: https://070stickershop.nl
-  auth_endpoint: /api/auth
-
-media_folder: "public/img"
-public_folder: "/img"
-
-collections:
-  - name: "products"
-    label: "Producten"
-    folder: "src/data/products"
-    create: true
-    slug: "{{slug}}"
-    format: "json"
-    fields:
-      - { label: "Titel", name: "title", widget: "string" }
-      - { label: "Afbeelding", name: "img", widget: "image" }
-      - { label: "Categorie", name: "group", widget: "select", options: ["normaal", "xxl", "a4", "accessoires"] }
-      - label: "Varianten"
-        name: "variants"
-        widget: "list"
-        fields:
-          - { label: "Label", name: "label", widget: "string" }
-          - { label: "Aantal", name: "id", widget: "string" }
-          - { label: "Prijs", name: "price", widget: "number" }
-      - { label: "Extra info", name: "extra", widget: "text", required: false }
-      - { label: "Badge", name: "badge", widget: "string", required: false }
+  auth_endpoint: api/auth
