@@ -3,7 +3,7 @@
   function onError(e){console.error("Decap CMS init error:", e);}
   window.CMS_MANUAL_INIT = !0;
   var s = document.createElement("script");
-  // ✅ Nieuwe CDN met juiste headers
+  // ✅ Gebruik jsDelivr — deze werkt goed met MIME types
   s.src = "https://cdn.jsdelivr.net/npm/decap-cms@2.15.72/dist/decap-cms.js";
   s.onload = function(){
     try {
