@@ -3,20 +3,28 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>CMS test</title>
+    <title>070 Stickershop CMS</title>
     <meta name="robots" content="noindex">
   </head>
   <body>
-    <h1>CMS laad...</h1>
+    <h2 style="font-family:sans-serif;text-align:center;margin-top:50px">
+      CMS aan het laden...
+    </h2>
 
-    <script data-cfasync="false" src="https://unpkg.com/decap-cms-app@3.3.1/dist/decap-cms-app.js"></script>
+    <!-- Gebruik oudere stabiele Decap CMS versie -->
+    <script
+      data-cfasync="false"
+      src="https://unpkg.com/decap-cms@2.15.72/dist/decap-cms.js">
+    </script>
+
+    <!-- Init slechts één keer -->
     <script data-cfasync="false">
-      window.addEventListener('load', function() {
-        console.log("CMS script geladen:", typeof CMS);
-        if (window.CMS) {
-          CMS.init({ configPath: '/admin/config.yml' });
+      window.addEventListener("load", function() {
+        if (window.CMS && !window.__CMS_INITED__) {
+          window.__CMS_INITED__ = true;
+          CMS.init({ configPath: "/admin/config.yml" });
         } else {
-          console.error("CMS niet geladen");
+          console.error("Decap CMS kon niet worden geladen.");
         }
       });
     </script>
