@@ -4,14 +4,21 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>070 Stickershop CMS</title>
-    <!-- Decap CMS bundle -->
-    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   </head>
   <body>
+    <!-- root element voor Decap CMS -->
+    <div id="nc-root"></div>
+
+    <!-- Laad Decap CMS pas ná het parsen van <body> -->
+    <script defer src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+
+    <!-- Init zodra het script beschikbaar is -->
     <script>
-      // Forceer expliciete init (voorkomt “white screen”)
-      window.CMS_MANUAL_INIT = true;
-      CMS.init({ configPath: "/admin/config.yml" });
+      window.addEventListener('DOMContentLoaded', function () {
+        if (window.CMS) {
+          CMS.init({ configPath: '/admin/config.yml' });
+        }
+      });
     </script>
   </body>
 </html>
