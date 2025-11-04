@@ -7,18 +7,15 @@
     <meta name="robots" content="noindex" />
   </head>
   <body>
-    <!-- Laad een bewezen stabiele build van Netlify CMS -->
-    <script
-      data-cfasync="false"
-      src="https://unpkg.com/netlify-cms-app@^2.15.72/dist/netlify-cms.js">
-    </script>
-
+    <!-- Decap CMS (stabiele 3.3.1) laden en pas daarna init doen -->
+    <script data-cfasync="false" src="https://unpkg.com/decap-cms@3.3.1/dist/decap-cms.js"></script>
     <script data-cfasync="false">
-      // Init pas als alles geladen is en 1x
       window.addEventListener('load', function () {
-        if (window.CMS && !window.__CMS_INITED__) {
-          window.__CMS_INITED__ = true;
+        if (window.CMS) {
           CMS.init({ configPath: '/admin/config.yml' });
+        } else {
+          // heel soms komt het script net later binnen:
+          setTimeout(function(){ if (window.CMS) CMS.init({ configPath: '/admin/config.yml' }); }, 400);
         }
       });
     </script>
