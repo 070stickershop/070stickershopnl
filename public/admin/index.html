@@ -7,15 +7,18 @@
     <meta name="robots" content="noindex" />
   </head>
   <body>
-    <!-- Decap CMS (stabiele 3.3.1) laden en pas daarna init doen -->
-    <script data-cfasync="false" src="https://unpkg.com/decap-cms@3.3.1/dist/decap-cms.js"></script>
+    <!-- Gebruik de APP-bundle (geen auto-init) -->
+    <script
+      data-cfasync="false"
+      src="https://unpkg.com/decap-cms-app@3.3.1/dist/decap-cms-app.js">
+    </script>
+
+    <!-- Init exact één keer, ná load -->
     <script data-cfasync="false">
       window.addEventListener('load', function () {
-        if (window.CMS) {
+        if (window.CMS && !window.__CMS_INITED__) {
+          window.__CMS_INITED__ = true;
           CMS.init({ configPath: '/admin/config.yml' });
-        } else {
-          // heel soms komt het script net later binnen:
-          setTimeout(function(){ if (window.CMS) CMS.init({ configPath: '/admin/config.yml' }); }, 400);
         }
       });
     </script>
