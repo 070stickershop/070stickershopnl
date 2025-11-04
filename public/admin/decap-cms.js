@@ -1,2 +1,16 @@
-/*! decap-cms@2.15.72 | MIT */
-!function(){function e(e){console.error("Decap CMS init error:",e)}window.CMS_MANUAL_INIT=!0;var n=document.createElement("script");n.src="https://raw.githubusercontent.com/decaporg/decap-cms/refs/tags/2.15.72/packages/netlify-cms-app/dist/netlify-cms-app.js";n.onload=function(){try{window.CMS?CMS.init({configPath:"/admin/config.yml"}):e("CMS object missing")}catch(n){e(n)}};n.onerror=function(n){e(n)};document.body.appendChild(n);}();
+/*! decap-cms@2.15.72 | via jsDelivr */
+!function(){
+  function onError(e){console.error("Decap CMS init error:", e);}
+  window.CMS_MANUAL_INIT = !0;
+  var s = document.createElement("script");
+  // ✅ Nieuwe CDN met juiste headers
+  s.src = "https://cdn.jsdelivr.net/npm/decap-cms@2.15.72/dist/decap-cms.js";
+  s.onload = function(){
+    try {
+      if (window.CMS) CMS.init({ configPath: "/admin/config.yml" });
+      else onError("CMS object missing");
+    } catch (e) { onError(e); }
+  };
+  s.onerror = function(e){ onError(e); };
+  document.body.appendChild(s);
+}();
