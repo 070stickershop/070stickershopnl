@@ -6,17 +6,21 @@
     <title>070 Stickershop CMS</title>
   </head>
   <body>
-    <!-- root element voor Decap CMS -->
     <div id="nc-root"></div>
 
-    <!-- Laad Decap CMS pas ná het parsen van <body> -->
-    <script defer src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <!-- Laad een recente Decap CMS build (niet 3.0.0) -->
+    <script src="https://unpkg.com/decap-cms@3.3.1/dist/decap-cms.js"></script>
 
-    <!-- Init zodra het script beschikbaar is -->
+    <!-- Init pas als ALLES klaar is -->
     <script>
-      window.addEventListener('DOMContentLoaded', function () {
+      window.addEventListener('load', function () {
         if (window.CMS) {
           CMS.init({ configPath: '/admin/config.yml' });
+        } else {
+          // Als Rocket Loader of iets anders het script nog later injecteert
+          setTimeout(function(){
+            if (window.CMS) CMS.init({ configPath: '/admin/config.yml' });
+          }, 500);
         }
       });
     </script>
