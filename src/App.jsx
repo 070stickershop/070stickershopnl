@@ -1,15 +1,14 @@
-// src/App.jsx (CMS-ready for Cloudflare Pages + Decap CMS)
-import React, { useEffect, useMemo, useState, useRef } from "react";
+import React, { useMemo, useState, useRef } from "react";
 
 /* ================== Helpers ================== */
 function formatPrice(n) {
   return n.toLocaleString("nl-NL", { style: "currency", currency: "EUR" });
 }
 
-// Subtiele haptic & beep feedback (mobiel + desktop)
 function haptic(ms = 30) {
-  if (typeof navigator !== "undefined" && navigator.vibrate) navigator.vibrate(ms);
+  if (navigator.vibrate) navigator.vibrate(ms);
 }
+
 function beep(duration = 120, frequency = 880, volume = 0.12) {
   if (typeof window === "undefined") return;
   const AudioCtx = window.AudioContext || window.webkitAudioContext;
@@ -23,611 +22,309 @@ function beep(duration = 120, frequency = 880, volume = 0.12) {
   osc.connect(gain);
   gain.connect(ctx.destination);
   osc.start();
-  setTimeout(() => { osc.stop(); ctx.close(); }, duration);
+  setTimeout(() => {
+    osc.stop();
+    ctx.close();
+  }, duration);
 }
 
 /* ================== Config ================== */
 const HERO_BG = "/img/ado-sfeer.jpg";
-const PAYMENT_MODE = "whatsapp";
 const WHATSAPP_NUMBER = "31624729671";
-const PAYPAL_ME_HANDLE = "JouwPayPalMeNaam";
-
-const INSTAGRAM_HANDLE = "070_stickershop";
-const INSTAGRAM_URL = `https://www.instagram.com/${INSTAGRAM_HANDLE}/`;
-const TIKTOK_HANDLE = "070_stickershop";
-const TIKTOK_URL = `https://www.tiktok.com/@${TIKTOK_HANDLE}`;
-
+const INSTAGRAM_URL = "https://www.instagram.com/070_stickershop/";
+const TIKTOK_URL = "https://www.tiktok.com/@070_stickershop";
 const CATEGORIES = [
   { id: "all", label: "Alles" },
   { id: "normaal", label: "Normaal" },
   { id: "xxl", label: "XXL A6" },
   { id: "a4", label: "A4" },
+  { id: "accessoires", label: "Accessoires" },
 ];
 
-/* ---- KORTINGSCODES ---- */
-const COUPONS = {
-  MATCHDAY10: {
-    type: "percent",
-    value: 10,
-    description: "10% korting op A4, XXL en Tape (alleen vandaag)",
-    groups: ["a4", "xxl", "accessoires"],
-    onlyToday: true,
-  },
-};
-
-function localISODate() {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-}
-function isMatchdayToday(){ return true; }
-function isEligibleForMatchday(product){ return ["a4","xxl","accessoires"].includes(product.group); }
-
-/* ------------------------------ Fallback DATA ------------------------------ */
-/* Wordt alleen gebruikt als /products.json niet geladen kan worden */
-const FALLBACK_PRODUCTS = [
-  {
-    id: "normal-den-haag-territory",
-    title: "Den Haag Territory",
-    img: "/img/den-haag-territory.jpg",
-    tags: ["normaal", "85x55mm", "vinyl"],
-    variants: [
-      { id: "25", label: "25 stuks", price: 3.5 },
-      { id: "50", label: "50 stuks", price: 6.5 },
-      { id: "100", label: "100 stuks", price: 11.0 },
-      { id: "200", label: "200 stuks", price: 22.0 },
-    ],
-    extra: "85×55 mm · Vinyl · UV- & waterbestendig",
-    badge: "Populair",
-    group: "normaal",
-  }
-];
+/* ================== Dynamic product import ================== */
+// eslint-disable-next-line import/no-webpack-loader-syntax
+const productsModules = import.meta.glob("./data/products/*.json", { eager: true });
+const PRODUCTS = Object.values(productsModules).map((m) => m.default || m);
 
 /* ================== App ================== */
 export default function App() {
-  // Producten uit CMS laden
-  const [products, setProducts] = useState([]);
-  const [loadError, setLoadError] = useState(false);
-  useEffect(() => {
-    const url = "/products.json";
-    console.log("[CMS] producten laden uit", url);
-    fetch(url, { cache: "no-store" })
-      .then(r => {
-        if (!r.ok) throw new Error("HTTP " + r.status);
-        return r.json();
-      })
-      .then(d => {
-        // Decap via 'files' → { items: [...] } | Of flat array: [...]
-        const list = Array.isArray(d) ? d : (d.items || []);
-        if (Array.isArray(list) && list.length > 0) {
-          console.log("[CMS] producten geladen:", list.length);
-          setProducts(list);
-        } else {
-          console.warn("[CMS] products.json leeg, fallback gebruiken");
-          setProducts(FALLBACK_PRODUCTS);
-        }
-      })
-      .catch(err => {
-        console.error("[CMS] laden mislukt:", err);
-        setLoadError(true);
-        setProducts(FALLBACK_PRODUCTS);
-      });
-  }, []);
-
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
   const [cart, setCart] = useState([]);
   const [openCart, setOpenCart] = useState(false);
-
-  const [selected, setSelected] = useState({});
-  useEffect(() => {
-    setSelected(prev => {
-      const o = { ...prev };
-      for (const p of products) if (!o[p.id]) o[p.id] = p.variants?.[0]?.id;
-      return o;
-    });
-  }, [products]);
-
-  const [couponInput, setCouponInput] = useState("");
-  const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [toast, setToast] = useState({ open: false, title: "", img: "", variant: "" });
   const toastTimerRef = useRef(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+
   function showAddedToast({ title, img, variant }) {
     setToast({ open: true, title, img, variant });
-    if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
-    toastTimerRef.current = setTimeout(() => setToast(t => ({ ...t, open:false })), 2200);
-    haptic(25); beep(110,920,0.13);
+    clearTimeout(toastTimerRef.current);
+    toastTimerRef.current = setTimeout(() => setToast({ open: false }), 2200);
+    haptic(25);
+    beep(110, 920, 0.13);
   }
-
-  const [confirmOpen, setConfirmOpen] = useState(false);
 
   const items = useMemo(() => {
     const q = query.trim().toLowerCase();
-    const base = products;
-    if (!q) return base;
-    return base.filter(p =>
-      p.title.toLowerCase().includes(q) ||
-      (p.tags || []).some(t => t.toLowerCase().includes(q))
+    if (!q) return PRODUCTS;
+    return PRODUCTS.filter(
+      (p) =>
+        p.title?.toLowerCase().includes(q) ||
+        p.tags?.some((t) => t.toLowerCase().includes(q))
     );
-  }, [query, products]);
+  }, [query]);
 
   const visibleItems = useMemo(() => {
-    return items.filter((p) => {
-      if (category === "all") return true;
-      if (category === "a4") return p.id === "a4-stickers";
-      if (category === "xxl") return p.id.startsWith("xxl-");
-      return p.id.startsWith("normal-");
-    });
+    if (category === "all") return items;
+    return items.filter((p) => p.group === category);
   }, [items, category]);
 
-  function resolveVariantPrice(product, variantId) {
-    const v = product.variants?.find(x => x.id === variantId) || product.variants?.[0];
-    if (!v) return { price: 0, label: "-" };
-    if (product.id === "a4-stickers") {
-      const qty = v.qty ?? (parseInt(v.id, 10) || 1);
-      const price = product.variantPricing ? product.variantPricing(qty) : 0;
-      return { price, label: v.label };
-    }
-    return { price: v.price, label: v.label };
-  }
-
-  function addToCart(productId) {
-    const product = products.find((p) => p.id === productId);
-    if (!product) return;
-    const variantId = selected[productId] ?? product.variants?.[0]?.id;
-    const { price, label } = resolveVariantPrice(product, variantId);
-
-    setCart(prev => {
-      const idx = prev.findIndex(x => x.productId === productId && x.variantId === variantId);
-      if (idx >= 0) {
-        const next = [...prev];
-        next[idx] = { ...next[idx], qty: next[idx].qty + 1 };
-        return next;
+  function addToCart(product) {
+    const { id, title, img } = product;
+    const variant = product.variants?.[0] || { id: "1", label: "1 stuks", price: 0 };
+    setCart((prev) => {
+      const existing = prev.find((x) => x.productId === id);
+      if (existing) {
+        return prev.map((x) =>
+          x.productId === id ? { ...x, qty: x.qty + 1 } : x
+        );
       }
-      return [...prev, { productId, title: product.title, variantId, variantLabel: label, price, img: product.img, qty: 1 }];
+      return [
+        ...prev,
+        {
+          productId: id,
+          title,
+          variantId: variant.id,
+          variantLabel: variant.label,
+          price: variant.price,
+          img,
+          qty: 1,
+        },
+      ];
     });
-    showAddedToast({ title: product.title, img: product.img, variant: label });
-  }
-
-  function changeVariant(productId, variantId){ setSelected(s => ({ ...s, [productId]: variantId })); }
-  function removeFromCart(productId, variantId){
-    setCart(prev => prev.filter(x => !(x.productId === productId && x.variantId === variantId)));
-  }
-
-  function handleApplyCoupon() {
-    const code = couponInput.trim().toUpperCase();
-    if (!code) return alert("Voer een kortingscode in.");
-    const c = COUPONS[code];
-    if (!c) return alert("Ongeldige kortingscode.");
-    setAppliedCoupon({ code, appliedOn: localISODate(), ...c });
-    haptic(20);
-  }
-  function handleRemoveCoupon(){ setAppliedCoupon(null); setCouponInput(""); haptic(15); }
-
-  function computeDiscount(subtotal, cart) {
-    if (!appliedCoupon) return 0;
-    if (appliedCoupon.onlyToday && appliedCoupon.appliedOn !== localISODate()) return 0;
-    let eligibleSubtotal = subtotal;
-    if (appliedCoupon.groups?.length) {
-      eligibleSubtotal = cart.reduce((sum, item) => {
-        const product = products.find(p => p.id === item.productId);
-        if (product && appliedCoupon.groups.includes(product.group)) return sum + item.price * item.qty;
-        return sum;
-      }, 0);
-    }
-    let d = 0;
-    if (appliedCoupon.type === "percent") d = eligibleSubtotal * (appliedCoupon.value / 100);
-    else if (appliedCoupon.type === "fixed") d = appliedCoupon.value;
-    return Math.min(d, subtotal);
+    showAddedToast({ title, img, variant: variant.label });
   }
 
   const subtotal = cart.reduce((s, x) => s + x.price * x.qty, 0);
-
-  function computeShipping() {
-    if (cart.length === 0) return 0;
-    if (cart.length === 1 && cart[0].productId.startsWith("normal-") && cart[0].variantId === "25" && cart[0].qty === 1) return 3.0;
-    return 4.5;
-  }
-
-  const shipping = computeShipping();
-  const discount = computeDiscount(subtotal, cart);
-  const total = Math.max(0, subtotal - discount) + shipping;
+  const shipping = cart.length > 0 ? 4.5 : 0;
+  const total = subtotal + shipping;
 
   function buildOrderText() {
-    const lines = cart.map(i => `• ${i.title} – ${i.variantLabel} × ${i.qty} = ${formatPrice(i.price * i.qty)}`);
-    const parts = ["Bestelling 070_stickershop", ...lines, `Subtotaal: ${formatPrice(subtotal)}`];
-    if (discount > 0 && appliedCoupon?.code) parts.push(`Korting (${appliedCoupon.code}): -${formatPrice(discount)}`);
-    parts.push(`Verzendkosten: ${formatPrice(shipping)}`, `Totaal: ${formatPrice(total)}`, "", "Graag bevestigen – ik stuur direct een betaalverzoek terug. Bedankt! 👊");
-    return parts.join("\n");
+    const lines = cart.map(
+      (i) =>
+        `• ${i.title} – ${i.variantLabel} × ${i.qty} = ${formatPrice(
+          i.price * i.qty
+        )}`
+    );
+    return [
+      "Bestelling 070stickershop.nl",
+      ...lines,
+      `Totaal: ${formatPrice(total)}`,
+      "",
+      "Vul hieronder je adres en naam in:",
+      "Naam:",
+      "Adres:",
+      "Postcode + Woonplaats:",
+      "",
+      "We sturen daarna direct een betaalverzoek terug via WhatsApp 👊",
+    ].join("\n");
   }
 
-  function handleCheckout() {
-    if (cart.length === 0) return alert("Je winkelwagen is leeg.");
-    setConfirmOpen(true); haptic(20); beep(90,700,0.12);
-  }
   function proceedCheckout() {
+    if (cart.length === 0) {
+      alert("Je winkelwagen is leeg.");
+      return;
+    }
     const tekst = buildOrderText();
-    if (PAYMENT_MODE === "whatsapp") {
-      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(tekst)}`;
-      window.location.href = url; return;
-    }
-    if (PAYMENT_MODE === "paypalme") {
-      const bedrag = (Math.round(total * 100) / 100).toFixed(2);
-      const url = `https://www.paypal.me/${PAYPAL_ME_HANDLE}/${bedrag}`;
-      window.open(url, "_blank");
-      alert("Noteer in PayPal: order via 070_stickershop. Dankjewel!");
-    }
-  }
-  function applyMatchdayFromBanner() {
-    setCouponInput("MATCHDAY10");
-    const c = COUPONS.MATCHDAY10;
-    if (c) setAppliedCoupon({ code:"MATCHDAY10", appliedOn: localISODate(), ...c });
-    haptic(18);
+    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(tekst)}`;
+    window.location.href = url;
   }
 
+  /* ================== UI ================== */
   return (
     <div className="min-h-screen text-neutral-900 bg-gradient-to-br from-[#0b6e4f] via-[#f2c200]/30 to-[#f2c200]/60">
-      {/* Topbar */}
-      <header className="sticky top-0 z-30 backdrop-blur supports-backdrop-blur:bg-white/70 bg-white/60 border-b border-black/5">
+      {/* Header */}
+      <header className="sticky top-0 z-30 backdrop-blur bg-white/70 border-b border-black/5">
         <div className="mx-auto max-w-6xl px-4 py-3 flex items-center gap-3">
           <div className="flex items-center gap-2">
-            <img src="/img/070-logo.jpeg" alt="070 Logo" className="h-10 w-auto object-contain drop-shadow" />
-            <span className="font-extrabold tracking-tight text-xl">070_stickershop</span>
+            <img src="/img/070-logo.jpeg" alt="Logo" className="h-10 w-auto" />
+            <span className="font-extrabold tracking-tight text-xl">
+              070_stickershop
+            </span>
           </div>
-
-          <nav className="ml-auto hidden md:flex items-center gap-6 text-sm">
-            <a href="#collectie" className="hover:underline">Collectie</a>
-            <a href="#info" className="hover:underline">Verzending</a>
-            <a href="#contact" className="hover:underline">Contact</a>
-
-            <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 shadow-sm hover:shadow transition bg-white/90">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-4 w-4">
-                <rect x="3" y="3" width="18" height="18" rx="5" ry="5"></rect>
-                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                <circle cx="17.5" cy="6.5" r="0.5"></circle>
-              </svg>
-              Instagram
-            </a>
-
-            <a href={TIKTOK_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 shadow-sm hover:shadow transition bg-white/90">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" className="h-4 w-4" aria-hidden="true">
-                <path fill="currentColor" d="M34.8 14.6c-3.2-1.7-5.4-4.5-6.2-8.2h-6.1v24.8c-.1 2.4-2.1 4.3-4.5 4.3-2.5 0-4.5-2-4.5-4.5s2-4.5 4.5-4.5c.6 0 1.1.1 1.6.3V20c-7.1-1.1-13.6 4.5-13.6 11.7 0 6.4 5.2 11.6 11.6 11.6 6.3 0 11.5-5.1 11.6-11.4V19.3c2.3 1.9 5.2 3.1 8.4 3.1v-7.8c-.9 0-1.8-.1-2.7-.4z"/>
-              </svg>
-              TikTok
-            </a>
-          </nav>
-        </div>
-
-        {/* MATCHDAY banner */}
-        <div className="bg-black text-white">
-          <div className="mx-auto max-w-6xl px-4 py-2 text-sm flex items-center gap-3">
-            <span className="font-semibold">Alleen vandaag:</span>
-            <span>MATCHDAY10 — 10% korting op A4, XXL en Tape</span>
-            {!appliedCoupon ? (
-              <button onClick={applyMatchdayFromBanner} className="ml-auto rounded-full bg-white text-black px-3 py-1 text-xs font-semibold hover:bg:white/90">
-                Code toepassen
-              </button>
-            ) : (<span className="ml-auto text-green-400 font-semibold">Code toegepast</span>)}
-          </div>
+          <button
+            onClick={() => setOpenCart(true)}
+            className="ml-auto relative p-2 rounded-full border shadow-sm hover:shadow bg-white/90"
+          >
+            🛒
+            {cart.length > 0 && (
+              <span className="absolute -top-1 -right-1 text-xs bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center">
+                {cart.length}
+              </span>
+            )}
+          </button>
         </div>
       </header>
 
-      {/* HERO */}
-      <section className="relative isolate h-[420px] md:h-[650px] lg:h-[750px]">
-        <img src={HERO_BG} alt="Ado sfeer" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/0" />
-        <div className="relative z-10 mx-auto max-w-6xl px-4 h-full flex items-center">
-          <div className="grid md:grid-cols-2 gap-10 items-center w-full">
-            <div>
-              <h1 className="text-4xl md:text-5xl font-black leading-tight text-white drop-shadow">#1 Stickershop in Den Haag sinds 2023</h1>
-              <p className="mt-4 text-white/90 max-w-prose">Welkom bij 070_stickershop – hoogwaardige vinyl stickers in groen-geel. Water- & UV-bestendig.</p>
-              <div className="mt-6 flex flex-wrap gap-3">
-                <a href="#collectie" className="rounded-2xl bg-[#f2c200] px-5 py-2.5 font-semibold shadow hover:shadow-md transition">Shop nu</a>
-                <a href="#info" className="rounded-2xl bg:white/90 px-5 py-2.5 font-semibold shadow hover:shadow-md transition">Verzending & betalen</a>
-              </div>
-            </div>
-            <div className="hidden md:flex items-center justify-center">
-              <div className="rounded-full p-2 bg-white/5 ring-1 ring-white/15 backdrop-blur-sm shadow-2xl">
-                <img src="/img/070-logo.jpeg" alt="070_stickershop logo" className="w-56 h-56 rounded-full object-cover object-center" />
-              </div>
-            </div>
+      {/* Hero */}
+      <section className="relative isolate h-[400px] md:h-[600px]">
+        <img
+          src={HERO_BG}
+          alt="Hero"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="relative z-10 flex items-center justify-center h-full text-center text-white">
+          <div>
+            <h1 className="text-4xl font-black mb-4">070 Stickershop</h1>
+            <p className="text-lg">Hoogwaardige vinyl stickers – Groen & Geel trots</p>
+            <a
+              href="#collectie"
+              className="inline-block mt-6 bg-[#f2c200] text-black px-5 py-2 rounded-2xl font-bold"
+            >
+              Shop nu
+            </a>
           </div>
         </div>
       </section>
 
       {/* Collectie */}
       <section id="collectie" className="bg-white/80 border-t border-black/5">
-        <div className="mx-auto max-w-7xl px-4 py-12">
-          <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
-            <h2 className="text-2xl md:text-3xl font-black tracking-tight">Collectie</h2>
-            <div className="md:ml-auto w-full md:w-80">
-              <label className="relative block">
-                <input value={query} onChange={(e)=>setQuery(e.target.value)} className="w-full rounded-2xl border px-4 py-2.5 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0b6e4f]" placeholder="Zoeken op naam of tag…" />
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500">⌘K</span>
-              </label>
-            </div>
-          </div>
+        <div className="max-w-6xl mx-auto px-4 py-12">
+          <h2 className="text-3xl font-black mb-4">Collectie</h2>
 
-          {/* Categorie chips */}
-          <div className="mt-4 flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 mb-6">
             {CATEGORIES.map((c) => (
-              <button key={c.id} onClick={()=>setCategory(c.id)} className={`px-3 py-1.5 rounded-full border text-sm transition shadow-sm ${category===c.id?"bg-[#0b6e4f] text-white border-[#0b6e4f]":"bg-white hover:bg-white/80"}`}>
+              <button
+                key={c.id}
+                onClick={() => setCategory(c.id)}
+                className={`px-3 py-1.5 rounded-full border text-sm ${
+                  category === c.id
+                    ? "bg-[#0b6e4f] text-white"
+                    : "bg-white hover:bg-white/90"
+                }`}
+              >
                 {c.label}
               </button>
             ))}
           </div>
 
-          {/* Info melding bij laaddfout */}
-          {loadError && (
-            <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-800">
-              Kon producten niet laden. Probeer de pagina te vernieuwen. (Er wordt tijdelijk een fallback-lijst getoond.)
-            </div>
-          )}
-
-          {/* Product grid */}
-          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {visibleItems.length === 0 ? (
-              <div className="col-span-full text-center text-sm text-neutral-600">Geen producten gevonden.</div>
-            ) : visibleItems.map((p) => {
-              const variantId = selected[p.id] ?? p.variants?.[0]?.id;
-              const { price, label } = resolveVariantPrice(p, variantId);
-              const showMatchday = isMatchdayToday() && isEligibleForMatchday(p);
-              return (
-                <article key={p.id} className="group rounded-3xl bg-white shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 border border-black/5 overflow-hidden">
-                  <div className="relative aspect-[4/3] w-full overflow-hidden">
-                    <img src={p.img} alt={p.title} className="absolute inset-0 w-full h-full object-cover object-center" loading="lazy" />
-                    {p.badge && (<span className="absolute left-3 top-3 z-10 rounded-xl bg-[#0b6e4f] px-2.5 py-1 text-xs font-bold text-white shadow">{p.badge}</span>)}
-                    {showMatchday && (<span className="absolute right-3 top-3 z-10 rounded-xl bg-green-500 px-2.5 py-1 text-xs font-bold text-white shadow" title="Alleen vandaag op A4, XXL en Tape">-10% met MATCHDAY10</span>)}
+          {/* No products fallback */}
+          {PRODUCTS.length === 0 ? (
+            <p className="text-center text-neutral-600">
+              Nog geen producten toegevoegd via CMS.
+            </p>
+          ) : (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {visibleItems.map((p) => (
+                <article
+                  key={p.id}
+                  className="rounded-3xl bg-white shadow hover:shadow-lg transition overflow-hidden border border-black/5"
+                >
+                  <div className="relative aspect-[4/3]">
+                    <img
+                      src={p.img}
+                      alt={p.title}
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                    {p.badge && (
+                      <span className="absolute left-3 top-3 bg-[#0b6e4f] text-white text-xs px-2 py-1 rounded-xl">
+                        {p.badge}
+                      </span>
+                    )}
                   </div>
                   <div className="p-4">
                     <h3 className="font-bold text-lg">{p.title}</h3>
-                    <p className="mt-1 text-sm text-neutral-600">{(p.tags || []).join(" · ")}</p>
-                    <p className="text-xs text-neutral-500 mt-1">
-                      {p.id?.startsWith("normal-") ? "Formaat: 85×55mm"
-                        : p.id === "a4-stickers" ? "Formaat: A4 (210×297mm)"
-                        : p.id?.startsWith("xxl-") ? "Formaat: A6 (105×148mm)"
-                        : p.group === "accessoires" ? "Accessoire" : "-"}
-                      {" · "}Vinyl · UV- & waterbestendig
+                    <p className="text-sm text-neutral-600">
+                      {p.extra || "Sticker"}
                     </p>
-
-                    <div className="mt-3 flex items-center gap-2">
-                      <label htmlFor={`variant-${p.id}`} className="text-sm text-neutral-700">Kies aantal:</label>
-                      <select id={`variant-${p.id}`} className="rounded-xl border px-3 py-1.5 text-sm" value={variantId} onChange={(e)=>changeVariant(p.id, e.target.value)}>
-                        {(p.variants || []).map((v) => (<option key={v.id} value={v.id}>{v.label}</option>))}
-                      </select>
-                    </div>
-
-                    {p.variantNote && <p className="mt-2 text-xs text-neutral-500">{p.variantNote}</p>}
-
                     <div className="mt-3 flex items-center justify-between">
-                      <span className="text-lg font-extrabold tracking-tight">{formatPrice(price || 0)}</span>
-                      <button onClick={()=>addToCart(p.id)} className="rounded-2xl border px-3 py-1.5 text-sm font-semibold hover:shadow transition bg-[#f2f8f6] hover:bg-white">
+                      <span className="text-lg font-extrabold">
+                        {p.variants?.[0]
+                          ? formatPrice(p.variants[0].price)
+                          : "€0,00"}
+                      </span>
+                      <button
+                        onClick={() => addToCart(p)}
+                        className="rounded-2xl border px-3 py-1.5 text-sm font-semibold hover:shadow bg-[#f2f8f6] hover:bg-white"
+                      >
                         Voeg toe
                       </button>
                     </div>
                   </div>
                 </article>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Info */}
-      <section id="info" className="bg-white/90">
-        <div className="mx-auto max-w-6xl px-4 py-12 grid md:grid-cols-3 gap-6">
-          <div className="rounded-3xl border p-6 shadow-sm">
-            <h3 className="font-extrabold text-lg">Verzending</h3>
-            <p className="mt-2 text-sm text-neutral-700">
-              Verzendkosten: <strong>€4,50</strong> standaard. <br />
-              <em>Uitzondering:</em> bestellingen die uitsluitend bestaan uit <strong>25 stuks</strong> (Normaal) of <strong>10 stuks</strong> (XXL A6) verzenden voor <strong>€4,00</strong>.
-            </p>
-          </div>
-          <div className="rounded-3xl border p-6 shadow-sm">
-            <h3 className="font-extrabold text-lg">Betalen</h3>
-            <p className="mt-2 text-sm text-neutral-700">
-              Betaling stemmen we na bestelling af via <strong>WhatsApp</strong> (we sturen direct een betaalverzoek, bijv. Tikkie).
-            </p>
-          </div>
-          <div className="rounded-3xl border p-6 shadow-sm">
-            <h3 className="font-extrabold text-lg">Kwaliteit</h3>
-            <p className="mt-2 text-sm text-neutral-700">
-              Polymeer vinyl, outdoor-laminaat, krasvast. Met liefde gemaakt in 070.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact + Instagram/TikTok */}
-      <footer id="contact" className="bg-neutral-950 text-white">
-        <div className="mx-auto max-w-6xl px-4 py-12 grid md:grid-cols-2 gap-8">
-          <div>
-            <h3 className="text-2xl font-black">Contact</h3>
-            <p className="mt-2 text:white/80">Heb je een vraag of wil je samenwerken? Stuur een bericht!</p>
-
-            <div className="mt-4 flex flex-wrap gap-3">
-              <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-white/20 px-4 py-2 shadow-sm hover:shadow transition bg-white/10">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-4 w-4">
-                  <rect x="3" y="3" width="18" height="18" rx="5" ry="5"></rect>
-                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                  <circle cx="17.5" cy="6.5" r="0.5"></circle>
-                </svg>
-                Instagram
-              </a>
-
-              <a href={TIKTOK_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-white/20 px-4 py-2 shadow-sm hover:shadow transition bg-white/10">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" className="h-4 w-4" aria-hidden="true">
-                  <path fill="currentColor" d="M34.8 14.6c-3.2-1.7-5.4-4.5-6.2-8.2h-6.1v24.8c-.1 2.4-2.1 4.3-4.5 4.3-2.5 0-4.5-2-4.5-4.5s2-4.5 4.5-4.5c.6 0 1.1.1 1.6.3V20c-7.1-1.1-13.6 4.5-13.6 11.7 0 6.4 5.2 11.6 11.6 11.6 6.3 0 11.5-5.1 11.6-11.4V19.3c2.3 1.9 5.2 3.1 8.4 3.1v-7.8c-.9 0-1.8-.1-2.7-.4z"/>
-                </svg>
-                TikTok
-              </a>
-            </div>
-
-            <form className="mt-4 grid gap-3">
-              <input className="rounded-xl border border-white/10 bg:white/10 px-4 py-2.5 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-[#f2c200]" placeholder="E-mail" />
-              <textarea className="rounded-xl border border-white/10 bg:white/10 px-4 py-2.5 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-[#f2c200]" placeholder="Bericht" rows={4} />
-              <button type="button" className="rounded-2xl bg-[#f2c200] px-5 py-2.5 font-bold text-neutral-900 shadow hover:shadow-md transition">Versturen</button>
-            </form>
-          </div>
-
-          <div>
-            <h3 className="text-2xl font-black">Over 070_stickershop</h3>
-            <p className="mt-2 text-white/80">Hoogwaardige vinyl stickers in groen-geel, ontworpen voor buitengebruik. UV- en waterbestendig, snel geleverd vanuit Den Haag.</p>
-            <ul className="mt-3 text-white/70 text-sm list-disc list-inside space-y-1">
-              <li>Vinyl met outdoor-laminaat</li>
-              <li>Scherpe prijzen & staffelkorting</li>
-              <li>Snelle verzending binnen Nederland</li>
-            </ul>
-            <div className="mt-4 text-sm text-white/60">© {new Date().getFullYear()} 070_stickershop – Alle rechten voorbehouden</div>
-          </div>
-        </div>
-      </footer>
-
-      {/* Cart Drawer, Toast, Confirm modal ... (ongewijzigd) */}
-      {/* ——— Cart Drawer ——— */}
-      {openCart && (
-        <div className="fixed inset-0 z-[80]">
-          <div className="absolute inset-0 bg-black/40" onClick={()=>setOpenCart(false)} />
-          <aside className="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl p-6 flex flex-col">
-            <div className="flex items-center justify-between">
-              <h3 className="text-xl font-extrabold">Winkelwagen</h3>
-              <button onClick={()=>setOpenCart(false)} className="rounded-xl border px-2 py-1 text-sm">Sluiten</button>
-            </div>
-            <div className="mt-4 flex-1 overflow-auto divide-y">
-              {cart.length===0 && <p className="text-sm text-neutral-600">Nog geen items. Voeg iets toe uit de collectie.</p>}
-              {cart.map(item => (
-                <div key={`${item.productId}-${item.variantId}`} className="py-3 flex items-center gap-3">
-                  <img src={item.img} alt="" className="h-14 w-14 rounded-xl object-cover object-center" />
-                  <div className="flex-1">
-                    <div className="font-semibold">{item.title}</div>
-                    <div className="text-sm text-neutral-600">{item.variantLabel} – {formatPrice(item.price)}</div>
-                    <div className="text-sm text-neutral-600">Aantal in wagen: {item.qty}</div>
-                  </div>
-                  <button onClick={()=>removeFromCart(item.productId, item.variantId)} className="text-sm rounded-xl border px-2 py-1">Verwijder</button>
-                </div>
               ))}
             </div>
-            <Totals
-              subtotal={subtotal}
-              discount={discount}
-              shipping={shipping}
-              total={total}
-              couponInput={couponInput}
-              setCouponInput={setCouponInput}
-              appliedCoupon={appliedCoupon}
-              handleApplyCoupon={handleApplyCoupon}
-              handleRemoveCoupon={handleRemoveCoupon}
-              handleCheckout={handleCheckout}
-            />
+          )}
+        </div>
+      </section>
+
+      {/* Winkelwagen Drawer */}
+      {openCart && (
+        <div className="fixed inset-0 z-50">
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setOpenCart(false)}
+          />
+          <aside className="absolute right-0 top-0 h-full w-full max-w-md bg-white p-6 flex flex-col shadow-2xl">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-extrabold">Winkelwagen</h3>
+              <button onClick={() => setOpenCart(false)}>✕</button>
+            </div>
+            <div className="flex-1 overflow-auto divide-y">
+              {cart.length === 0 ? (
+                <p className="text-sm text-neutral-600">
+                  Nog geen items toegevoegd.
+                </p>
+              ) : (
+                cart.map((i) => (
+                  <div
+                    key={i.productId}
+                    className="py-3 flex items-center gap-3"
+                  >
+                    <img
+                      src={i.img}
+                      alt=""
+                      className="h-14 w-14 rounded-xl object-cover"
+                    />
+                    <div className="flex-1">
+                      <div className="font-semibold">{i.title}</div>
+                      <div className="text-sm text-neutral-600">
+                        {i.variantLabel} – {formatPrice(i.price)}
+                      </div>
+                      <div className="text-sm text-neutral-600">
+                        Aantal: {i.qty}
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+
+            <div className="border-t mt-4 pt-4 space-y-1">
+              <div className="flex justify-between">
+                <span>Subtotaal</span>
+                <span>{formatPrice(subtotal)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Verzendkosten</span>
+                <span>{formatPrice(shipping)}</span>
+              </div>
+              <div className="flex justify-between font-bold text-lg">
+                <span>Totaal</span>
+                <span>{formatPrice(total)}</span>
+              </div>
+
+              <button
+                onClick={proceedCheckout}
+                className="w-full mt-4 rounded-2xl bg-[#0b6e4f] text-white py-2 font-semibold shadow"
+              >
+                Bestelling plaatsen via WhatsApp
+              </button>
+            </div>
           </aside>
         </div>
       )}
-
-      {/* Toast */}
-      {toast.open && !openCart && (
-        <Toast toast={toast} setToast={setToast} setOpenCart={setOpenCart} />
-      )}
-
-      {/* Confirm modal */}
-      {confirmOpen && (
-        <ConfirmModal
-          cart={cart}
-          subtotal={subtotal}
-          discount={discount}
-          shipping={shipping}
-          total={total}
-          setConfirmOpen={setConfirmOpen}
-          proceedCheckout={proceedCheckout}
-        />
-      )}
-    </div>
-  );
-}
-
-/* === Kleine subcomponents om de file overzichtelijk te houden === */
-function Totals({
-  subtotal, discount, shipping, total,
-  couponInput, setCouponInput, appliedCoupon,
-  handleApplyCoupon, handleRemoveCoupon, handleCheckout
-}) {
-  return (
-    <div className="border-t pt-4">
-      <div className="flex items-center justify-between"><span className="font-semibold">Subtotaal</span><span>{formatPrice(subtotal)}</span></div>
-      <div className="mt-3">
-        {appliedCoupon ? (
-          <div className="flex items-center justify-between rounded-xl bg-green-50 border border-green-200 px-3 py-2">
-            <div className="text-sm"><span className="font-semibold">Code toegepast:</span> {appliedCoupon.code} <span className="text-green-700">({appliedCoupon.description || "korting"})</span></div>
-            <button type="button" onClick={handleRemoveCoupon} className="text-xs text-red-600 hover:underline">Verwijderen</button>
-          </div>
-        ) : (
-          <div className="flex gap-2">
-            <input type="text" value={couponInput} onChange={(e)=>setCouponInput(e.target.value)} placeholder="Kortingscode" className="flex-1 rounded-xl bg:white border border-black/10 px-3 py-2 text-sm" />
-            <button type="button" onClick={handleApplyCoupon} className="rounded-xl bg-[#0b6e4f] hover:bg-[#0a6045] text-white text-sm font-semibold px-3 py-2">Toepassen</button>
-          </div>
-        )}
-      </div>
-      {discount>0 && (<div className="mt-2 flex items-center justify-between text-sm text-green-700"><span>Korting</span><span>-{formatPrice(discount)}</span></div>)}
-      <div className="mt-1 flex items-center justify-between text-sm"><span>Verzendkosten</span><span>{shipping===0?"–":formatPrice(shipping)}</span></div>
-      <div className="mt-2 flex items-center justify-between text-lg font-extrabold"><span>Totaal</span><span>{formatPrice(total)}</span></div>
-      <button type="button" onClick={handleCheckout} onTouchStart={handleCheckout} onKeyDown={(e)=> (e.key==="Enter"?handleCheckout():null)} className="relative z-10 mt-3 w-full rounded-2xl bg-[#0b6e4f] hover:bg-[#0a6045] text-white font-semibold px-5 py-2.5 shadow hover:shadow-md transition" role="button" tabIndex={0}>
-        Bestelling plaatsen
-      </button>
-      <p className="mt-2 text-xs text-neutral-500">Alle prijzen excl. verzendkosten. Verzendkosten worden automatisch berekend op basis van je keuze.</p>
-    </div>
-  );
-}
-
-function Toast({ toast, setToast, setOpenCart }) {
-  return (
-    <div className={`pointer-events-none fixed inset-x-0 bottom-4 z-[40] flex justify-center transition-all duration-300 ${toast.open?"opacity-100 translate-y-0":"opacity-0 translate-y-3"}`} aria-live="polite">
-      <div className="pointer-events-auto mx-4 w-full max-w-md rounded-2xl border border-black/10 bg-white/95 shadow-xl backdrop-blur p-3">
-        <div className="flex items-center gap-3">
-          {toast.img ? (<img src={toast.img} alt="" className="h-10 w-10 rounded-lg object-cover object-center border border-black/10" />) : null}
-          <div className="min-w-0 flex-1">
-            <div className="text-sm"><span className="font-semibold">{toast.title}</span>{toast.variant ? <span className="text-neutral-600"> — {toast.variant}</span> : null}</div>
-            <div className="text-xs text-neutral-600">Toegevoegd aan je winkelwagen</div>
-          </div>
-          <div className="flex items-center gap-2">
-            <button onClick={()=>{ setOpenCart(true); setToast(t => ({ ...t, open:false })); }} className="rounded-xl bg-[#0b6e4f] hover:bg-[#0a6045] text-white text-xs font-semibold px-3 py-1.5 shadow">Bekijk winkelwagen</button>
-            <button onClick={()=>setToast(t => ({ ...t, open:false }))} className="rounded-xl border px-2 py-1 text-xs" aria-label="Sluit melding" title="Sluiten">✕</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function ConfirmModal({ cart, subtotal, discount, shipping, total, setConfirmOpen, proceedCheckout }) {
-  return (
-    <div className="fixed inset-0 z-[90]">
-      <div className="absolute inset-0 bg-black/40" onClick={()=>setConfirmOpen(false)} aria-hidden="true" />
-      <div className="absolute inset-0 flex items-center justify-center p-4">
-        <div className="w-full max-w-md rounded-2xl bg-white shadow-2xl border border-black/10 p-5">
-          <h3 className="text-xl font-extrabold">Bestelling bevestigen</h3>
-          <div className="mt-3 max-h-56 overflow-auto divide-y">
-            {cart.map(i => (
-              <div key={`${i.productId}-${i.variantId}`} className="py-2 flex items-center gap-3">
-                <img src={i.img} alt="" className="h-10 w-10 rounded-lg object-cover object-center border border-black/10" />
-                <div className="flex-1 min-w-0">
-                  <div className="font-semibold truncate">{i.title}</div>
-                  <div className="text-sm text-neutral-600">{i.variantLabel} × {i.qty}</div>
-                </div>
-                <div className="text-sm font-semibold">{formatPrice(i.price * i.qty)}</div>
-              </div>
-            ))}
-          </div>
-          <div className="mt-4 space-y-1 text-sm">
-            <div className="flex items-center justify-between"><span className="text-neutral-600">Subtotaal</span><span>{formatPrice(subtotal)}</span></div>
-            {discount>0 && (<div className="flex items-center justify-between text-green-700"><span>Korting</span><span>-{formatPrice(discount)}</span></div>)}
-            <div className="flex items-center justify-between"><span className="text-neutral-600">Verzendkosten</span><span>{shipping===0?"–":formatPrice(shipping)}</span></div>
-            <div className="flex items-center justify-between text-lg font-extrabold"><span>Totaal</span><span>{formatPrice(total)}</span></div>
-          </div>
-          <div className="mt-5 flex items-center gap-3">
-            <button onClick={()=>{ haptic(15); beep(80,820,0.12); proceedCheckout(); }} className="flex-1 rounded-2xl bg-[#0b6e4f] hover:bg-[#0a6045] text-white font-semibold px-4 py-2.5 shadow">Doorgaan naar betaling</button>
-            <button onClick={()=>{ setConfirmOpen(false); haptic(10); }} className="rounded-2xl border px-4 py-2.5">Annuleren</button>
-          </div>
-          <p className="mt-2 text-xs text-neutral-500">Je wordt doorgestuurd naar WhatsApp (of PayPal) om de bestelling af te ronden.</p>
-        </div>
-      </div>
     </div>
   );
 }
