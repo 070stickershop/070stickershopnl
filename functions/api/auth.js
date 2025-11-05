@@ -34,20 +34,19 @@ export async function onRequest(context) {
       });
     }
 
-    // Token zonder geneste template strings
-    const tokenLiteral = JSON.stringify(tokenJson.access_token);
-    const html =
-      "<!doctype html><html><body><script>" +
-      "(function(){ " +
-      "var token = " + tokenLiteral + "; " +
-      "var msg = { token: token }; " +
-      "if (window.opener) { window.opener.postMessage(msg, '*'); window.close(); } " +
-      "else { document.body.textContent = 'Login gelukt. Je kunt dit venster sluiten.'; }" +
-      "})();" +
-      "</script></body></html>";
+// Token zonder geneste template strings
+const tokenLiteral = JSON.stringify(tokenJson.access_token);
+const html =
+  "<!doctype html><html><body><script>" +
+  "(function(){" +
+  "var token = " + tokenLiteral + ";" +
+  "if (window.opener) {" +
+  "window.opener.postMessage('authorization:github:success:' + token, '*');" +
+  "window.close();" +
+  "} else {" +
+  "document.body.textContent = 'Login gelukt. Je kunt dit venster sluiten.';" +
+  "}" +
+  "})();" +
+  "</script></body></html>";
 
-    return new Response(html, { headers: { "Content-Type": "text/html" } });
-  }
-
-  return new Response("Not found", { status: 404 });
-}
+return new Response(html, { headers: { "Content-Type": "text/html" } });
