@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://070stickershop.nl/sitemap.xml
