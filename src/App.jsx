@@ -900,7 +900,7 @@ export default function App() {
 <section className="max-w-5xl mx-auto px-4 py-12">
   <div className="text-center mb-8">
     <h2 className="text-2xl font-extrabold text-[#008C45]">Tevreden Klanten 💬</h2>
-    <p className="text-neutral-700 mt-1">Gemiddeld <span className="font-bold text-[#FFD700]">4.7 / 5</span> gebaseerd op echte bestellingen</p>
+    <p className="text-neutral-700 mt-1">Gemiddeld <span className="font-bold text-[#FFD700]">4.8 / 5.0</span> gebaseerd op echte bestellingen</p>
   </div>
 
   <div className="grid sm:grid-cols-2 gap-6">
