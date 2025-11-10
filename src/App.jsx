@@ -1,4 +1,4 @@
-// src/App.jsx
+/* App.jsx – versie met Haagse winkelwagen & adres-checkout (11-11-2025) */
 import React, { useMemo, useState, useRef } from "react";
 
 /* ================== Helpers ================== */
@@ -34,7 +34,7 @@ function beep(duration = 120, frequency = 880, volume = 0.12) {
 /* ================== Config ================== */
 const HERO_BG = "/img/ado-sfeer.jpg";
 
-// Betalen
+// Betalen (zonder KvK)
 const PAYMENT_MODE = "whatsapp"; // "whatsapp" | "paypalme" | "tikkie-api"
 const WHATSAPP_NUMBER = "31624729671"; // <-- jouw nummer zonder +
 const PAYPAL_ME_HANDLE = "JouwPayPalMeNaam";
@@ -52,11 +52,10 @@ const CATEGORIES = [
   { id: "normaal", label: "Normaal" },
   { id: "xxl", label: "XXL A6" },
   { id: "a4", label: "A4" },
-  { id: "accessoires", label: "Accessoires" },
 ];
 
 /* ---- KORTINGSCODES ----
-   MATCHDAY10: alleen vandaag, 10% op A4 Stickers, XXL Stickers en Accessoires (tape) */
+   MATCHDAY10: alleen vandaag, 10% op A4, XXL en Accessoires (tape) */
 const COUPONS = {
   MATCHDAY10: {
     type: "percent",
@@ -67,6 +66,22 @@ const COUPONS = {
   },
 };
 
+/* Kleine helpers voor ‘vandaag’ en eligibility */
+function localISODate() {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+function isMatchdayToday() {
+  // “Alleen vandaag” badge
+  return true;
+}
+function isEligibleForMatchday(product) {
+  return ["a4", "xxl", "accessoires"].includes(product.group);
+}
+
 /* ------------------------------ DATA ------------------------------ */
 const PRODUCTS = [
   /* ---------------- Normaal ---------------- */
@@ -74,21 +89,6 @@ const PRODUCTS = [
     id: "normal-den-haag-territory",
     title: "Den Haag Territory",
     img: "/img/den-haag-territory.jpg",
-    tags: ["normaal", "85x55mm", "vinyl"],
-    variants: [
-      { id: "25", label: "25 stuks", price: 3.5 },
-      { id: "50", label: "50 stuks", price: 6.5 },
-      { id: "100", label: "100 stuks", price: 11.0 },
-      { id: "200", label: "200 stuks", price: 22.0 },
-    ],
-    extra: "85×55 mm · Vinyl · UV- & waterbestendig",
-    badge: "Populair",
-    group: "normaal",
-  },
-   {
-    id: "normal-generaties-heen",
-    title: "Door De Generaties Heen",
-    img: "/img/door-de-generaties.jpg",
     tags: ["normaal", "85x55mm", "vinyl"],
     variants: [
       { id: "25", label: "25 stuks", price: 3.5 },
@@ -298,18 +298,17 @@ const PRODUCTS = [
     extra: "Ideaal om mee te nemen naar awaydays · 50 meter lang.",
     group: "accessoires",
   },
-  {
-  id: "fuck-dordrecht",
-  title: "Fuck D*rdrecht Vlag",
-  img: "/img/fuck-dordrecht.jpg",
-  tags: ["vlag", "accessoires"],
-  variants: [
-    { id: "1", label: "1 vlag", price: 15.0 },
-  ],
-  extra: "100x50cm, hoogwaardige kwaliteit · Ideaal voor awaydays.",
-  group: "accessoires",
-},
 
+  /* ---------------- Vlag ---------------- */
+  {
+    id: "fuck-dordrecht",
+    title: "Fuck D*rdrecht Vlag",
+    img: "/img/fuck-dordrecht.jpg",
+    tags: ["vlag", "accessoires"],
+    variants: [{ id: "1", label: "1 vlag", price: 15.0 }],
+    extra: "100x50cm, hoogwaardige kwaliteit · Ideaal voor awaydays.",
+    group: "accessoires",
+  },
 ];
 
 /* ================== App ================== */
@@ -341,8 +340,12 @@ export default function App() {
     beep(110, 920, 0.13);
   }
 
-  // Checkout confirm modal
-  const [confirmOpen, setConfirmOpen] = useState(false);
+  // Checkout modals
+  const [confirmOpen, setConfirmOpen] = useState(false); // stap 1 (bestaand)
+  const [addressOpen, setAddressOpen] = useState(false); // stap 2 (nieuw)
+  const [customer, setCustomer] = useState({ name: "", street: "", postalCity: "" });
+
+  const [successMsg, setSuccessMsg] = useState("");
 
   const items = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -359,7 +362,7 @@ export default function App() {
       if (category === "all") return true;
       if (category === "a4") return p.id === "a4-stickers";
       if (category === "xxl") return p.id.startsWith("xxl-");
-      return p.id.startsWith("normal-");
+      return p.id.startsWith("normal-") || p.group === "accessoires";
     });
   }, [items, category]);
 
@@ -416,14 +419,6 @@ export default function App() {
   }
 
   // ---- Coupon helpers ----
-  function localISODate() {
-    const d = new Date();
-    const y = d.getFullYear();
-    const m = String(d.getMonth() + 1).padStart(2, "0");
-    const day = String(d.getDate()).padStart(2, "0");
-    return `${y}-${m}-${day}`;
-  }
-
   function handleApplyCoupon() {
     const code = couponInput.trim().toUpperCase();
     if (!code) {
@@ -519,9 +514,22 @@ export default function App() {
 
     parts.push(
       `Verzendkosten: ${formatPrice(shipping)}`,
-      `Totaal: ${formatPrice(total)}`,
+      `Totaal: ${formatPrice(total)}`
+    );
+
+    // Adresblok (nieuw)
+    parts.push(
       "",
-      "Graag bevestigen – ik stuur direct een betaalverzoek terug. Bedankt! 👊"
+      "Gegevens:",
+      `Naam: ${customer.name || "-"}`,
+      `Adres: ${customer.street || "-"}`,
+      `Postcode + plaats: ${customer.postalCity || "-"}`
+    );
+
+    parts.push(
+      "",
+      "Graag bevestigen – ik stuur direct een betaalverzoek terug. Bedankt! 👊",
+      "Bestelling geplaatst via 070StickerShop.nl 💚💛"
     );
 
     return parts.join("\n");
@@ -537,6 +545,7 @@ export default function App() {
     beep(90, 700, 0.12);
   }
 
+  // In stap 2 (adresmodal) wordt pas écht doorgestuurd
   function proceedCheckout() {
     const tekst = buildOrderText();
 
@@ -613,7 +622,7 @@ export default function App() {
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
                    className="h-4 w-4" aria-hidden="true">
-                <path fill="currentColor" d="M34.8 14.6c-3.2-1.7-5.4-4.5-6.2-8.2h-6.1v24.8c-.1 2.4-2.1 4.3-4.5 4.3-2.5 0-4.5-2-4.5-4.5s2-4.5 4.5-4.5c.6 0 1.1.1 1.6.3V20c-7.1-1.1-13.6 4.5-13.6 11.7 0 6.4 5.2 11.6 11.6 11.6 6.3 0 11.5-5.1 11.6-11.4V19.3c2.3 1.9 5.2 3.1 8.4 3.1v-7.8c-.9 0-1.8-.1-2.7-.4z"/>
+                  <path fill="currentColor" d="M34.8 14.6c-3.2-1.7-5.4-4.5-6.2-8.2h-6.1v24.8c-.1 2.4-2.1 4.3-4.5 4.3-2.5 0-4.5-2-4.5-4.5s2-4.5 4.5-4.5c.6 0 1.1.1 1.6.3V20c-7.1-1.1-13.6 4.5-13.6 11.7 0 6.4 5.2 11.6 11.6 11.6 6.3 0 11.5-5.1 11.6-11.4V19.3c2.3 1.9 5.2 3.1 8.4 3.1v-7.8c-.9 0-1.8-.1-2.7-.4z"/>
               </svg>
               TikTok
             </a>
@@ -659,7 +668,7 @@ export default function App() {
               </div>
             </div>
 
-            {/* Rond afgewerkt logo */}
+            {/* Rond logo */}
             <div className="hidden md:flex items-center justify-center">
               <div className="rounded-full p-2 bg-white/5 ring-1 ring-white/15 backdrop-blur-sm shadow-2xl">
                 <img
@@ -711,9 +720,10 @@ export default function App() {
             {visibleItems.map((p) => {
               const variantId = selected[p.id] ?? p.variants[0]?.id;
               const { price, label } = resolveVariantPrice(p, variantId);
+              const showMatchday = isMatchdayToday() && isEligibleForMatchday(p);
               return (
                 <article key={p.id} className="group rounded-3xl bg-white shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 border border-black/5 overflow-hidden">
-                  {/* Afbeelding met vaste aspect-ratio + centreren */}
+                  {/* Afbeelding */}
                   <div className="relative aspect-[4/3] w-full overflow-hidden">
                     <img
                       src={p.img}
@@ -721,9 +731,19 @@ export default function App() {
                       className="absolute inset-0 w-full h-full object-cover object-center"
                       loading="lazy"
                     />
+                    {/* Linker badge */}
                     {p.badge && (
                       <span className="absolute left-3 top-3 z-10 rounded-xl bg-[#0b6e4f] px-2.5 py-1 text-xs font-bold text-white shadow">
                         {p.badge}
+                      </span>
+                    )}
+                    {/* Rechter badge: MATCHDAY10 */}
+                    {showMatchday && (
+                      <span
+                        className="absolute right-3 top-3 z-10 rounded-xl bg-green-500 px-2.5 py-1 text-xs font-bold text-white shadow"
+                        title="Alleen vandaag op A4, XXL en Tape"
+                      >
+                        -10% met MATCHDAY10
                       </span>
                     )}
                   </div>
@@ -738,6 +758,8 @@ export default function App() {
                         ? "Formaat: A6 (105×148mm)"
                         : p.id === "a4-stickers"
                         ? "Formaat: A4 (210×297mm)"
+                        : p.group === "accessoires"
+                        ? "Accessoire"
                         : "-"}
                       {" · "}Vinyl · UV- & waterbestendig
                     </p>
@@ -1020,7 +1042,7 @@ export default function App() {
         </div>
       )}
 
-      {/* Bevestigingsmodal vóór afrekenen (boven cart: z-[90]) */}
+      {/* Bevestigingsmodal vóór afrekenen (stap 1) */}
       {confirmOpen && (
         <div className="fixed inset-0 z-[90]">
           <div
@@ -1069,11 +1091,13 @@ export default function App() {
               </div>
 
               <div className="mt-5 flex items-center gap-3">
+                {/* i.p.v. direct afrekenen -> ga naar adres-stap */}
                 <button
                   onClick={() => {
                     haptic(15);
                     beep(80, 820, 0.12);
-                    proceedCheckout();
+                    setConfirmOpen(false);
+                    setAddressOpen(true);
                   }}
                   className="flex-1 rounded-2xl bg-[#0b6e4f] hover:bg-[#0a6045] text-white font-semibold px-4 py-2.5 shadow"
                 >
@@ -1091,13 +1115,129 @@ export default function App() {
               </div>
 
               <p className="mt-2 text-xs text-neutral-500">
-                Je wordt doorgestuurd naar WhatsApp (of PayPal) om de bestelling af te ronden.
+                Je gaat in de volgende stap je adres invullen en daarna word je doorgestuurd naar WhatsApp.
               </p>
             </div>
           </div>
         </div>
       )}
-      {/* /modal */}
+      {/* /modal stap 1 */}
+
+      {/* Adresgegevens modal – stap 2 */}
+      {addressOpen && (
+        <div className="fixed inset-0 z-[95]">
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setAddressOpen(false)}
+            aria-hidden="true"
+          />
+          <div className="absolute inset-0 flex items-center justify-center p-4">
+            <div className="w-full max-w-md rounded-2xl bg-white shadow-2xl border border-black/10 p-5">
+              <h3 className="text-xl font-extrabold">Bezorgadres</h3>
+
+              <div className="mt-3 grid gap-3">
+                <div>
+                  <label className="block text-sm font-semibold mb-1">Naam</label>
+                  <input
+                    type="text"
+                    className="w-full rounded-xl border border-black/10 px-3 py-2"
+                    placeholder="Voor- en achternaam"
+                    value={customer.name}
+                    onChange={(e) => setCustomer((c) => ({ ...c, name: e.target.value }))}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold mb-1">Straat + huisnummer</label>
+                  <input
+                    type="text"
+                    className="w-full rounded-xl border border-black/10 px-3 py-2"
+                    placeholder="Bijv. Leyweg 123"
+                    value={customer.street}
+                    onChange={(e) => setCustomer((c) => ({ ...c, street: e.target.value }))}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold mb-1">Postcode + plaats</label>
+                  <input
+                    type="text"
+                    className="w-full rounded-xl border border-black/10 px-3 py-2"
+                    placeholder="Bijv. 2545AA Den Haag"
+                    value={customer.postalCity}
+                    onChange={(e) => setCustomer((c) => ({ ...c, postalCity: e.target.value }))}
+                  />
+                </div>
+                <p className="text-xs text-neutral-500">
+                  We gebruiken dit adres alleen om je bestelling te verzenden.
+                </p>
+              </div>
+
+              <div className="mt-5 flex items-center gap-3">
+                <button
+                  onClick={() => {
+                    if (!customer.name.trim() || !customer.street.trim() || !customer.postalCity.trim()) {
+                      alert("Vul je naam en adres (straat + huisnr, postcode + plaats) in.");
+                      return;
+                    }
+                    haptic(15);
+                    beep(80, 820, 0.12);
+                    const tekst = buildOrderText();
+                    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(tekst)}`;
+                    // kleine succesmelding
+                    setSuccessMsg("✅ Bestelling wordt geopend in WhatsApp...");
+                    setTimeout(() => {
+                      window.location.href = url;
+                    }, 800);
+                  }}
+                  className="flex-1 rounded-2xl bg-[#0b6e4f] hover:bg-[#0a6045] text-white font-semibold px-4 py-2.5 shadow"
+                >
+                  Bestellen via WhatsApp
+                </button>
+                <button
+                  onClick={() => {
+                    setAddressOpen(false);
+                    setConfirmOpen(true); // terug naar stap 1
+                    haptic(10);
+                  }}
+                  className="rounded-2xl border px-4 py-2.5"
+                >
+                  Terug
+                </button>
+              </div>
+
+              <p className="mt-2 text-xs text-neutral-500">
+                We sturen je bestelling via WhatsApp door. Je ontvangt daarna een betaalverzoek.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* /modal stap 2 */}
+
+      {/* Sticky Winkelwagen knop – Haagse stijl (altijd zichtbaar) */}
+      <button
+        onClick={() => setOpenCart(true)}
+        className="fixed z-[95] bottom-5 right-5 rounded-full shadow-xl px-5 py-4 flex items-center gap-2"
+        style={{ backgroundColor: "#008C45", color: "white", border: "3px solid #FFD700" }}
+        aria-label="Open winkelwagen"
+        title="Winkelwagen"
+      >
+        <span aria-hidden>🛒</span>
+        {cart.length > 0 && (
+          <span
+            className="ml-1 text-sm font-extrabold min-w-6 h-6 rounded-full grid place-items-center"
+            style={{ backgroundColor: "#FFD700", color: "#0b6e4f", padding: "0 8px" }}
+          >
+            {cart.reduce((n, x) => n + x.qty, 0)}
+          </span>
+        )}
+      </button>
+
+      {/* Success melding */}
+      {successMsg && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-white shadow-lg border border-black/10 px-4 py-2 rounded-2xl text-sm font-semibold text-[#0b6e4f] z-[96]">
+          {successMsg}
+        </div>
+      )}
     </div>
   );
 }
