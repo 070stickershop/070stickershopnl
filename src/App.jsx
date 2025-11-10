@@ -899,8 +899,8 @@ export default function App() {
           {/* ---------------------------------- Reviews Sectie ---------------------------------- */}
 <section className="max-w-5xl mx-auto px-4 py-12">
   <div className="text-center mb-8">
-    <h2 className="text-2xl font-extrabold text-[#008C45]">Wat klanten zeggen 💬</h2>
-    <p className="text-neutral-700 mt-1">Gemiddeld <span className="font-bold text-[#FFD700]">4.9 / 5</span> gebaseerd op echte bestellingen</p>
+    <h2 className="text-2xl font-extrabold text-[#008C45]">Tevreden Klanten 💬</h2>
+    <p className="text-neutral-700 mt-1">Gemiddeld <span className="font-bold text-[#FFD700]">4.7 / 5</span> gebaseerd op echte bestellingen</p>
   </div>
 
   <div className="grid sm:grid-cols-2 gap-6">
@@ -910,7 +910,7 @@ export default function App() {
         <img src="/img/reviews/kevin.jpg" alt="Kevin" className="w-12 h-12 rounded-full object-cover" />
         <div>
           <p className="font-bold">Kevin</p>
-          <p className="text-sm text-neutral-500">Den Haag</p>
+          <p className="text-sm text-neutral-500">Kevin uit Den Haag</p>
         </div>
       </div>
       <div className="text-yellow-400 mb-2">⭐⭐⭐⭐⭐</div>
@@ -925,7 +925,7 @@ export default function App() {
         <img src="/img/reviews/Szymon.jpg" alt="Szymon" className="w-12 h-12 rounded-full object-cover" />
         <div>
           <p className="font-bold">Szymon</p>
-          <p className="text-sm text-neutral-500">Warschau</p>
+          <p className="text-sm text-neutral-500">Szymon uit Warschau</p>
         </div>
       </div>
       <div className="text-yellow-400 mb-2">⭐⭐⭐⭐⭐</div>
@@ -940,7 +940,7 @@ export default function App() {
         <img src="/img/reviews/daan.jpg" alt="Daan" className="w-12 h-12 rounded-full object-cover" />
         <div>
           <p className="font-bold">Daan</p>
-          <p className="text-sm text-neutral-500">Ypenburg</p>
+          <p className="text-sm text-neutral-500">Daan uit Ypenburg</p>
         </div>
       </div>
       <div className="text-yellow-400 mb-2">⭐⭐⭐⭐⭐</div>
@@ -955,12 +955,27 @@ export default function App() {
         <img src="/img/reviews/linda.jpg" alt="Linda" className="w-12 h-12 rounded-full object-cover" />
         <div>
           <p className="font-bold">Linda</p>
-          <p className="text-sm text-neutral-500">Leidschendam</p>
+          <p className="text-sm text-neutral-500">Linda Uit Leidschendam</p>
         </div>
       </div>
-      <div className="text-yellow-400 mb-2">⭐⭐⭐⭐⭐</div>
+      <div className="text-yellow-400 mb-2">⭐⭐⭐⭐</div>
       <p className="text-neutral-700 italic">
         “Snelle levering, netjes verpakt. Mijn jongens vonden ze geweldig!”
+      </p>
+    </div>
+
+    {/* Review 5 */}
+    <div className="bg-white border border-black/5 shadow-md rounded-2xl p-5 hover:shadow-lg transition">
+      <div className="flex items-center gap-3 mb-3">
+        <img src="/img/reviews/linda.jpg" alt="Linda" className="w-12 h-12 rounded-full object-cover" />
+        <div>
+          <p className="font-bold">Mike</p>
+          <p className="text-sm text-neutral-500">Mike Uit Leidschendam</p>
+        </div>
+      </div>
+      <div className="text-yellow-400 mb-2">⭐⭐⭐⭐</div>
+      <p className="text-neutral-700 italic">
+        “Zeer tevreden met deze stickers!”
       </p>
     </div>
   </div>
