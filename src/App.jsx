@@ -910,7 +910,7 @@ export default function App() {
         <img src="/img/reviews/kevin.jpg" alt="Kevin" className="w-12 h-12 rounded-full object-cover" />
         <div>
           <p className="font-bold">Kevin</p>
-          <p className="text-sm text-neutral-500">Kevin uit Den Haag</p>
+          <p className="text-sm text-neutral-500">Kevin | Den Haag</p>
         </div>
       </div>
       <div className="text-yellow-400 mb-2">⭐⭐⭐⭐⭐</div>
@@ -925,7 +925,7 @@ export default function App() {
         <img src="/img/reviews/Szymon.jpg" alt="Szymon" className="w-12 h-12 rounded-full object-cover" />
         <div>
           <p className="font-bold">Szymon</p>
-          <p className="text-sm text-neutral-500">Szymon uit Warschau</p>
+          <p className="text-sm text-neutral-500">Szymon | Warschau</p>
         </div>
       </div>
       <div className="text-yellow-400 mb-2">⭐⭐⭐⭐⭐</div>
@@ -940,7 +940,7 @@ export default function App() {
         <img src="/img/reviews/daan.jpg" alt="Daan" className="w-12 h-12 rounded-full object-cover" />
         <div>
           <p className="font-bold">Daan</p>
-          <p className="text-sm text-neutral-500">Daan uit Ypenburg</p>
+          <p className="text-sm text-neutral-500">Daan | Ypenburg</p>
         </div>
       </div>
       <div className="text-yellow-400 mb-2">⭐⭐⭐⭐⭐</div>
@@ -955,7 +955,7 @@ export default function App() {
         <img src="/img/reviews/linda.jpg" alt="Linda" className="w-12 h-12 rounded-full object-cover" />
         <div>
           <p className="font-bold">Linda</p>
-          <p className="text-sm text-neutral-500">Linda Uit Leidschendam</p>
+          <p className="text-sm text-neutral-500">Linda | Leidschendam</p>
         </div>
       </div>
       <div className="text-yellow-400 mb-2">⭐⭐⭐⭐</div>
@@ -967,10 +967,25 @@ export default function App() {
     {/* Review 5 */}
     <div className="bg-white border border-black/5 shadow-md rounded-2xl p-5 hover:shadow-lg transition">
       <div className="flex items-center gap-3 mb-3">
+        <img src="/img/reviews/delano.jpg" alt="Delano" className="w-12 h-12 rounded-full object-cover" />
+        <div>
+          <p className="font-bold">Delano</p>
+          <p className="text-sm text-neutral-500">Delano | Nootdorp</p>
+        </div>
+      </div>
+      <div className="text-yellow-400 mb-2">⭐⭐⭐⭐⭐</div>
+      <p className="text-neutral-700 italic">
+        “Een van de weinige met kwaliteit stickers. Toppah!”
+      </p>
+    </div>
+
+    {/* Review 6 */}
+    <div className="bg-white border border-black/5 shadow-md rounded-2xl p-5 hover:shadow-lg transition">
+      <div className="flex items-center gap-3 mb-3">
         <img src="/img/reviews/linda.jpg" alt="Linda" className="w-12 h-12 rounded-full object-cover" />
         <div>
           <p className="font-bold">Mike</p>
-          <p className="text-sm text-neutral-500">Mike Uit Leidschendam</p>
+          <p className="text-sm text-neutral-500">Mike | Den Haag</p>
         </div>
       </div>
       <div className="text-yellow-400 mb-2">⭐⭐⭐⭐</div>
