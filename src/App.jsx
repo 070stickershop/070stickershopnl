@@ -85,6 +85,21 @@ const PRODUCTS = [
     badge: "Populair",
     group: "normaal",
   },
+   {
+    id: "normal-generaties-heen",
+    title: "Door De Generaties Heen",
+    img: "/img/door-de-generaties.jpg",
+    tags: ["normaal", "85x55mm", "vinyl"],
+    variants: [
+      { id: "25", label: "25 stuks", price: 3.5 },
+      { id: "50", label: "50 stuks", price: 6.5 },
+      { id: "100", label: "100 stuks", price: 11.0 },
+      { id: "200", label: "200 stuks", price: 22.0 },
+    ],
+    extra: "85×55 mm · Vinyl · UV- & waterbestendig",
+    badge: "Populair",
+    group: "normaal",
+  },
   {
     id: "normal-mijn-club",
     title: "Mijn Club FC Den Haag",
