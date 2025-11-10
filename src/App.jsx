@@ -896,6 +896,75 @@ export default function App() {
             </ul>
             <div className="mt-4 text-sm text-white/60">© {new Date().getFullYear()} 070_stickershop – Alle rechten voorbehouden</div>
           </div>
+          {/* ---------------------------------- Reviews Sectie ---------------------------------- */}
+<section className="max-w-5xl mx-auto px-4 py-12">
+  <div className="text-center mb-8">
+    <h2 className="text-2xl font-extrabold text-[#008C45]">Wat klanten zeggen 💬</h2>
+    <p className="text-neutral-700 mt-1">Gemiddeld <span className="font-bold text-[#FFD700]">4.9 / 5</span> gebaseerd op echte bestellingen</p>
+  </div>
+
+  <div className="grid sm:grid-cols-2 gap-6">
+    {/* Review 1 */}
+    <div className="bg-white border border-black/5 shadow-md rounded-2xl p-5 hover:shadow-lg transition">
+      <div className="flex items-center gap-3 mb-3">
+        <img src="/img/reviews/kevin.jpg" alt="Kevin" className="w-12 h-12 rounded-full object-cover" />
+        <div>
+          <p className="font-bold">Kevin</p>
+          <p className="text-sm text-neutral-500">Den Haag</p>
+        </div>
+      </div>
+      <div className="text-yellow-400 mb-2">⭐⭐⭐⭐⭐</div>
+      <p className="text-neutral-700 italic">
+        “Topkwaliteit stickers, snel geleverd en goeie service. Echte klasse!”
+      </p>
+    </div>
+
+    {/* Review 2 */}
+    <div className="bg-white border border-black/5 shadow-md rounded-2xl p-5 hover:shadow-lg transition">
+      <div className="flex items-center gap-3 mb-3">
+        <img src="/img/reviews/Szymon.jpg" alt="Szymon" className="w-12 h-12 rounded-full object-cover" />
+        <div>
+          <p className="font-bold">Szymon</p>
+          <p className="text-sm text-neutral-500">Warschau</p>
+        </div>
+      </div>
+      <div className="text-yellow-400 mb-2">⭐⭐⭐⭐⭐</div>
+      <p className="text-neutral-700 italic">
+        “Thank you very much friends from The Hague for this amazing stickers!”
+      </p>
+    </div>
+
+    {/* Review 3 */}
+    <div className="bg-white border border-black/5 shadow-md rounded-2xl p-5 hover:shadow-lg transition">
+      <div className="flex items-center gap-3 mb-3">
+        <img src="/img/reviews/daan.jpg" alt="Daan" className="w-12 h-12 rounded-full object-cover" />
+        <div>
+          <p className="font-bold">Daan</p>
+          <p className="text-sm text-neutral-500">Ypenburg</p>
+        </div>
+      </div>
+      <div className="text-yellow-400 mb-2">⭐⭐⭐⭐⭐</div>
+      <p className="text-neutral-700 italic">
+        “Helemaal top, Voorheen altijd via instagram maar de site werkt top!”
+      </p>
+    </div>
+
+    {/* Review 4 */}
+    <div className="bg-white border border-black/5 shadow-md rounded-2xl p-5 hover:shadow-lg transition">
+      <div className="flex items-center gap-3 mb-3">
+        <img src="/img/reviews/linda.jpg" alt="Linda" className="w-12 h-12 rounded-full object-cover" />
+        <div>
+          <p className="font-bold">Linda</p>
+          <p className="text-sm text-neutral-500">Leidschendam</p>
+        </div>
+      </div>
+      <div className="text-yellow-400 mb-2">⭐⭐⭐⭐⭐</div>
+      <p className="text-neutral-700 italic">
+        “Snelle levering, netjes verpakt. Mijn jongens vonden ze geweldig!”
+      </p>
+    </div>
+  </div>
+</section>
         </div>
       </footer>
 
