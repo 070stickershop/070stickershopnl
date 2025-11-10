@@ -995,6 +995,39 @@ export default function App() {
     </div>
   </div>
 </section>
+{/* ---------------------------------- Community Foto's ---------------------------------- */}
+<section className="max-w-6xl mx-auto px-4 py-12">
+  <div className="text-center mb-8">
+    <h2 className="text-2xl font-extrabold text-[#008C45]">Onze stickers 📸</h2>
+    <p className="text-neutral-700">Jullie stickers gespot in de stad of ergens anders ? — stuur je foto via Instagram!</p>
+  </div>
+
+  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+    <div className="overflow-hidden rounded-2xl shadow-sm hover:shadow-lg transition">
+      <img src="/img/reviews/foto1.jpg" alt="Gespot in amerika" className="w-full h-48 object-cover object-center" />
+    </div>
+    <div className="overflow-hidden rounded-2xl shadow-sm hover:shadow-lg transition">
+      <img src="/img/reviews/foto2.jpg" alt="everywhere we go!" className="w-full h-48 object-cover object-center" />
+    </div>
+    <div className="overflow-hidden rounded-2xl shadow-sm hover:shadow-lg transition">
+      <img src="/img/reviews/foto3.jpg" alt="onze tape rollen in actie" className="w-full h-48 object-cover object-center" />
+    </div>
+    <div className="overflow-hidden rounded-2xl shadow-sm hover:shadow-lg transition">
+      <img src="/img/reviews/foto4.jpg" alt="gespot in warschau" className="w-full h-48 object-cover object-center" />
+    </div>
+  </div>
+
+  <div className="text-center mt-6">
+    <a
+      href="https://www.instagram.com/070_stickershop/"
+      target="_blank"
+      rel="noreferrer"
+      className="inline-flex items-center gap-2 rounded-full bg-[#008C45] hover:bg-[#00783C] text-white px-5 py-2.5 font-semibold shadow-md transition"
+    >
+      📲 Deel jouw foto op Instagram
+    </a>
+  </div>
+</section>
         </div>
       </footer>
 
