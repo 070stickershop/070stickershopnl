@@ -137,6 +137,7 @@ const PRODUCTS = [
     ],
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
     group: "normaal",
+  soldOut: true, // ✅ deze vlag is uitverkocht
   },
   {
     id: "normal-fuck-den-bosch",
@@ -785,6 +786,9 @@ function applyMatchdayFromBanner() {
               const groupDiscount = BLACK_FRIDAY_TIERS[p.group] || 0;
               const showBlackFriday = isMatchdayToday() && groupDiscount > 0;
 
+              // Uitverkocht?
+              const isSoldOut = p.soldOut;
+
               return (
                 <article
                   key={p.id}
@@ -804,13 +808,19 @@ function applyMatchdayFromBanner() {
                         {p.badge}
                       </span>
                     )}
-                    {/* Rechter badge: Black Friday per groep */}
-                    {showBlackFriday && (
+                    {/* Rechter badge: Black Friday per groep (alleen als niet uitverkocht) */}
+                    {showBlackFriday && !isSoldOut && (
                       <span
                         className="absolute right-3 top-3 z-10 rounded-xl bg-green-500 px-2.5 py-1 text-xs font-bold text-white shadow"
                         title="Black Friday korting – hoogte verschilt per product"
                       >
                         -{groupDiscount}% Black Friday
+                      </span>
+                    )}
+                    {/* Uitverkocht badge */}
+                    {isSoldOut && (
+                      <span className="absolute right-3 top-3 z-10 rounded-xl bg-red-600 px-2.5 py-1 text-xs font-bold text-white shadow">
+                        Uitverkocht
                       </span>
                     )}
                   </div>
@@ -846,6 +856,7 @@ function applyMatchdayFromBanner() {
                         className="rounded-xl border px-3 py-1.5 text-sm"
                         value={variantId}
                         onChange={(e) => changeVariant(p.id, e.target.value)}
+                        disabled={isSoldOut} // 🔒 niet kiezen als uitverkocht
                       >
                         {p.variants.map((v) => (
                           <option key={v.id} value={v.id}>
@@ -866,10 +877,15 @@ function applyMatchdayFromBanner() {
                         {formatPrice(price)}
                       </span>
                       <button
-                        onClick={() => addToCart(p.id)}
-                        className="rounded-2xl border px-3 py-1.5 text-sm font-semibold hover:shadow transition bg-[#f2f8f6] hover:bg-white"
+                        onClick={() => !isSoldOut && addToCart(p.id)}
+                        disabled={isSoldOut}
+                        className={`rounded-2xl border px-3 py-1.5 text-sm font-semibold hover:shadow transition ${
+                          isSoldOut
+                            ? "bg-neutral-200 text-neutral-500 cursor-not-allowed"
+                            : "bg-[#f2f8f6] hover:bg-white"
+                        }`}
                       >
-                        Voeg toe
+                        {isSoldOut ? "Uitverkocht" : "Voeg toe"}
                       </button>
                     </div>
                   </div>
