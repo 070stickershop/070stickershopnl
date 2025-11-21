@@ -110,6 +110,21 @@ const PRODUCTS = [
     group: "normaal",
   },
   {
+  id: "normal-groeten-uit-den-haag",
+  title: "Groeten Uit Den Haag",
+  img: "/img/groeten-uit-den-haag.jpg",
+  tags: ["normaal", "85x55mm", "vinyl"],
+  variants: [
+    { id: "25", label: "25 stuks", price: 3.5 },
+    { id: "50", label: "50 stuks", price: 6.5 },
+    { id: "100", label: "100 stuks", price: 11.0 },
+    { id: "200", label: "200 stuks", price: 22.0 },
+  ],
+  extra: "85×55 mm · Vinyl · UV- & waterbestendig",
+  badge: "Nieuw",
+  group: "normaal",
+},
+  {
     id: "normal-generaties-heen",
     title: "Door De Generaties Heen",
     img: "/img/door-de-generaties.jpg",
@@ -271,6 +286,22 @@ const PRODUCTS = [
     extra: "A6 (105×148 mm) · Vinyl · UV- & waterbestendig",
     group: "xxl",
   },
+  {
+  id: "xxl-fc-den-haag-1905",
+  title: "XXL stickers – FC Den Haag / 1905",
+  img: "/img/fc-den-haag.jpg",
+  tags: ["rond", "xxl", "1905", "denhaag"],
+  variants: [
+    { id: "10", label: "10 stuks", price: 3.0 },
+    { id: "25", label: "25 stuks", price: 7.5 },
+    { id: "50", label: "50 stuks", price: 12.0 },
+    { id: "75", label: "75 stuks", price: 16.5 },
+    { id: "100", label: "100 stuks", price: 22.0 },
+  ],
+  extra: "Vinyl · UV- & waterbestendig",
+  badge: "Nieuw",
+  group: "xxl",
+},
 
   /* ---------------- A4 ---------------- */
   {
