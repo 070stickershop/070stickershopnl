@@ -55,17 +55,24 @@ const CATEGORIES = [
 ];
 
 /* ---- KORTINGSCODES ----
-   MATCHDAY10: alleen vandaag, 10% op A4, XXL en Accessoires (tape) */
-const COUPONS = {
-  MATCHDAY10: {
-    type: "percent",
-    value: 10,
-    description: "10% korting op A4, XXL en Tape (alleen vandaag)",
-    groups: ["a4", "xxl", "accessoires"],
-    onlyToday: true,
-  },
+   BLACKFRIDAY: 10% normaal, 15% XXL, 50% tape & vlag (max 50%) */
+
+// per productgroep
+const BLACK_FRIDAY_TIERS = {
+  normaal: 10,       // normale stickers
+  xxl: 15,           // XXL stickers
+  accessoires: 50,   // tape + vlag (max 50%)
 };
 
+const COUPONS = {
+  BLACKFRIDAY: {
+    type: "tiered",
+    description:
+      "Black Friday: 10% op normale stickers, 15% op XXL en 50% op tape & vlaggen",
+    tiers: BLACK_FRIDAY_TIERS,
+    onlyToday: false, // zet op true + date-check als je het maar 1 dag wilt
+  },
+};
 /* Kleine helpers voor ‘vandaag’ en eligibility */
 function localISODate() {
   const d = new Date();
@@ -75,11 +82,13 @@ function localISODate() {
   return `${y}-${m}-${day}`;
 }
 function isMatchdayToday() {
-  // “Alleen vandaag” badge
+  // Black Friday actief? Zet op false als actie voorbij is
   return true;
 }
+
 function isEligibleForMatchday(product) {
-  return ["a4", "xxl", "accessoires"].includes(product.group);
+  // alleen tonen als er een percentage voor deze groep is
+  return Boolean(BLACK_FRIDAY_TIERS[product.group]);
 }
 
 /* ------------------------------ DATA ------------------------------ */
@@ -455,38 +464,59 @@ export default function App() {
     haptic(15);
   }
 
-  function computeDiscount(subtotal, cart) {
-    if (!appliedCoupon) return 0;
+function computeDiscount(subtotal, cart) {
+  if (!appliedCoupon) return 0;
 
-    // Alleen vandaag geldig?
-    if (appliedCoupon.onlyToday) {
-      if (appliedCoupon.appliedOn !== localISODate()) {
-        return 0;
-      }
+  // Alleen vandaag geldig?
+  if (appliedCoupon.onlyToday) {
+    if (appliedCoupon.appliedOn !== localISODate()) {
+      return 0;
     }
+  }
 
-    // Subtotaal van items die in de juiste groepen vallen
-    let eligibleSubtotal = 0;
-    if (appliedCoupon.groups?.length) {
-      eligibleSubtotal = cart.reduce((sum, item) => {
-        const product = PRODUCTS.find((p) => p.id === item.productId);
-        if (product && appliedCoupon.groups.includes(product.group)) {
-          return sum + item.price * item.qty;
-        }
-        return sum;
-      }, 0);
-    } else {
-      eligibleSubtotal = subtotal;
-    }
-
+  // 1) Staffelkorting per groep (Black Friday)
+  if (appliedCoupon.type === "tiered" && appliedCoupon.tiers) {
     let d = 0;
-    if (appliedCoupon.type === "percent") {
-      d = eligibleSubtotal * (appliedCoupon.value / 100);
-    } else if (appliedCoupon.type === "fixed") {
-      d = appliedCoupon.value;
+
+    for (const item of cart) {
+      const product = PRODUCTS.find((p) => p.id === item.productId);
+      if (!product) continue;
+
+      const pct = appliedCoupon.tiers[product.group] || 0;
+      if (!pct) continue;
+
+      d += item.price * item.qty * (pct / 100);
     }
+
+    // veiligheid: nooit meer korting dan het subtotaal
     return Math.min(d, subtotal);
   }
+
+  // 2) Bestaande percent/fixed fallback (voor andere codes)
+  // Subtotaal van items die in de juiste groepen vallen
+  let eligibleSubtotal = 0;
+  if (appliedCoupon.groups?.length) {
+    eligibleSubtotal = cart.reduce((sum, item) => {
+      const product = PRODUCTS.find((p) => p.id === item.productId);
+      if (product && appliedCoupon.groups.includes(product.group)) {
+        return sum + item.price * item.qty;
+      }
+      return sum;
+    }, 0);
+  } else {
+    eligibleSubtotal = subtotal;
+  }
+
+  let d = 0;
+  if (appliedCoupon.type === "percent") {
+    d = eligibleSubtotal * (appliedCoupon.value / 100);
+  } else if (appliedCoupon.type === "fixed") {
+    d = appliedCoupon.value;
+  }
+
+  return Math.min(d, subtotal);
+}
+
 
   const subtotal = cart.reduce((s, x) => s + x.price * x.qty, 0);
 
@@ -710,7 +740,9 @@ export default function App() {
                   className="w-full rounded-2xl border px-4 py-2.5 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0b6e4f]"
                   placeholder="Zoeken op naam of tag…"
                 />
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500">⌘K</span>
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500">
+                  ⌘K
+                </span>
               </label>
             </div>
           </div>
@@ -722,7 +754,9 @@ export default function App() {
                 key={c.id}
                 onClick={() => setCategory(c.id)}
                 className={`px-3 py-1.5 rounded-full border text-sm transition shadow-sm ${
-                  category === c.id ? "bg-[#0b6e4f] text-white border-[#0b6e4f]" : "bg-white hover:bg-white/80"
+                  category === c.id
+                    ? "bg-[#0b6e4f] text-white border-[#0b6e4f]"
+                    : "bg-white hover:bg-white/80"
                 }`}
               >
                 {c.label}
@@ -735,9 +769,16 @@ export default function App() {
             {visibleItems.map((p) => {
               const variantId = selected[p.id] ?? p.variants[0]?.id;
               const { price, label } = resolveVariantPrice(p, variantId);
-              const showMatchday = isMatchdayToday() && isEligibleForMatchday(p);
+
+              // Black Friday korting per groep
+              const groupDiscount = BLACK_FRIDAY_TIERS[p.group] || 0;
+              const showBlackFriday = isMatchdayToday() && groupDiscount > 0;
+
               return (
-                <article key={p.id} className="group rounded-3xl bg-white shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 border border-black/5 overflow-hidden">
+                <article
+                  key={p.id}
+                  className="group rounded-3xl bg-white shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 border border-black/5 overflow-hidden"
+                >
                   {/* Afbeelding */}
                   <div className="relative aspect-[4/3] w-full overflow-hidden">
                     <img
@@ -752,20 +793,22 @@ export default function App() {
                         {p.badge}
                       </span>
                     )}
-                    {/* Rechter badge: MATCHDAY10 */}
-                    {showMatchday && (
+                    {/* Rechter badge: Black Friday per groep */}
+                    {showBlackFriday && (
                       <span
                         className="absolute right-3 top-3 z-10 rounded-xl bg-green-500 px-2.5 py-1 text-xs font-bold text-white shadow"
-                        title="Alleen vandaag op A4, XXL en Tape"
+                        title="Black Friday korting – hoogte verschilt per product"
                       >
-                        -10% met MATCHDAY10
+                        -{groupDiscount}% Black Friday
                       </span>
                     )}
                   </div>
 
                   <div className="p-4">
                     <h3 className="font-bold text-lg">{p.title}</h3>
-                    <p className="mt-1 text-sm text-neutral-600">{p.tags.join(" · ")}</p>
+                    <p className="mt-1 text-sm text-neutral-600">
+                      {p.tags.join(" · ")}
+                    </p>
                     <p className="text-xs text-neutral-500 mt-1">
                       {p.id.startsWith("normal-")
                         ? "Formaat: 85×55mm"
@@ -781,7 +824,12 @@ export default function App() {
 
                     {/* Variant selector */}
                     <div className="mt-3 flex items-center gap-2">
-                      <label htmlFor={`variant-${p.id}`} className="text-sm text-neutral-700">Kies aantal:</label>
+                      <label
+                        htmlFor={`variant-${p.id}`}
+                        className="text-sm text-neutral-700"
+                      >
+                        Kies aantal:
+                      </label>
                       <select
                         id={`variant-${p.id}`}
                         className="rounded-xl border px-3 py-1.5 text-sm"
@@ -789,15 +837,23 @@ export default function App() {
                         onChange={(e) => changeVariant(p.id, e.target.value)}
                       >
                         {p.variants.map((v) => (
-                          <option key={v.id} value={v.id}>{v.label}</option>
+                          <option key={v.id} value={v.id}>
+                            {v.label}
+                          </option>
                         ))}
                       </select>
                     </div>
 
-                    {p.variantNote && <p className="mt-2 text-xs text-neutral-500">{p.variantNote}</p>}
+                    {p.variantNote && (
+                      <p className="mt-2 text-xs text-neutral-500">
+                        {p.variantNote}
+                      </p>
+                    )}
 
                     <div className="mt-3 flex items-center justify-between">
-                      <span className="text-lg font-extrabold tracking-tight">{formatPrice(price)}</span>
+                      <span className="text-lg font-extrabold tracking-tight">
+                        {formatPrice(price)}
+                      </span>
                       <button
                         onClick={() => addToCart(p.id)}
                         className="rounded-2xl border px-3 py-1.5 text-sm font-semibold hover:shadow transition bg-[#f2f8f6] hover:bg-white"
@@ -812,6 +868,7 @@ export default function App() {
           </div>
         </div>
       </section>
+
 
       {/* Info */}
       <section id="info" className="bg-white/90">
