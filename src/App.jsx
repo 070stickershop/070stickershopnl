@@ -612,13 +612,20 @@ function computeDiscount(subtotal, cart) {
     }
   }
 
-  // Quick apply knop in banner
-  function applyMatchdayFromBanner() {
-    setCouponInput("MATCHDAY10");
-    const c = COUPONS.MATCHDAY10;
-    if (c) setAppliedCoupon({ code: "MATCHDAY10", appliedOn: localISODate(), ...c });
-    haptic(18);
+// Quick apply knop in banner – Black Friday
+function applyMatchdayFromBanner() {
+  setCouponInput("BLACKFRIDAY");
+  const c = COUPONS.BLACKFRIDAY;
+  if (c) {
+    setAppliedCoupon({
+      code: "BLACKFRIDAY",
+      appliedOn: localISODate(),
+      ...c,
+    });
   }
+  haptic(18);
+}
+
 
   return (
     <div className="min-h-screen text-neutral-900 bg-gradient-to-br from-[#0b6e4f] via-[#f2c200]/30 to-[#f2c200]/60">
@@ -674,11 +681,13 @@ function computeDiscount(subtotal, cart) {
           </nav>
         </div>
 
-        {/* MATCHDAY banner */}
+        {/* Black Friday banner */}
         <div className="bg-black text-white">
           <div className="mx-auto max-w-6xl px-4 py-2 text-sm flex items-center gap-3">
-            <span className="font-semibold">Alleen vandaag:</span>
-            <span>MATCHDAY10 — 10% korting op A4, XXL en Tape</span>
+            <span className="font-semibold">Black Friday:</span>
+            <span>
+              BLACKFRIDAY — 10% normaal · 15% XXL · 50% tape & vlag
+            </span>
             {!appliedCoupon ? (
               <button
                 onClick={applyMatchdayFromBanner}
@@ -687,7 +696,9 @@ function computeDiscount(subtotal, cart) {
                 Code toepassen
               </button>
             ) : (
-              <span className="ml-auto text-green-400 font-semibold">Code toegepast</span>
+              <span className="ml-auto text-green-400 font-semibold">
+                Code toegepast
+              </span>
             )}
           </div>
         </div>
