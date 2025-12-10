@@ -1,4 +1,4 @@
-/* App.jsx – versie met Haagse winkelwagen & adres-checkout (11-11-2025) */
+/* App.jsx – versie met Haagse winkelwagen & adres-checkout (Matchday versie) */
 import React, { useMemo, useState, useRef } from "react";
 
 /* ================== Helpers ================== */
@@ -55,24 +55,17 @@ const CATEGORIES = [
 ];
 
 /* ---- KORTINGSCODES ----
-   BLACKFRIDAY: 10% normaal, 15% XXL, 50% tape & vlag (max 50%) */
-
-// per productgroep
-const BLACK_FRIDAY_TIERS = {
-  normaal: 10,       // normale stickers
-  xxl: 15,           // XXL stickers
-  accessoires: 50,   // tape + vlag (max 50%)
-};
-
+   MATCHDAY10: alleen op wedstrijddagen, 10% op A4, XXL en Accessoires (tape/vlag) */
 const COUPONS = {
-  BLACKFRIDAY: {
-    type: "tiered",
-    description:
-      "Black Friday: 10% op normale stickers, 15% op XXL en 50% op tape & vlaggen",
-    tiers: BLACK_FRIDAY_TIERS,
-    onlyToday: false, // zet op true + date-check als je het maar 1 dag wilt
+  MATCHDAY10: {
+    type: "percent",
+    value: 10,
+    description: "10% korting op A4, XXL en Tape/Vlag (alleen matchdays)",
+    groups: ["a4", "xxl", "accessoires"],
+    onlyToday: true,
   },
 };
+
 /* Kleine helpers voor ‘vandaag’ en eligibility */
 function localISODate() {
   const d = new Date();
@@ -81,14 +74,34 @@ function localISODate() {
   const day = String(d.getDate()).padStart(2, "0");
   return `${y}-${m}-${day}`;
 }
+
+// Lijst met wedstrijddagen (YYYY-MM-DD)
+const MATCH_DAYS = [
+  "2025-12-12",
+  "2025-12-19",
+  "2026-01-09",
+  "2026-01-16",
+  "2026-01-23",
+  "2026-01-26",
+  "2026-01-30",
+  "2026-02-13",
+  "2026-02-20",
+  "2026-02-27",
+  "2026-03-07",
+  "2026-03-13",
+  "2026-03-17",
+  "2026-03-22",
+  // vul hier zelf jouw wedstrijddagen toe
+];
+
 function isMatchdayToday() {
-  // Black Friday actief? Zet op false als actie voorbij is
-  return true;
+  // alleen true op wedstrijddagen
+  return MATCH_DAYS.includes(localISODate());
 }
 
 function isEligibleForMatchday(product) {
-  // alleen tonen als er een percentage voor deze groep is
-  return Boolean(BLACK_FRIDAY_TIERS[product.group]);
+  // A4, XXL en accessoires (tape/vlag)
+  return ["a4", "xxl", "accessoires"].includes(product.group);
 }
 
 /* ------------------------------ DATA ------------------------------ */
@@ -110,20 +123,21 @@ const PRODUCTS = [
     group: "normaal",
   },
   {
-  id: "normal-groeten-uit-den-haag",
-  title: "Groeten Uit Den Haag",
-  img: "/img/groeten-uit-den-haag.jpg",
-  tags: ["normaal", "85x55mm", "vinyl"],
-  variants: [
-    { id: "25", label: "25 stuks", price: 3.5 },
-    { id: "50", label: "50 stuks", price: 6.5 },
-    { id: "100", label: "100 stuks", price: 11.0 },
-    { id: "200", label: "200 stuks", price: 22.0 },
-  ],
-  extra: "85×55 mm · Vinyl · UV- & waterbestendig",
-  badge: "Nieuw",
-  group: "normaal",
-},
+    id: "normal-groeten-uit-den-haag",
+    title: "Groeten Uit Den Haag",
+    img: "/img/groeten-uit-den-haag.jpg",
+    tags: ["normaal", "85x55mm", "vinyl"],
+    variants: [
+      { id: "25", label: "25 stuks", price: 3.5 },
+      { id: "50", label: "50 stuks", price: 6.5 },
+      { id: "100", label: "100 stuks", price: 11.0 },
+      { id: "200", label: "200 stuks", price: 22.0 },
+    ],
+    extra: "85×55 mm · Vinyl · UV- & waterbestendig",
+    badge: "Nieuw",
+    group: "normaal",
+    soldOut: true,
+  },
   {
     id: "normal-generaties-heen",
     title: "Door De Generaties Heen",
@@ -152,7 +166,7 @@ const PRODUCTS = [
     ],
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
     group: "normaal",
-  soldOut: true, // ✅ deze vlag is uitverkocht
+    soldOut: true,
   },
   {
     id: "normal-fuck-den-bosch",
@@ -195,6 +209,7 @@ const PRODUCTS = [
     ],
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
     group: "normaal",
+    soldOut: true,
   },
   {
     id: "normal-betreden-op-eigen-risico",
@@ -209,6 +224,7 @@ const PRODUCTS = [
     ],
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
     group: "normaal",
+    soldOut: true,
   },
   {
     id: "normal-coming-for-you",
@@ -223,6 +239,7 @@ const PRODUCTS = [
     ],
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
     group: "normaal",
+    soldOut: true,
   },
   {
     id: "normal-fuck-espn",
@@ -287,21 +304,21 @@ const PRODUCTS = [
     group: "xxl",
   },
   {
-  id: "xxl-fc-den-haag-1905",
-  title: "XXL stickers – FC Den Haag / 1905",
-  img: "/img/fc-den-haag.jpg",
-  tags: ["rond", "xxl", "1905", "denhaag"],
-  variants: [
-    { id: "10", label: "10 stuks", price: 3.0 },
-    { id: "25", label: "25 stuks", price: 7.5 },
-    { id: "50", label: "50 stuks", price: 12.0 },
-    { id: "75", label: "75 stuks", price: 16.5 },
-    { id: "100", label: "100 stuks", price: 22.0 },
-  ],
-  extra: "Vinyl · UV- & waterbestendig",
-  badge: "Nieuw",
-  group: "xxl",
-},
+    id: "xxl-fc-den-haag-1905",
+    title: "XXL stickers – FC Den Haag / 1905",
+    img: "/img/fc-den-haag.jpg",
+    tags: ["rond", "xxl", "1905", "denhaag"],
+    variants: [
+      { id: "10", label: "10 stuks", price: 3.0 },
+      { id: "25", label: "25 stuks", price: 7.5 },
+      { id: "50", label: "50 stuks", price: 12.0 },
+      { id: "75", label: "75 stuks", price: 16.5 },
+      { id: "100", label: "100 stuks", price: 22.0 },
+    ],
+    extra: "Vinyl · UV- & waterbestendig",
+    badge: "Nieuw",
+    group: "xxl",
+  },
 
   /* ---------------- A4 ---------------- */
   {
@@ -384,7 +401,12 @@ export default function App() {
   const [appliedCoupon, setAppliedCoupon] = useState(null); // { code, type, value, groups, onlyToday, description, appliedOn }
 
   // Toast state
-  const [toast, setToast] = useState({ open: false, title: "", img: "", variant: "" });
+  const [toast, setToast] = useState({
+    open: false,
+    title: "",
+    img: "",
+    variant: "",
+  });
   const toastTimerRef = useRef(null);
   function showAddedToast({ title, img, variant }) {
     setToast({ open: true, title, img, variant });
@@ -397,9 +419,13 @@ export default function App() {
   }
 
   // Checkout modals
-  const [confirmOpen, setConfirmOpen] = useState(false); // stap 1 (bestaand)
-  const [addressOpen, setAddressOpen] = useState(false); // stap 2 (nieuw)
-  const [customer, setCustomer] = useState({ name: "", street: "", postalCity: "" });
+  const [confirmOpen, setConfirmOpen] = useState(false); // stap 1
+  const [addressOpen, setAddressOpen] = useState(false); // stap 2
+  const [customer, setCustomer] = useState({
+    name: "",
+    street: "",
+    postalCity: "",
+  });
 
   const [successMsg, setSuccessMsg] = useState("");
 
@@ -470,7 +496,9 @@ export default function App() {
 
   function removeFromCart(productId, variantId) {
     setCart((prev) =>
-      prev.filter((x) => !(x.productId === productId && x.variantId === variantId))
+      prev.filter(
+        (x) => !(x.productId === productId && x.variantId === variantId)
+      )
     );
   }
 
@@ -496,59 +524,41 @@ export default function App() {
     haptic(15);
   }
 
-function computeDiscount(subtotal, cart) {
-  if (!appliedCoupon) return 0;
+  function computeDiscount(subtotal, cart) {
+    if (!appliedCoupon) return 0;
 
-  // Alleen vandaag geldig?
-  if (appliedCoupon.onlyToday) {
-    if (appliedCoupon.appliedOn !== localISODate()) {
-      return 0;
+    // Alleen vandaag geldig?
+    if (appliedCoupon.onlyToday) {
+      if (appliedCoupon.appliedOn !== localISODate()) {
+        return 0;
+      }
     }
-  }
 
-  // 1) Staffelkorting per groep (Black Friday)
-  if (appliedCoupon.type === "tiered" && appliedCoupon.tiers) {
+    // Subtotaal van items die in de juiste groepen vallen
+    let eligibleSubtotal = 0;
+
+    if (appliedCoupon.groups?.length) {
+      eligibleSubtotal = cart.reduce((sum, item) => {
+        const product = PRODUCTS.find((p) => p.id === item.productId);
+        if (product && appliedCoupon.groups.includes(product.group)) {
+          return sum + item.price * item.qty;
+        }
+        return sum;
+      }, 0);
+    } else {
+      eligibleSubtotal = subtotal;
+    }
+
     let d = 0;
 
-    for (const item of cart) {
-      const product = PRODUCTS.find((p) => p.id === item.productId);
-      if (!product) continue;
-
-      const pct = appliedCoupon.tiers[product.group] || 0;
-      if (!pct) continue;
-
-      d += item.price * item.qty * (pct / 100);
+    if (appliedCoupon.type === "percent") {
+      d = eligibleSubtotal * (appliedCoupon.value / 100);
+    } else if (appliedCoupon.type === "fixed") {
+      d = appliedCoupon.value;
     }
 
-    // veiligheid: nooit meer korting dan het subtotaal
     return Math.min(d, subtotal);
   }
-
-  // 2) Bestaande percent/fixed fallback (voor andere codes)
-  // Subtotaal van items die in de juiste groepen vallen
-  let eligibleSubtotal = 0;
-  if (appliedCoupon.groups?.length) {
-    eligibleSubtotal = cart.reduce((sum, item) => {
-      const product = PRODUCTS.find((p) => p.id === item.productId);
-      if (product && appliedCoupon.groups.includes(product.group)) {
-        return sum + item.price * item.qty;
-      }
-      return sum;
-    }, 0);
-  } else {
-    eligibleSubtotal = subtotal;
-  }
-
-  let d = 0;
-  if (appliedCoupon.type === "percent") {
-    d = eligibleSubtotal * (appliedCoupon.value / 100);
-  } else if (appliedCoupon.type === "fixed") {
-    d = appliedCoupon.value;
-  }
-
-  return Math.min(d, subtotal);
-}
-
 
   const subtotal = cart.reduce((s, x) => s + x.price * x.qty, 0);
 
@@ -594,7 +604,7 @@ function computeDiscount(subtotal, cart) {
       `Totaal: ${formatPrice(total)}`
     );
 
-    // Adresblok (nieuw)
+    // Adresblok
     parts.push(
       "",
       "Gegevens:",
@@ -644,20 +654,19 @@ function computeDiscount(subtotal, cart) {
     }
   }
 
-// Quick apply knop in banner – Black Friday
-function applyMatchdayFromBanner() {
-  setCouponInput("BLACKFRIDAY");
-  const c = COUPONS.BLACKFRIDAY;
-  if (c) {
-    setAppliedCoupon({
-      code: "BLACKFRIDAY",
-      appliedOn: localISODate(),
-      ...c,
-    });
+  // Quick apply knop in banner – MATCHDAY10
+  function applyMatchdayFromBanner() {
+    setCouponInput("MATCHDAY10");
+    const c = COUPONS.MATCHDAY10;
+    if (c) {
+      setAppliedCoupon({
+        code: "MATCHDAY10",
+        appliedOn: localISODate(),
+        ...c,
+      });
+    }
+    haptic(18);
   }
-  haptic(18);
-}
-
 
   return (
     <div className="min-h-screen text-neutral-900 bg-gradient-to-br from-[#0b6e4f] via-[#f2c200]/30 to-[#f2c200]/60">
@@ -676,9 +685,15 @@ function applyMatchdayFromBanner() {
           </div>
 
           <nav className="ml-auto hidden md:flex items-center gap-6 text-sm">
-            <a href="#collectie" className="hover:underline">Collectie</a>
-            <a href="#info" className="hover:underline">Verzending</a>
-            <a href="#contact" className="hover:underline">Contact</a>
+            <a href="#collectie" className="hover:underline">
+              Collectie
+            </a>
+            <a href="#info" className="hover:underline">
+              Verzending
+            </a>
+            <a href="#contact" className="hover:underline">
+              Contact
+            </a>
 
             {/* Instagram */}
             <a
@@ -687,9 +702,14 @@ function applyMatchdayFromBanner() {
               rel="noreferrer"
               className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 shadow-sm hover:shadow transition bg-white/90"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                   fill="none" stroke="currentColor" strokeWidth="1.5"
-                   className="h-4 w-4">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                className="h-4 w-4"
+              >
                 <rect x="3" y="3" width="18" height="18" rx="5" ry="5"></rect>
                 <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
                 <circle cx="17.5" cy="6.5" r="0.5"></circle>
@@ -704,22 +724,29 @@ function applyMatchdayFromBanner() {
               rel="noreferrer"
               className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 shadow-sm hover:shadow transition bg-white/90"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
-                   className="h-4 w-4" aria-hidden="true">
-                  <path fill="currentColor" d="M34.8 14.6c-3.2-1.7-5.4-4.5-6.2-8.2h-6.1v24.8c-.1 2.4-2.1 4.3-4.5 4.3-2.5 0-4.5-2-4.5-4.5s2-4.5 4.5-4.5c.6 0 1.1.1 1.6.3V20c-7.1-1.1-13.6 4.5-13.6 11.7 0 6.4 5.2 11.6 11.6 11.6 6.3 0 11.5-5.1 11.6-11.4V19.3c2.3 1.9 5.2 3.1 8.4 3.1v-7.8c-.9 0-1.8-.1-2.7-.4z"/>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 48 48"
+                className="h-4 w-4"
+                aria-hidden="true"
+              >
+                <path
+                  fill="currentColor"
+                  d="M34.8 14.6c-3.2-1.7-5.4-4.5-6.2-8.2h-6.1v24.8c-.1 2.4-2.1 4.3-4.5 4.3-2.5 0-4.5-2-4.5-4.5s2-4.5 4.5-4.5c.6 0 1.1.1 1.6.3V20c-7.1-1.1-13.6 4.5-13.6 11.7 0 6.4 5.2 11.6 11.6 11.6 6.3 0 11.5-5.1 11.6-11.4V19.3c2.3 1.9 5.2 3.1 8.4 3.1v-7.8c-.9 0-1.8-.1-2.7-.4z"
+                />
               </svg>
               TikTok
             </a>
           </nav>
         </div>
+      </header>
 
-        {/* Black Friday banner */}
+      {/* MATCHDAY banner – alleen zichtbaar op wedstrijddagen */}
+      {isMatchdayToday() && (
         <div className="bg-black text-white">
           <div className="mx-auto max-w-6xl px-4 py-2 text-sm flex items-center gap-3">
-            <span className="font-semibold">Black Friday:</span>
-            <span>
-              BLACKFRIDAY — 10% normaal · 15% XXL · 50% tape & vlag
-            </span>
+            <span className="font-semibold">Matchday actie:</span>
+            <span>MATCHDAY10 — 10% korting op A4, XXL en Tape/Vlag</span>
             {!appliedCoupon ? (
               <button
                 onClick={applyMatchdayFromBanner}
@@ -734,11 +761,15 @@ function applyMatchdayFromBanner() {
             )}
           </div>
         </div>
-      </header>
+      )}
 
       {/* HERO */}
       <section className="relative isolate h-[420px] md:h-[650px] lg:h-[750px]">
-        <img src={HERO_BG} alt="Ado sfeer" className="absolute inset-0 w-full h-full object-cover" />
+        <img
+          src={HERO_BG}
+          alt="Ado sfeer"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/0" />
         <div className="relative z-10 mx-auto max-w-6xl px-4 h-full flex items-center">
           <div className="grid md:grid-cols-2 gap-10 items-center w-full">
@@ -751,8 +782,18 @@ function applyMatchdayFromBanner() {
                 groen-geel. Water- & UV-bestendig.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
-                <a href="#collectie" className="rounded-2xl bg-[#f2c200] px-5 py-2.5 font-semibold shadow hover:shadow-md transition">Shop nu</a>
-                <a href="#info" className="rounded-2xl bg-white/90 px-5 py-2.5 font-semibold shadow hover:shadow-md transition">Verzending & betalen</a>
+                <a
+                  href="#collectie"
+                  className="rounded-2xl bg-[#f2c200] px-5 py-2.5 font-semibold shadow hover:shadow-md transition"
+                >
+                  Shop nu
+                </a>
+                <a
+                  href="#info"
+                  className="rounded-2xl bg-white/90 px-5 py-2.5 font-semibold shadow hover:shadow-md transition"
+                >
+                  Verzending & betalen
+                </a>
               </div>
             </div>
 
@@ -774,7 +815,9 @@ function applyMatchdayFromBanner() {
       <section id="collectie" className="bg-white/80 border-t border-black/5">
         <div className="mx-auto max-w-7xl px-4 py-12">
           <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
-            <h2 className="text-2xl md:text-3xl font-black tracking-tight">Collectie</h2>
+            <h2 className="text-2xl md:text-3xl font-black tracking-tight">
+              Collectie
+            </h2>
             <div className="md:ml-auto w-full md:w-80">
               <label className="relative block">
                 <input
@@ -813,12 +856,9 @@ function applyMatchdayFromBanner() {
               const variantId = selected[p.id] ?? p.variants[0]?.id;
               const { price, label } = resolveVariantPrice(p, variantId);
 
-              // Black Friday korting per groep
-              const groupDiscount = BLACK_FRIDAY_TIERS[p.group] || 0;
-              const showBlackFriday = isMatchdayToday() && groupDiscount > 0;
-
-              // Uitverkocht?
               const isSoldOut = p.soldOut;
+              const showMatchday =
+                isMatchdayToday() && isEligibleForMatchday(p) && !isSoldOut;
 
               return (
                 <article
@@ -839,13 +879,13 @@ function applyMatchdayFromBanner() {
                         {p.badge}
                       </span>
                     )}
-                    {/* Rechter badge: Black Friday per groep (alleen als niet uitverkocht) */}
-                    {showBlackFriday && !isSoldOut && (
+                    {/* Rechter badge: MATCHDAY10 */}
+                    {showMatchday && (
                       <span
                         className="absolute right-3 top-3 z-10 rounded-xl bg-green-500 px-2.5 py-1 text-xs font-bold text-white shadow"
-                        title="Black Friday korting – hoogte verschilt per product"
+                        title="Matchday: 10% korting op A4, XXL en Tape/Vlag met MATCHDAY10"
                       >
-                        -{groupDiscount}% Black Friday
+                        -10% met MATCHDAY10
                       </span>
                     )}
                     {/* Uitverkocht badge */}
@@ -887,7 +927,7 @@ function applyMatchdayFromBanner() {
                         className="rounded-xl border px-3 py-1.5 text-sm"
                         value={variantId}
                         onChange={(e) => changeVariant(p.id, e.target.value)}
-                        disabled={isSoldOut} // 🔒 niet kiezen als uitverkocht
+                        disabled={isSoldOut}
                       >
                         {p.variants.map((v) => (
                           <option key={v.id} value={v.id}>
@@ -927,7 +967,6 @@ function applyMatchdayFromBanner() {
         </div>
       </section>
 
-
       {/* Info */}
       <section id="info" className="bg-white/90">
         <div className="mx-auto max-w-6xl px-4 py-12 grid md:grid-cols-3 gap-6">
@@ -935,30 +974,38 @@ function applyMatchdayFromBanner() {
             <h3 className="font-extrabold text-lg">Verzending</h3>
             <p className="mt-2 text-sm text-neutral-700">
               Verzendkosten: <strong>€4,50</strong> standaard. <br />
-              <em>Uitzondering:</em> bestellingen die uitsluitend bestaan uit <strong>25 stuks</strong> (Normaal) of <strong>10 stuks</strong> (XXL A6) verzenden voor <strong>€4,00</strong>.
+              <em>Uitzondering:</em> bestellingen die uitsluitend bestaan uit{" "}
+              <strong>25 stuks</strong> (Normaal) of{" "}
+              <strong>10 stuks</strong> (XXL A6) verzenden voor{" "}
+              <strong>€4,00</strong>.
             </p>
           </div>
           <div className="rounded-3xl border p-6 shadow-sm">
             <h3 className="font-extrabold text-lg">Betalen</h3>
             <p className="mt-2 text-sm text-neutral-700">
-              Betaling stemmen we na bestelling af via <strong>WhatsApp</strong> (we sturen direct een betaalverzoek, bijv. Tikkie).
+              Betaling stemmen we na bestelling af via{" "}
+              <strong>WhatsApp</strong> (we sturen direct een betaalverzoek,
+              bijv. Tikkie).
             </p>
           </div>
           <div className="rounded-3xl border p-6 shadow-sm">
             <h3 className="font-extrabold text-lg">Kwaliteit</h3>
             <p className="mt-2 text-sm text-neutral-700">
-              Polymeer vinyl, outdoor-laminaat, krasvast. Met liefde gemaakt in 070.
+              Polymeer vinyl, outdoor-laminaat, krasvast. Met liefde gemaakt in
+              070.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Contact + Instagram/TikTok */}
+      {/* Contact + Instagram/TikTok + reviews + community */}
       <footer id="contact" className="bg-neutral-950 text-white">
         <div className="mx-auto max-w-6xl px-4 py-12 grid md:grid-cols-2 gap-8">
           <div>
             <h3 className="text-2xl font-black">Contact</h3>
-            <p className="mt-2 text-white/80">Heb je een vraag of wil je samenwerken? Stuur een bericht!</p>
+            <p className="mt-2 text-white/80">
+              Heb je een vraag of wil je samenwerken? Stuur een bericht!
+            </p>
 
             <div className="mt-4 flex flex-wrap gap-3">
               <a
@@ -967,9 +1014,14 @@ function applyMatchdayFromBanner() {
                 rel="noreferrer"
                 className="inline-flex items-center gap-2 rounded-full border border-white/20 px-4 py-2 shadow-sm hover:shadow transition bg-white/10"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                     fill="none" stroke="currentColor" strokeWidth="1.5"
-                     className="h-4 w-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  className="h-4 w-4"
+                >
                   <rect x="3" y="3" width="18" height="18" rx="5" ry="5"></rect>
                   <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
                   <circle cx="17.5" cy="6.5" r="0.5"></circle>
@@ -983,192 +1035,304 @@ function applyMatchdayFromBanner() {
                 rel="noreferrer"
                 className="inline-flex items-center gap-2 rounded-full border border-white/20 px-4 py-2 shadow-sm hover:shadow transition bg-white/10"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
-                     className="h-4 w-4" aria-hidden="true">
-                  <path fill="currentColor" d="M34.8 14.6c-3.2-1.7-5.4-4.5-6.2-8.2h-6.1v24.8c-.1 2.4-2.1 4.3-4.5 4.3-2.5 0-4.5-2-4.5-4.5s2-4.5 4.5-4.5c.6 0 1.1.1 1.6.3V20c-7.1-1.1-13.6 4.5-13.6 11.7 0 6.4 5.2 11.6 11.6 11.6 6.3 0 11.5-5.1 11.6-11.4V19.3c2.3 1.9 5.2 3.1 8.4 3.1v-7.8c-.9 0-1.8-.1-2.7-.4z"/>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 48 48"
+                  className="h-4 w-4"
+                  aria-hidden="true"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M34.8 14.6c-3.2-1.7-5.4-4.5-6.2-8.2h-6.1v24.8c-.1 2.4-2.1 4.3-4.5 4.3-2.5 0-4.5-2-4.5-4.5s2-4.5 4.5-4.5c.6 0 1.1.1 1.6.3V20c-7.1-1.1-13.6 4.5-13.6 11.7 0 6.4 5.2 11.6 11.6 11.6 6.3 0 11.5-5.1 11.6-11.4V19.3c2.3 1.9 5.2 3.1 8.4 3.1v-7.8c-.9 0-1.8-.1-2.7-.4z"
+                  />
                 </svg>
                 TikTok
               </a>
             </div>
 
             <form className="mt-4 grid gap-3">
-              <input className="rounded-xl border border-white/10 bg-white/10 px-4 py-2.5 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-[#f2c200]" placeholder="E-mail" />
-              <textarea className="rounded-xl border border-white/10 bg-white/10 px-4 py-2.5 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-[#f2c200]" placeholder="Bericht" rows={4} />
-              <button type="button" className="rounded-2xl bg-[#f2c200] px-5 py-2.5 font-bold text-neutral-900 shadow hover:shadow-md transition">Versturen</button>
+              <input
+                className="rounded-xl border border-white/10 bg-white/10 px-4 py-2.5 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-[#f2c200]"
+                placeholder="E-mail"
+              />
+              <textarea
+                className="rounded-xl border border-white/10 bg-white/10 px-4 py-2.5 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-[#f2c200]"
+                placeholder="Bericht"
+                rows={4}
+              />
+              <button
+                type="button"
+                className="rounded-2xl bg-[#f2c200] px-5 py-2.5 font-bold text-neutral-900 shadow hover:shadow-md transition"
+              >
+                Versturen
+              </button>
             </form>
           </div>
 
           <div>
             <h3 className="text-2xl font-black">Over 070_stickershop</h3>
             <p className="mt-2 text-white/80">
-              Hoogwaardige vinyl stickers in groen-geel, ontworpen voor buitengebruik. UV- en waterbestendig,
-              snel geleverd vanuit Den Haag. Vragen of maatwerk? Stuur ons gerust een bericht.
+              Hoogwaardige vinyl stickers in groen-geel, ontworpen voor
+              buitengebruik. UV- en waterbestendig, snel geleverd vanuit Den
+              Haag. Vragen of maatwerk? Stuur ons gerust een bericht.
             </p>
             <ul className="mt-3 text-white/70 text-sm list-disc list-inside space-y-1">
               <li>Vinyl met outdoor-laminaat</li>
               <li>Scherpe prijzen & staffelkorting</li>
               <li>Snelle verzending binnen Nederland</li>
             </ul>
-            <div className="mt-4 text-sm text-white/60">© {new Date().getFullYear()} 070_stickershop – Alle rechten voorbehouden</div>
+            <div className="mt-4 text-sm text-white/60">
+              © {new Date().getFullYear()} 070_stickershop – Alle rechten
+              voorbehouden
+            </div>
           </div>
-          {/* ---------------------------------- Reviews Sectie ---------------------------------- */}
-<section className="max-w-5xl mx-auto px-4 py-12">
-  <div className="text-center mb-8">
-    <h2 className="text-2xl font-extrabold text-[#008C45]">Tevreden Klanten 💬</h2>
-    <p className="text-neutral-700 mt-1">Gemiddeld <span className="font-bold text-[#FFD700]">4.8 / 5.0</span> gebaseerd op echte bestellingen</p>
-  </div>
-
-  <div className="grid sm:grid-cols-2 gap-6">
-    {/* Review 1 */}
-    <div className="bg-white border border-black/5 shadow-md rounded-2xl p-5 hover:shadow-lg transition">
-      <div className="flex items-center gap-3 mb-3">
-        <img src="/img/reviews/kevin.jpg" alt="Kevin" className="w-12 h-12 rounded-full object-cover" />
-        <div>
-          <p className="font-bold">Kevin</p>
-          <p className="text-sm text-neutral-500">Kevin | Den Haag</p>
         </div>
-      </div>
-      <div className="text-yellow-400 mb-2">⭐⭐⭐⭐⭐</div>
-      <p className="text-neutral-700 italic">
-        “Topkwaliteit stickers, snel geleverd en goeie service. Echte klasse!”
-      </p>
-    </div>
 
-    {/* Review 2 */}
-    <div className="bg-white border border-black/5 shadow-md rounded-2xl p-5 hover:shadow-lg transition">
-      <div className="flex items-center gap-3 mb-3">
-        <img src="/img/reviews/Szymon.jpg" alt="Szymon" className="w-12 h-12 rounded-full object-cover" />
-        <div>
-          <p className="font-bold">Szymon</p>
-          <p className="text-sm text-neutral-500">Szymon | Warschau</p>
-        </div>
-      </div>
-      <div className="text-yellow-400 mb-2">⭐⭐⭐⭐⭐</div>
-      <p className="text-neutral-700 italic">
-        “Thank you very much friends from The Hague for this amazing stickers!”
-      </p>
-    </div>
+        {/* ---------------------------------- Reviews Sectie ---------------------------------- */}
+        <section className="max-w-5xl mx-auto px-4 py-12">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-extrabold text-[#008C45]">
+              Tevreden Klanten 💬
+            </h2>
+            <p className="text-neutral-700 mt-1">
+              Gemiddeld{" "}
+              <span className="font-bold text-[#FFD700]">4.8 / 5.0</span>{" "}
+              gebaseerd op echte bestellingen
+            </p>
+          </div>
 
-    {/* Review 3 */}
-    <div className="bg-white border border-black/5 shadow-md rounded-2xl p-5 hover:shadow-lg transition">
-      <div className="flex items-center gap-3 mb-3">
-        <img src="/img/reviews/daan.jpg" alt="Daan" className="w-12 h-12 rounded-full object-cover" />
-        <div>
-          <p className="font-bold">Daan</p>
-          <p className="text-sm text-neutral-500">Daan | Ypenburg</p>
-        </div>
-      </div>
-      <div className="text-yellow-400 mb-2">⭐⭐⭐⭐⭐</div>
-      <p className="text-neutral-700 italic">
-        “Helemaal top, Voorheen altijd via instagram maar de site werkt top!”
-      </p>
-    </div>
+          <div className="grid sm:grid-cols-2 gap-6">
+            {/* Review 1 */}
+            <div className="bg-white border border-black/5 shadow-md rounded-2xl p-5 hover:shadow-lg transition">
+              <div className="flex items-center gap-3 mb-3">
+                <img
+                  src="/img/reviews/kevin.jpg"
+                  alt="Kevin"
+                  className="w-12 h-12 rounded-full object-cover"
+                />
+                <div>
+                  <p className="font-bold">Kevin</p>
+                  <p className="text-sm text-neutral-500">Kevin | Den Haag</p>
+                </div>
+              </div>
+              <div className="text-yellow-400 mb-2">⭐⭐⭐⭐⭐</div>
+              <p className="text-neutral-700 italic">
+                “Topkwaliteit stickers, snel geleverd en goeie service. Echte
+                klasse!”
+              </p>
+            </div>
 
-    {/* Review 4 */}
-    <div className="bg-white border border-black/5 shadow-md rounded-2xl p-5 hover:shadow-lg transition">
-      <div className="flex items-center gap-3 mb-3">
-        <img src="/img/reviews/linda.jpg" alt="Linda" className="w-12 h-12 rounded-full object-cover" />
-        <div>
-          <p className="font-bold">Linda</p>
-          <p className="text-sm text-neutral-500">Linda | Leidschendam</p>
-        </div>
-      </div>
-      <div className="text-yellow-400 mb-2">⭐⭐⭐⭐</div>
-      <p className="text-neutral-700 italic">
-        “Snelle levering, netjes verpakt. Mijn jongens vonden ze geweldig!”
-      </p>
-    </div>
+            {/* Review 2 */}
+            <div className="bg-white border border-black/5 shadow-md rounded-2xl p-5 hover:shadow-lg transition">
+              <div className="flex items-center gap-3 mb-3">
+                <img
+                  src="/img/reviews/Szymon.jpg"
+                  alt="Szymon"
+                  className="w-12 h-12 rounded-full object-cover"
+                />
+                <div>
+                  <p className="font-bold">Szymon</p>
+                  <p className="text-sm text-neutral-500">Szymon | Warschau</p>
+                </div>
+              </div>
+              <div className="text-yellow-400 mb-2">⭐⭐⭐⭐⭐</div>
+              <p className="text-neutral-700 italic">
+                “Thank you very much friends from The Hague for this amazing
+                stickers!”
+              </p>
+            </div>
 
-    {/* Review 5 */}
-    <div className="bg-white border border-black/5 shadow-md rounded-2xl p-5 hover:shadow-lg transition">
-      <div className="flex items-center gap-3 mb-3">
-        <img src="/img/reviews/delano.jpg" alt="Delano" className="w-12 h-12 rounded-full object-cover" />
-        <div>
-          <p className="font-bold">Delano</p>
-          <p className="text-sm text-neutral-500">Delano | Nootdorp</p>
-        </div>
-      </div>
-      <div className="text-yellow-400 mb-2">⭐⭐⭐⭐⭐</div>
-      <p className="text-neutral-700 italic">
-        “Een van de weinige met kwaliteit stickers. Toppah!”
-      </p>
-    </div>
+            {/* Review 3 */}
+            <div className="bg-white border border-black/5 shadow-md rounded-2xl p-5 hover:shadow-lg transition">
+              <div className="flex items-center gap-3 mb-3">
+                <img
+                  src="/img/reviews/daan.jpg"
+                  alt="Daan"
+                  className="w-12 h-12 rounded-full object-cover"
+                />
+                <div>
+                  <p className="font-bold">Daan</p>
+                  <p className="text-sm text-neutral-500">Daan | Ypenburg</p>
+                </div>
+              </div>
+              <div className="text-yellow-400 mb-2">⭐⭐⭐⭐⭐</div>
+              <p className="text-neutral-700 italic">
+                “Helemaal top, Voorheen altijd via instagram maar de site werkt
+                top!”
+              </p>
+            </div>
 
-    {/* Review 6 */}
-    <div className="bg-white border border-black/5 shadow-md rounded-2xl p-5 hover:shadow-lg transition">
-      <div className="flex items-center gap-3 mb-3">
-        <img src="/img/reviews/linda.jpg" alt="Linda" className="w-12 h-12 rounded-full object-cover" />
-        <div>
-          <p className="font-bold">Mike</p>
-          <p className="text-sm text-neutral-500">Mike | Den Haag</p>
-        </div>
-      </div>
-      <div className="text-yellow-400 mb-2">⭐⭐⭐⭐</div>
-      <p className="text-neutral-700 italic">
-        “Zeer tevreden met deze stickers!”
-      </p>
-    </div>
-  </div>
-</section>
-{/* ---------------------------------- Community Foto's ---------------------------------- */}
-<section className="max-w-6xl mx-auto px-4 py-12">
-  <div className="text-center mb-8">
-    <h2 className="text-2xl font-extrabold text-[#008C45]">Onze stickers 📸</h2>
-    <p className="text-neutral-700">Jullie stickers gespot in de stad of ergens anders ? — stuur je foto via Instagram!</p>
-  </div>
+            {/* Review 4 */}
+            <div className="bg-white border border-black/5 shadow-md rounded-2xl p-5 hover:shadow-lg transition">
+              <div className="flex items-center gap-3 mb-3">
+                <img
+                  src="/img/reviews/linda.jpg"
+                  alt="Linda"
+                  className="w-12 h-12 rounded-full object-cover"
+                />
+                <div>
+                  <p className="font-bold">Linda</p>
+                  <p className="text-sm text-neutral-500">
+                    Linda | Leidschendam
+                  </p>
+                </div>
+              </div>
+              <div className="text-yellow-400 mb-2">⭐⭐⭐⭐</div>
+              <p className="text-neutral-700 italic">
+                “Snelle levering, netjes verpakt. Mijn jongens vonden ze
+                geweldig!”
+              </p>
+            </div>
 
-  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-    <div className="overflow-hidden rounded-2xl shadow-sm hover:shadow-lg transition">
-      <img src="/img/reviews/foto1.jpg" alt="Gespot in amerika" className="w-full h-48 object-cover object-center" />
-    </div>
-    <div className="overflow-hidden rounded-2xl shadow-sm hover:shadow-lg transition">
-      <img src="/img/reviews/foto2.jpg" alt="everywhere we go!" className="w-full h-48 object-cover object-center" />
-    </div>
-    <div className="overflow-hidden rounded-2xl shadow-sm hover:shadow-lg transition">
-      <img src="/img/reviews/foto3.jpg" alt="onze tape rollen in actie" className="w-full h-48 object-cover object-center" />
-    </div>
-    <div className="overflow-hidden rounded-2xl shadow-sm hover:shadow-lg transition">
-      <img src="/img/reviews/foto4.jpg" alt="gespot in warschau" className="w-full h-48 object-cover object-center" />
-    </div>
-  </div>
+            {/* Review 5 */}
+            <div className="bg-white border border-black/5 shadow-md rounded-2xl p-5 hover:shadow-lg transition">
+              <div className="flex items-center gap-3 mb-3">
+                <img
+                  src="/img/reviews/delano.jpg"
+                  alt="Delano"
+                  className="w-12 h-12 rounded-full object-cover"
+                />
+                <div>
+                  <p className="font-bold">Delano</p>
+                  <p className="text-sm text-neutral-500">Delano | Nootdorp</p>
+                </div>
+              </div>
+              <div className="text-yellow-400 mb-2">⭐⭐⭐⭐⭐</div>
+              <p className="text-neutral-700 italic">
+                “Een van de weinige met kwaliteit stickers. Toppah!”
+              </p>
+            </div>
 
-  <div className="text-center mt-6">
-    <a
-      href="https://www.instagram.com/070_stickershop/"
-      target="_blank"
-      rel="noreferrer"
-      className="inline-flex items-center gap-2 rounded-full bg-[#008C45] hover:bg-[#00783C] text-white px-5 py-2.5 font-semibold shadow-md transition"
-    >
-      📲 Deel jouw foto op Instagram
-    </a>
-  </div>
-</section>
-        </div>
+            {/* Review 6 */}
+            <div className="bg-white border border-black/5 shadow-md rounded-2xl p-5 hover:shadow-lg transition">
+              <div className="flex items-center gap-3 mb-3">
+                <img
+                  src="/img/reviews/linda.jpg"
+                  alt="Linda"
+                  className="w-12 h-12 rounded-full object-cover"
+                />
+                <div>
+                  <p className="font-bold">Mike</p>
+                  <p className="text-sm text-neutral-500">Mike | Den Haag</p>
+                </div>
+              </div>
+              <div className="text-yellow-400 mb-2">⭐⭐⭐⭐</div>
+              <p className="text-neutral-700 italic">
+                “Zeer tevreden met deze stickers!”
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* ---------------------------------- Community Foto's ---------------------------------- */}
+        <section className="max-w-6xl mx-auto px-4 py-12">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-extrabold text-[#008C45]">
+              Onze stickers 📸
+            </h2>
+            <p className="text-neutral-700">
+              Jullie stickers gespot in de stad of ergens anders ? — stuur je
+              foto via Instagram!
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="overflow-hidden rounded-2xl shadow-sm hover:shadow-lg transition">
+              <img
+                src="/img/reviews/foto1.jpg"
+                alt="Gespot in amerika"
+                className="w-full h-48 object-cover object-center"
+              />
+            </div>
+            <div className="overflow-hidden rounded-2xl shadow-sm hover:shadow-lg transition">
+              <img
+                src="/img/reviews/foto2.jpg"
+                alt="everywhere we go!"
+                className="w-full h-48 object-cover object-center"
+              />
+            </div>
+            <div className="overflow-hidden rounded-2xl shadow-sm hover:shadow-lg transition">
+              <img
+                src="/img/reviews/foto3.jpg"
+                alt="onze tape rollen in actie"
+                className="w-full h-48 object-cover object-center"
+              />
+            </div>
+            <div className="overflow-hidden rounded-2xl shadow-sm hover:shadow-lg transition">
+              <img
+                src="/img/reviews/foto4.jpg"
+                alt="gespot in warschau"
+                className="w-full h-48 object-cover object-center"
+              />
+            </div>
+          </div>
+
+          <div className="text-center mt-6">
+            <a
+              href="https://www.instagram.com/070_stickershop/"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-full bg-[#008C45] hover:bg-[#00783C] text-white px-5 py-2.5 font-semibold shadow-md transition"
+            >
+              📲 Deel jouw foto op Instagram
+            </a>
+          </div>
+        </section>
       </footer>
 
       {/* Cart Drawer (z-index boven toast) */}
       {openCart && (
         <div className="fixed inset-0 z-[80]">
-          <div className="absolute inset-0 bg-black/40" onClick={() => setOpenCart(false)} />
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setOpenCart(false)}
+          />
           <aside className="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl p-6 flex flex-col">
             {/* header */}
             <div className="flex items-center justify-between">
               <h3 className="text-xl font-extrabold">Winkelwagen</h3>
-              <button onClick={() => setOpenCart(false)} className="rounded-xl border px-2 py-1 text-sm">Sluiten</button>
+              <button
+                onClick={() => setOpenCart(false)}
+                className="rounded-xl border px-2 py-1 text-sm"
+              >
+                Sluiten
+              </button>
             </div>
 
             {/* items */}
             <div className="mt-4 flex-1 overflow-auto divide-y">
-              {cart.length === 0 && <p className="text-sm text-neutral-600">Nog geen items. Voeg iets toe uit de collectie.</p>}
+              {cart.length === 0 && (
+                <p className="text-sm text-neutral-600">
+                  Nog geen items. Voeg iets toe uit de collectie.
+                </p>
+              )}
               {cart.map((item) => (
-                <div key={`${item.productId}-${item.variantId}`} className="py-3 flex items-center gap-3">
-                  <img src={item.img} alt="" className="h-14 w-14 rounded-xl object-cover object-center" />
+                <div
+                  key={`${item.productId}-${item.variantId}`}
+                  className="py-3 flex items-center gap-3"
+                >
+                  <img
+                    src={item.img}
+                    alt=""
+                    className="h-14 w-14 rounded-xl object-cover object-center"
+                  />
                   <div className="flex-1">
                     <div className="font-semibold">{item.title}</div>
-                    <div className="text-sm text-neutral-600">{item.variantLabel} – {formatPrice(item.price)}</div>
-                    <div className="text-sm text-neutral-600">Aantal in wagen: {item.qty}</div>
+                    <div className="text-sm text-neutral-600">
+                      {item.variantLabel} – {formatPrice(item.price)}
+                    </div>
+                    <div className="text-sm text-neutral-600">
+                      Aantal in wagen: {item.qty}
+                    </div>
                   </div>
-                  <button onClick={() => removeFromCart(item.productId, item.variantId)} className="text-sm rounded-xl border px-2 py-1">Verwijder</button>
+                  <button
+                    onClick={() =>
+                      removeFromCart(item.productId, item.variantId)
+                    }
+                    className="text-sm rounded-xl border px-2 py-1"
+                  >
+                    Verwijder
+                  </button>
                 </div>
               ))}
             </div>
@@ -1240,7 +1404,9 @@ function applyMatchdayFromBanner() {
                 type="button"
                 onClick={handleCheckout}
                 onTouchStart={handleCheckout}
-                onKeyDown={(e) => (e.key === "Enter" ? handleCheckout() : null)}
+                onKeyDown={(e) =>
+                  e.key === "Enter" ? handleCheckout() : null
+                }
                 className="relative z-10 mt-3 w-full rounded-2xl bg-[#0b6e4f] hover:bg-[#0a6045] text-white font-semibold px-5 py-2.5 shadow hover:shadow-md transition"
                 role="button"
                 tabIndex={0}
@@ -1249,7 +1415,8 @@ function applyMatchdayFromBanner() {
               </button>
 
               <p className="mt-2 text-xs text-neutral-500">
-                Alle prijzen excl. verzendkosten. Verzendkosten worden automatisch berekend op basis van je keuze.
+                Alle prijzen excl. verzendkosten. Verzendkosten worden
+                automatisch berekend op basis van je keuze.
               </p>
             </div>
           </aside>
@@ -1260,7 +1427,9 @@ function applyMatchdayFromBanner() {
       {toast.open && !openCart && (
         <div
           className={`pointer-events-none fixed inset-x-0 bottom-4 z-[40] flex justify-center transition-all duration-300 ${
-            toast.open ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
+            toast.open
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-3"
           }`}
           aria-live="polite"
         >
@@ -1276,9 +1445,16 @@ function applyMatchdayFromBanner() {
               <div className="min-w-0 flex-1">
                 <div className="text-sm">
                   <span className="font-semibold">{toast.title}</span>
-                  {toast.variant ? <span className="text-neutral-600"> — {toast.variant}</span> : null}
+                  {toast.variant ? (
+                    <span className="text-neutral-600">
+                      {" "}
+                      — {toast.variant}
+                    </span>
+                  ) : null}
                 </div>
-                <div className="text-xs text-neutral-600">Toegevoegd aan je winkelwagen</div>
+                <div className="text-xs text-neutral-600">
+                  Toegevoegd aan je winkelwagen
+                </div>
               </div>
               <div className="flex items-center gap-2">
                 <button
@@ -1291,7 +1467,9 @@ function applyMatchdayFromBanner() {
                   Bekijk winkelwagen
                 </button>
                 <button
-                  onClick={() => setToast((t) => ({ ...t, open: false }))}
+                  onClick={() =>
+                    setToast((t) => ({ ...t, open: false }))
+                  }
                   className="rounded-xl border px-2 py-1 text-xs"
                   aria-label="Sluit melding"
                   title="Sluiten"
@@ -1318,13 +1496,24 @@ function applyMatchdayFromBanner() {
 
               <div className="mt-3 max-h-56 overflow-auto divide-y">
                 {cart.map((i) => (
-                  <div key={`${i.productId}-${i.variantId}`} className="py-2 flex items-center gap-3">
-                    <img src={i.img} alt="" className="h-10 w-10 rounded-lg object-cover object-center border border-black/10" />
+                  <div
+                    key={`${i.productId}-${i.variantId}`}
+                    className="py-2 flex items-center gap-3"
+                  >
+                    <img
+                      src={i.img}
+                      alt=""
+                      className="h-10 w-10 rounded-lg object-cover object-center border border-black/10"
+                    />
                     <div className="flex-1 min-w-0">
                       <div className="font-semibold truncate">{i.title}</div>
-                      <div className="text-sm text-neutral-600">{i.variantLabel} × {i.qty}</div>
+                      <div className="text-sm text-neutral-600">
+                        {i.variantLabel} × {i.qty}
+                      </div>
                     </div>
-                    <div className="text-sm font-semibold">{formatPrice(i.price * i.qty)}</div>
+                    <div className="text-sm font-semibold">
+                      {formatPrice(i.price * i.qty)}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -1377,7 +1566,8 @@ function applyMatchdayFromBanner() {
               </div>
 
               <p className="mt-2 text-xs text-neutral-500">
-                Je gaat in de volgende stap je adres invullen en daarna word je doorgestuurd naar WhatsApp.
+                Je gaat in de volgende stap je adres invullen en daarna word je
+                doorgestuurd naar WhatsApp.
               </p>
             </div>
           </div>
@@ -1399,33 +1589,48 @@ function applyMatchdayFromBanner() {
 
               <div className="mt-3 grid gap-3">
                 <div>
-                  <label className="block text-sm font-semibold mb-1">Naam</label>
+                  <label className="block text-sm font-semibold mb-1">
+                    Naam
+                  </label>
                   <input
                     type="text"
                     className="w-full rounded-xl border border-black/10 px-3 py-2"
                     placeholder="Voor- en achternaam"
                     value={customer.name}
-                    onChange={(e) => setCustomer((c) => ({ ...c, name: e.target.value }))}
+                    onChange={(e) =>
+                      setCustomer((c) => ({ ...c, name: e.target.value }))
+                    }
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold mb-1">Straat + huisnummer</label>
+                  <label className="block text-sm font-semibold mb-1">
+                    Straat + huisnummer
+                  </label>
                   <input
                     type="text"
                     className="w-full rounded-xl border border-black/10 px-3 py-2"
                     placeholder="Bijv. Leyweg 123"
                     value={customer.street}
-                    onChange={(e) => setCustomer((c) => ({ ...c, street: e.target.value }))}
+                    onChange={(e) =>
+                      setCustomer((c) => ({ ...c, street: e.target.value }))
+                    }
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold mb-1">Postcode + plaats</label>
+                  <label className="block text-sm font-semibold mb-1">
+                    Postcode + plaats
+                  </label>
                   <input
                     type="text"
                     className="w-full rounded-xl border border-black/10 px-3 py-2"
                     placeholder="Bijv. 2545AA Den Haag"
                     value={customer.postalCity}
-                    onChange={(e) => setCustomer((c) => ({ ...c, postalCity: e.target.value }))}
+                    onChange={(e) =>
+                      setCustomer((c) => ({
+                        ...c,
+                        postalCity: e.target.value,
+                      }))
+                    }
                   />
                 </div>
                 <p className="text-xs text-neutral-500">
@@ -1436,15 +1641,22 @@ function applyMatchdayFromBanner() {
               <div className="mt-5 flex items-center gap-3">
                 <button
                   onClick={() => {
-                    if (!customer.name.trim() || !customer.street.trim() || !customer.postalCity.trim()) {
-                      alert("Vul je naam en adres (straat + huisnr, postcode + plaats) in.");
+                    if (
+                      !customer.name.trim() ||
+                      !customer.street.trim() ||
+                      !customer.postalCity.trim()
+                    ) {
+                      alert(
+                        "Vul je naam en adres (straat + huisnr, postcode + plaats) in."
+                      );
                       return;
                     }
                     haptic(15);
                     beep(80, 820, 0.12);
                     const tekst = buildOrderText();
-                    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(tekst)}`;
-                    // kleine succesmelding
+                    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+                      tekst
+                    )}`;
                     setSuccessMsg("✅ Bestelling wordt geopend in WhatsApp...");
                     setTimeout(() => {
                       window.location.href = url;
@@ -1467,7 +1679,8 @@ function applyMatchdayFromBanner() {
               </div>
 
               <p className="mt-2 text-xs text-neutral-500">
-                We sturen je bestelling via WhatsApp door. Je ontvangt daarna een betaalverzoek.
+                We sturen je bestelling via WhatsApp door. Je ontvangt daarna
+                een betaalverzoek.
               </p>
             </div>
           </div>
@@ -1475,11 +1688,15 @@ function applyMatchdayFromBanner() {
       )}
       {/* /modal stap 2 */}
 
-      {/* Sticky Winkelwagen knop – Haagse stijl (altijd zichtbaar) */}
+      {/* Sticky Winkelwagen knop */}
       <button
         onClick={() => setOpenCart(true)}
         className="fixed z-[95] bottom-5 right-5 rounded-full shadow-xl px-5 py-4 flex items-center gap-2"
-        style={{ backgroundColor: "#008C45", color: "white", border: "3px solid #FFD700" }}
+        style={{
+          backgroundColor: "#008C45",
+          color: "white",
+          border: "3px solid #FFD700",
+        }}
         aria-label="Open winkelwagen"
         title="Winkelwagen"
       >
@@ -1487,7 +1704,11 @@ function applyMatchdayFromBanner() {
         {cart.length > 0 && (
           <span
             className="ml-1 text-sm font-extrabold min-w-6 h-6 rounded-full grid place-items-center"
-            style={{ backgroundColor: "#FFD700", color: "#0b6e4f", padding: "0 8px" }}
+            style={{
+              backgroundColor: "#FFD700",
+              color: "#0b6e4f",
+              padding: "0 8px",
+            }}
           >
             {cart.reduce((n, x) => n + x.qty, 0)}
           </span>
