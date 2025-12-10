@@ -136,7 +136,7 @@ const PRODUCTS = [
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
     badge: "Nieuw",
     group: "normaal",
-    soldOut: true,
+    soldOut: false,
   },
   {
     id: "normal-generaties-heen",
