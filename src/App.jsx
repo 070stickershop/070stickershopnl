@@ -34,7 +34,7 @@ function beep(duration = 120, frequency = 880, volume = 0.12) {
 /* ================== Config ================== */
 const HERO_BG = "/img/ado-sfeer.jpg";
 
-// Betalen (zonder KvK)
+// Betalen 
 const PAYMENT_MODE = "whatsapp"; // "whatsapp" | "paypalme" | "tikkie-api"
 const WHATSAPP_NUMBER = "31624729671"; // <-- jouw nummer zonder +
 const PAYPAL_ME_HANDLE = "JouwPayPalMeNaam";
@@ -1223,6 +1223,25 @@ export default function App() {
             </div>
           </div>
         </section>
+
+        {/* Review 7 */}
+            <div className="bg-white border border-black/5 shadow-md rounded-2xl p-5 hover:shadow-lg transition">
+              <div className="flex items-center gap-3 mb-3">
+                <img
+                  src="/img/reviews/malgorzata.jpg"
+                  alt="Delano"
+                  className="w-12 h-12 rounded-full object-cover"
+                />
+                <div>
+                  <p className="font-bold">Malgorzata</p>
+                  <p className="text-sm text-neutral-500">Delano | Nootdorp</p>
+                </div>
+              </div>
+              <div className="text-yellow-400 mb-2">⭐⭐⭐⭐⭐</div>
+              <p className="text-neutral-700 italic">
+                “Very good quality and the material of the flag is really nice, i will definitely buy more in the future. greets from poland!”
+              </p>
+            </div>
 
         {/* ---------------------------------- Community Foto's ---------------------------------- */}
         <section className="max-w-6xl mx-auto px-4 py-12">
