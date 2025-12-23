@@ -1238,7 +1238,7 @@ export default function App() {
                 />
                 <div>
                   <p className="font-bold">Malgorzata</p>
-                  <p className="text-sm text-neutral-500">Szyman | Warzawa</p>
+                  <p className="text-sm text-neutral-500">Malgorzata | Warschau</p>
                 </div>
               </div>
               <div className="text-yellow-400 mb-2">⭐⭐⭐⭐⭐</div>
