@@ -319,8 +319,8 @@ const PRODUCTS = [
       { id: "100", label: "100 stuks", price: 23.0 },
     ],
     extra: "Vinyl · UV- & waterbestendig",
-    badge: "Nieuw",
-    group: "xxl",
+    badge: "Ronde Stickers !",
+    group: "xxl"
   },
 
   /* ---------------- A4 ---------------- */
@@ -343,6 +343,7 @@ const PRODUCTS = [
     },
     extra: "A4 (210×297 mm) · Vinyl · UV- & waterbestendig",
     group: "a4",
+    badge: "Alleen bij 070stickershop !",
   },
 
   /* ---------------- Accessoires (aparte sectie) ---------------- */
@@ -1237,7 +1238,7 @@ export default function App() {
                 />
                 <div>
                   <p className="font-bold">Malgorzata</p>
-                  <p className="text-sm text-neutral-500">Delano | Nootdorp</p>
+                  <p className="text-sm text-neutral-500">Szyman | Warzawa</p>
                 </div>
               </div>
               <div className="text-yellow-400 mb-2">⭐⭐⭐⭐⭐</div>
