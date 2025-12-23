@@ -135,6 +135,7 @@ const PRODUCTS = [
     ],
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
     badge: "Nieuw",
+    badge: "Populair",
     group: "normaal",
     soldOut: false,
   },
@@ -165,8 +166,9 @@ const PRODUCTS = [
       { id: "200", label: "200 stuks", price: 23.0 },
     ],
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
+    badge: "Populair",
     group: "normaal",
-    soldOut: true,
+    soldOut: false,
   },
   {
     id: "normal-fuck-den-bosch",
@@ -181,6 +183,7 @@ const PRODUCTS = [
     ],
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
     group: "normaal",
+    badge: "Populair",
   },
   {
     id: "normal-den-haag-till",
