@@ -159,7 +159,7 @@ const PRODUCTS = [
   {
     id: "normal-denhaag-culture",
     title: "Den Haag Culture",
-    img: "/img/denhaag.jpg",
+    img: "/img/denhaag-culture.jpg",
     tags: ["normaal", "85x55mm", "vinyl"],
     variants: [
       { id: "25", label: "25 stuks", price: 4.5 },
