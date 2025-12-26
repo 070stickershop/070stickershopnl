@@ -157,6 +157,23 @@ const PRODUCTS = [
     soldOut: false,
   },
   {
+    id: "normal-denhaag-culture,
+    title: "Den Haag Culture",
+    img: "/img/denhaag-culture.jpg",
+    tags: ["normaal", "85x55mm", "vinyl"],
+    variants: [
+      { id: "25", label: "25 stuks", price: 4.5 },
+      { id: "50", label: "50 stuks", price: 7.5 },
+      { id: "100", label: "100 stuks", price: 12.0 },
+      { id: "200", label: "200 stuks", price: 23.0 },
+    ],
+    extra: "85×55 mm · Vinyl · UV- & waterbestendig",
+    badge: "Nieuw",
+    badge: "Populair",
+    group: "normaal",
+    soldOut: false,
+  },
+  {
     id: "normal-generaties-heen",
     title: "Door De Generaties Heen",
     img: "/img/door-de-generaties.jpg",
