@@ -106,6 +106,7 @@ function isEligibleForMatchday(product) {
 
 /* ------------------------------ DATA ------------------------------ */
 const PRODUCTS = [
+  
   /* ---------------- Normaal ---------------- */
   {
     id: "normal-den-haag-territory",
@@ -123,6 +124,21 @@ const PRODUCTS = [
     group: "normaal",
   },
    {
+    id: "normal-goodnight",
+    title: "Good Night M-S*de",
+    img: "/img/good-night-m.jpg",
+    tags: ["normaal", "85x55mm", "vinyl"],
+    variants: [
+      { id: "25", label: "25 stuks", price: 4.5 },
+      { id: "50", label: "50 stuks", price: 7.5 },
+      { id: "100", label: "100 stuks", price: 12.0 },
+      { id: "200", label: "200 stuks", price: 23.0 },
+    ],
+    extra: "85×55 mm · Vinyl · UV- & waterbestendig",
+    badge: "Nieuw !",
+    group: "normaal",
+  },
+   {
     id: "den-haag-over-plakt",
     title: "Den Haag Overplakt",
     img: "/img/den-haag-overplakt.jpg",
@@ -134,7 +150,7 @@ const PRODUCTS = [
       { id: "200", label: "200 stuks", price: 23.0 },
     ],
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
-    badge: "Nieuw",
+    badge: "Nieuw !",
     badge: "Populair",
     group: "normaal",
     soldOut: false,
@@ -825,6 +841,7 @@ export default function App() {
                   className="rounded-2xl bg-[#f2c200] px-5 py-2.5 font-semibold shadow hover:shadow-md transition"
                 >
                   Shop nu
+                  
                 </a>
                 <a
                   href="#info"
