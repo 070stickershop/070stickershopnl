@@ -1,5 +1,6 @@
 /* App.jsx – versie met Haagse winkelwagen & adres-checkout (Matchday versie) */
 import React, { useMemo, useState, useRef } from "react";
+import { supabase } from "./lib/supabase";
 
 /* ================== Helpers ================== */
 function formatPrice(n) {
@@ -1649,117 +1650,132 @@ export default function App() {
       )}
       {/* /modal stap 1 */}
 
-      {/* Adresgegevens modal – stap 2 */}
-      {addressOpen && (
-        <div className="fixed inset-0 z-[95]">
-          <div
-            className="absolute inset-0 bg-black/40"
-            onClick={() => setAddressOpen(false)}
-            aria-hidden="true"
-          />
-          <div className="absolute inset-0 flex items-center justify-center p-4">
-            <div className="w-full max-w-md rounded-2xl bg-white shadow-2xl border border-black/10 p-5">
-              <h3 className="text-xl font-extrabold">Bezorgadres</h3>
+{/* Adresgegevens modal – stap 2 */}
+{addressOpen && (
+  <div className="fixed inset-0 z-[95]">
+    <div
+      className="absolute inset-0 bg-black/40"
+      onClick={() => setAddressOpen(false)}
+      aria-hidden="true"
+    />
+    <div className="absolute inset-0 flex items-center justify-center p-4">
+      <div className="w-full max-w-md rounded-2xl bg-white shadow-2xl border border-black/10 p-5">
+        <h3 className="text-xl font-extrabold">Bezorgadres</h3>
 
-              <div className="mt-3 grid gap-3">
-                <div>
-                  <label className="block text-sm font-semibold mb-1">
-                    Naam
-                  </label>
-                  <input
-                    type="text"
-                    className="w-full rounded-xl border border-black/10 px-3 py-2"
-                    placeholder="Voor- en achternaam"
-                    value={customer.name}
-                    onChange={(e) =>
-                      setCustomer((c) => ({ ...c, name: e.target.value }))
-                    }
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold mb-1">
-                    Straat + huisnummer
-                  </label>
-                  <input
-                    type="text"
-                    className="w-full rounded-xl border border-black/10 px-3 py-2"
-                    placeholder="Bijv. Leyweg 123"
-                    value={customer.street}
-                    onChange={(e) =>
-                      setCustomer((c) => ({ ...c, street: e.target.value }))
-                    }
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold mb-1">
-                    Postcode + plaats
-                  </label>
-                  <input
-                    type="text"
-                    className="w-full rounded-xl border border-black/10 px-3 py-2"
-                    placeholder="Bijv. 2545AA Den Haag"
-                    value={customer.postalCity}
-                    onChange={(e) =>
-                      setCustomer((c) => ({
-                        ...c,
-                        postalCity: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
-                <p className="text-xs text-neutral-500">
-                  We gebruiken dit adres alleen om je bestelling te verzenden.
-                </p>
-              </div>
+        <div className="mt-3 grid gap-3">
+          <div>
+            <label className="block text-sm font-semibold mb-1">
+              Naam
+            </label>
+            <input
+              type="text"
+              className="w-full rounded-xl border border-black/10 px-3 py-2"
+              value={customer.name}
+              onChange={(e) =>
+                setCustomer((c) => ({ ...c, name: e.target.value }))
+              }
+            />
+          </div>
 
-              <div className="mt-5 flex items-center gap-3">
-                <button
-                  onClick={() => {
-                    if (
-                      !customer.name.trim() ||
-                      !customer.street.trim() ||
-                      !customer.postalCity.trim()
-                    ) {
-                      alert(
-                        "Vul je naam en adres (straat + huisnr, postcode + plaats) in."
-                      );
-                      return;
-                    }
-                    haptic(15);
-                    beep(80, 820, 0.12);
-                    const tekst = buildOrderText();
-                    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
-                      tekst
-                    )}`;
-                    setSuccessMsg("✅ Bestelling wordt geopend in WhatsApp...");
-                    setTimeout(() => {
-                      window.location.href = url;
-                    }, 800);
-                  }}
-                  className="flex-1 rounded-2xl bg-[#0b6e4f] hover:bg-[#0a6045] text-white font-semibold px-4 py-2.5 shadow"
-                >
-                  Bestellen via WhatsApp
-                </button>
-                <button
-                  onClick={() => {
-                    setAddressOpen(false);
-                    setConfirmOpen(true); // terug naar stap 1
-                    haptic(10);
-                  }}
-                  className="rounded-2xl border px-4 py-2.5"
-                >
-                  Terug
-                </button>
-              </div>
+          <div>
+            <label className="block text-sm font-semibold mb-1">
+              Straat + huisnummer
+            </label>
+            <input
+              type="text"
+              className="w-full rounded-xl border border-black/10 px-3 py-2"
+              value={customer.street}
+              onChange={(e) =>
+                setCustomer((c) => ({ ...c, street: e.target.value }))
+              }
+            />
+          </div>
 
-              <p className="mt-2 text-xs text-neutral-500">
-                We sturen je bestelling via WhatsApp door. Je ontvangt daarna
-                een betaalverzoek.
-              </p>
-            </div>
+          <div>
+            <label className="block text-sm font-semibold mb-1">
+              Postcode + plaats
+            </label>
+            <input
+              type="text"
+              className="w-full rounded-xl border border-black/10 px-3 py-2"
+              value={customer.postalCity}
+              onChange={(e) =>
+                setCustomer((c) => ({
+                  ...c,
+                  postalCity: e.target.value,
+                }))
+              }
+            />
           </div>
         </div>
-      )}
+
+        <div className="mt-5 flex items-center gap-3">
+          <button
+            onClick={async () => {
+              if (
+                !customer.name.trim() ||
+                !customer.street.trim() ||
+                !customer.postalCity.trim()
+              ) {
+                alert(
+                  "Vul je naam en adres (straat + huisnr, postcode + plaats) in."
+                );
+                return;
+              }
+
+              const orderData = {
+                customer_name: customer.name,
+                customer_street: customer.street,
+                customer_postal_city: customer.postalCity,
+                items: cart,
+                subtotal,
+                shipping,
+                discount,
+                total,
+                status: "nieuw",
+              };
+
+              const { error } = await supabase
+                .from("orders")
+                .insert([orderData]);
+
+              if (error) {
+                alert("Fout bij opslaan bestelling.");
+                console.error(error);
+                return;
+              }
+
+              const tekst = buildOrderText();
+              const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+                tekst
+              )}`;
+
+              window.location.href = url;
+            }}
+            className="flex-1 rounded-2xl bg-[#0b6e4f] hover:bg-[#0a6045] text-white font-semibold px-4 py-2.5 shadow"
+          >
+            Bestellen via WhatsApp
+          </button>
+
+          <button
+            onClick={() => {
+              setAddressOpen(false);
+              setConfirmOpen(true);
+            }}
+            className="rounded-2xl border px-4 py-2.5"
+          >
+            Terug
+          </button>
+        </div>
+
+        <p className="mt-2 text-xs text-neutral-500">
+          We sturen je bestelling via WhatsApp door. Je ontvangt daarna
+          een betaalverzoek.
+        </p>
+      </div>
+    </div>
+  </div>
+)}
       {/* /modal stap 2 */}
 
       {/* Sticky Winkelwagen knop */}
