@@ -2,280 +2,222 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "./lib/supabase";
 
 const ADMIN_PASSWORD = "antiajax070";
-const [imageFile, setImageFile] = useState(null);
 
 export default function Admin() {
   const [authorized, setAuthorized] = useState(false);
   const [input, setInput] = useState("");
-
-  const [orders, setOrders] = useState([]);
   const [products, setProducts] = useState([]);
+  const [editingId, setEditingId] = useState(null);
 
   const [newProduct, setNewProduct] = useState({
     name: "",
-    price: "",
+    category: "",
     image: "",
     description: ""
   });
 
-  // =========================
-  // LOAD DATA
-  // =========================
-
-  async function loadOrders() {
-    const { data, error } = await supabase
-      .from("orders")
-      .select("*")
-      .order("created_at", { ascending: false });
-
-    if (!error) setOrders(data || []);
-  }
+  const [priceRows, setPriceRows] = useState([{ quantity: "", price: "" }]);
 
   async function loadProducts() {
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from("products")
-      .select("*")
+      .select("*, product_prices(*)")
       .order("created_at", { ascending: false });
 
-    if (!error) setProducts(data || []);
+    setProducts(data || []);
   }
 
   useEffect(() => {
-    if (authorized) {
-      loadOrders();
-      loadProducts();
-    }
+    if (authorized) loadProducts();
   }, [authorized]);
 
-  // =========================
-  // PRODUCT FUNCTIONS
-  // =========================
-
-async function addProduct() {
-  if (!newProduct.name || !newProduct.price || !imageFile) {
-    alert("Vul alles in + kies een afbeelding");
-    return;
-  }
-
-  const fileExt = imageFile.name.split(".").pop();
-  const fileName = `${Date.now()}.${fileExt}`;
-
-  const { error: uploadError } = await supabase.storage
-    .from("products")
-    .upload(fileName, imageFile);
-
-  if (uploadError) {
-    alert("Upload mislukt");
-    return;
-  }
-
-  const { data } = supabase.storage
-    .from("products")
-    .getPublicUrl(fileName);
-
-  const imageUrl = data.publicUrl;
-
-  await supabase.from("products").insert([
-    {
-      name: newProduct.name,
-      price: newProduct.price,
-      description: newProduct.description,
-      image: imageUrl
+  function handleLogin() {
+    if (input === ADMIN_PASSWORD) {
+      setAuthorized(true);
+    } else {
+      alert("Verkeerd wachtwoord");
     }
-  ]);
+  }
 
-  setNewProduct({ name: "", price: "", description: "" });
-  setImageFile(null);
-  loadProducts();
-}
+  function addPriceRow() {
+    setPriceRows([...priceRows, { quantity: "", price: "" }]);
+  }
+
+  function updatePriceRow(index, field, value) {
+    const updated = [...priceRows];
+    updated[index][field] = value;
+    setPriceRows(updated);
+  }
+
+  async function addProduct() {
+    if (!newProduct.name) return alert("Naam verplicht");
+
+    const { data: productData, error } = await supabase
+      .from("products")
+      .insert([newProduct])
+      .select()
+      .single();
+
+    if (error) return alert("Fout bij product");
+
+    const priceInserts = priceRows
+      .filter((p) => p.quantity && p.price)
+      .map((p) => ({
+        product_id: productData.id,
+        quantity: Number(p.quantity),
+        price: Number(p.price)
+      }));
+
+    if (priceInserts.length > 0) {
+      await supabase.from("product_prices").insert(priceInserts);
+    }
+
+    setNewProduct({
+      name: "",
+      category: "",
+      image: "",
+      description: ""
+    });
+    setPriceRows([{ quantity: "", price: "" }]);
+
+    loadProducts();
+  }
 
   async function deleteProduct(id) {
-    if (!confirm("Weet je zeker dat je dit product wilt verwijderen?"))
-      return;
+    if (!window.confirm("Weet je zeker?")) return;
 
     await supabase.from("products").delete().eq("id", id);
     loadProducts();
   }
 
-  // =========================
-  // LOGIN SCREEN
-  // =========================
-
   if (!authorized) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-neutral-100">
-        <div className="bg-white p-6 rounded-2xl shadow-xl w-full max-w-sm">
-          <h2 className="text-xl font-bold mb-4">Admin Login</h2>
-
+      <div className="min-h-screen flex items-center justify-center">
+        <div>
+          <h1 className="text-xl font-bold mb-4">Admin Login</h1>
           <input
             type="password"
-            placeholder="Wachtwoord"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            className="w-full border rounded-xl px-3 py-2 mb-3"
+            className="border px-3 py-2 rounded-lg mr-2"
           />
-
           <button
-            onClick={() =>
-              input === ADMIN_PASSWORD
-                ? setAuthorized(true)
-                : alert("Onjuist wachtwoord")
-            }
-            className="w-full bg-[#0b6e4f] text-white rounded-xl py-2 font-semibold"
+            onClick={handleLogin}
+            className="bg-green-600 text-white px-4 py-2 rounded-lg"
           >
-            Inloggen
+            Login
           </button>
         </div>
       </div>
     );
   }
 
-  // =========================
-  // DASHBOARD
-  // =========================
-
   return (
-    <div className="min-h-screen bg-neutral-100 p-6">
+    <div className="p-6 max-w-5xl mx-auto">
       <h1 className="text-2xl font-bold mb-6">Admin Dashboard</h1>
 
-      {/* ================= ORDERS ================= */}
+      <div className="border p-4 rounded-xl mb-8">
+        <h2 className="font-semibold mb-4">Nieuw product toevoegen</h2>
 
-      <div className="bg-white rounded-2xl shadow p-4 mb-8">
-        <h2 className="text-lg font-semibold mb-3">Bestellingen</h2>
+        <input
+          placeholder="Naam"
+          value={newProduct.name}
+          onChange={(e) =>
+            setNewProduct({ ...newProduct, name: e.target.value })
+          }
+          className="border px-3 py-2 rounded-lg w-full mb-2"
+        />
 
-        <div className="mb-4 font-semibold">
-          Totale omzet: €
-          {orders
-            .reduce((sum, o) => sum + Number(o.total || 0), 0)
-            .toFixed(2)}
-        </div>
+        <input
+          placeholder="Categorie"
+          value={newProduct.category}
+          onChange={(e) =>
+            setNewProduct({ ...newProduct, category: e.target.value })
+          }
+          className="border px-3 py-2 rounded-lg w-full mb-2"
+        />
 
-        {orders.map((order) => (
-          <div
-            key={order.id}
-            className="border rounded-xl p-4 mb-4 bg-neutral-50"
-          >
-            <div className="font-semibold">{order.customer_name}</div>
-            <div className="text-sm">{order.customer_street}</div>
-            <div className="text-sm">{order.customer_postal_city}</div>
+        <input
+          placeholder="Afbeelding URL"
+          value={newProduct.image}
+          onChange={(e) =>
+            setNewProduct({ ...newProduct, image: e.target.value })
+          }
+          className="border px-3 py-2 rounded-lg w-full mb-2"
+        />
 
-            <div className="mt-2 font-semibold">
-              Totaal: €{order.total}
-            </div>
+        <textarea
+          placeholder="Beschrijving"
+          value={newProduct.description}
+          onChange={(e) =>
+            setNewProduct({ ...newProduct, description: e.target.value })
+          }
+          className="border px-3 py-2 rounded-lg w-full mb-4"
+        />
 
-            <div className="mt-2 flex items-center gap-3">
-              <select
-                value={order.status}
-                onChange={async (e) => {
-                  const newStatus = e.target.value;
+        <h3 className="font-semibold mb-2">Prijzen</h3>
 
-                  await supabase
-                    .from("orders")
-                    .update({ status: newStatus })
-                    .eq("id", order.id);
-
-                  loadOrders();
-                }}
-                className="border rounded-lg px-2 py-1"
-              >
-                <option value="nieuw">Nieuw</option>
-                <option value="verzonden">Verzonden</option>
-                <option value="afgerond">Afgerond</option>
-              </select>
-
-              <button
-                onClick={async () => {
-                  if (!confirm("Weet je zeker?")) return;
-
-                  await supabase
-                    .from("orders")
-                    .delete()
-                    .eq("id", order.id);
-
-                  loadOrders();
-                }}
-                className="bg-red-600 text-white px-3 py-1 rounded-lg"
-              >
-                Verwijderen
-              </button>
-            </div>
+        {priceRows.map((row, i) => (
+          <div key={i} className="flex gap-2 mb-2">
+            <input
+              placeholder="Aantal"
+              value={row.quantity}
+              onChange={(e) =>
+                updatePriceRow(i, "quantity", e.target.value)
+              }
+              className="border px-3 py-2 rounded-lg w-1/2"
+            />
+            <input
+              placeholder="Prijs"
+              value={row.price}
+              onChange={(e) =>
+                updatePriceRow(i, "price", e.target.value)
+              }
+              className="border px-3 py-2 rounded-lg w-1/2"
+            />
           </div>
         ))}
-      </div>
-
-      {/* ================= PRODUCTS ================= */}
-
-      <div className="bg-white rounded-2xl shadow p-4">
-        <h2 className="text-lg font-semibold mb-4">
-          Producten beheren
-        </h2>
-
-        {/* Add Product */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
-          <input
-            placeholder="Naam"
-            value={newProduct.name}
-            onChange={(e) =>
-              setNewProduct({ ...newProduct, name: e.target.value })
-            }
-            className="border rounded-lg px-3 py-2"
-          />
-          <input
-            placeholder="Prijs"
-            value={newProduct.price}
-            onChange={(e) =>
-              setNewProduct({ ...newProduct, price: e.target.value })
-            }
-            className="border rounded-lg px-3 py-2"
-          />
-          <input
-            placeholder="Image URL"
-            value={newProduct.image}
-            onChange={(e) =>
-              setNewProduct({ ...newProduct, image: e.target.value })
-            }
-            className="border rounded-lg px-3 py-2"
-          />
-          <input
-            placeholder="Beschrijving"
-            value={newProduct.description}
-            onChange={(e) =>
-              setNewProduct({
-                ...newProduct,
-                description: e.target.value
-              })
-            }
-            className="border rounded-lg px-3 py-2"
-          />
-        </div>
 
         <button
-          onClick={addProduct}
-          className="bg-green-600 text-white px-4 py-2 rounded-lg mb-6"
+          onClick={addPriceRow}
+          className="bg-gray-300 px-3 py-1 rounded-lg mb-4"
         >
-          Product toevoegen
+          + Aantal toevoegen
         </button>
 
-        {/* Product list */}
-        {products.map((product) => (
-          <div
-            key={product.id}
-            className="border rounded-xl p-4 mb-3 bg-neutral-50 flex justify-between items-center"
+        <div>
+          <button
+            onClick={addProduct}
+            className="bg-green-600 text-white px-4 py-2 rounded-lg"
           >
-            <div>
-              <div className="font-semibold">{product.name}</div>
-              <div>€{product.price}</div>
-            </div>
-
-            <button
-              onClick={() => deleteProduct(product.id)}
-              className="bg-red-600 text-white px-3 py-1 rounded-lg"
-            >
-              Verwijderen
-            </button>
-          </div>
-        ))}
+            Product toevoegen
+          </button>
+        </div>
       </div>
+
+      <h2 className="font-semibold mb-4">Bestaande producten</h2>
+
+      {products.map((product) => (
+        <div key={product.id} className="border p-4 rounded-xl mb-4">
+          <div className="font-bold">{product.name}</div>
+          <div className="text-sm text-gray-600">{product.category}</div>
+
+          <div className="mt-2">
+            {product.product_prices.map((p) => (
+              <div key={p.id}>
+                {p.quantity} stuks → €{p.price}
+              </div>
+            ))}
+          </div>
+
+          <button
+            onClick={() => deleteProduct(product.id)}
+            className="bg-red-600 text-white px-3 py-1 rounded-lg mt-3"
+          >
+            Verwijderen
+          </button>
+        </div>
+      ))}
     </div>
   );
 }
