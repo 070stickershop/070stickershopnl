@@ -26,7 +26,7 @@ function beep(duration = 120, frequency = 880, volume = 0.12) {
   osc.connect(gain);
   gain.connect(ctx.destination);
   osc.start();
-  setTimeout(() => {
+  setTimeout(() => { 
     osc.stop();
     ctx.close();
   }, duration);
