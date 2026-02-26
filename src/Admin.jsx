@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "./lib/supabase";
 
 const ADMIN_PASSWORD = "antiajax070";
+const [imageFile, setImageFile] = useState(null);
 
 export default function Admin() {
   const [authorized, setAuthorized] = useState(false);
@@ -50,23 +51,43 @@ export default function Admin() {
   // PRODUCT FUNCTIONS
   // =========================
 
-  async function addProduct() {
-    if (!newProduct.name || !newProduct.price) {
-      alert("Naam en prijs zijn verplicht");
-      return;
-    }
-
-    await supabase.from("products").insert([newProduct]);
-
-    setNewProduct({
-      name: "",
-      price: "",
-      image: "",
-      description: ""
-    });
-
-    loadProducts();
+async function addProduct() {
+  if (!newProduct.name || !newProduct.price || !imageFile) {
+    alert("Vul alles in + kies een afbeelding");
+    return;
   }
+
+  const fileExt = imageFile.name.split(".").pop();
+  const fileName = `${Date.now()}.${fileExt}`;
+
+  const { error: uploadError } = await supabase.storage
+    .from("products")
+    .upload(fileName, imageFile);
+
+  if (uploadError) {
+    alert("Upload mislukt");
+    return;
+  }
+
+  const { data } = supabase.storage
+    .from("products")
+    .getPublicUrl(fileName);
+
+  const imageUrl = data.publicUrl;
+
+  await supabase.from("products").insert([
+    {
+      name: newProduct.name,
+      price: newProduct.price,
+      description: newProduct.description,
+      image: imageUrl
+    }
+  ]);
+
+  setNewProduct({ name: "", price: "", description: "" });
+  setImageFile(null);
+  loadProducts();
+}
 
   async function deleteProduct(id) {
     if (!confirm("Weet je zeker dat je dit product wilt verwijderen?"))
