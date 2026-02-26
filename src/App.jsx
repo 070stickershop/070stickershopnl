@@ -1,5 +1,6 @@
 /* App.jsx – versie met Haagse winkelwagen & adres-checkout (Matchday versie) */
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, { useMemo, useState, useRef } from "react";
+import { supabase } from "./lib/supabase";
 
 /* ================== Helpers ================== */
 function formatPrice(n) {
