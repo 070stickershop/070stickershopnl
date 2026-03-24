@@ -92,6 +92,11 @@ const MATCH_DAYS = [
   "2026-03-13",
   "2026-03-17",
   "2026-03-22",
+  "2026-04-03",
+  "2026-04-06",
+  "2026-04-12",
+  "2026-04-17",
+  "2026-04-24",
   // vul hier zelf jouw wedstrijddagen toe
 ];
 
@@ -439,6 +444,34 @@ const PRODUCTS = [
       { id: "5", label: "5 rollen", price: 30.0 },
     ],
     extra: "Ideaal om mee te nemen naar awaydays · 50 meter lang.",
+    group: "accessoires",
+  },
+  {
+    id: "den-haag-1-meter",
+    title: "1 Meter Sticker Den Haag",
+    img: "/img/den-haag-cp.jpg",
+    tags: ["1meter", "accessoires", "uniek", "awaydays"],
+    variants: [
+      { id: "1", label: "1 stuk", price: 4.50 },
+      { id: "2", label: "2 stuks", price: 9.00 },
+      { id: "3", label: "3 stuks", price: 10.5 },
+      { id: "5", label: "5 stuks", price: 17.50 },
+    ],
+    extra: "Uniek in nederland · 1 meter lang.",
+    group: "accessoires",
+  },
+    {
+    id: "den-haag-1-meter",
+    title: "1 Meter Sticker Den Haag Geel Groen",
+    img: "/img/den-haag-yg.jpg",
+    tags: ["1meter", "accessoires", "uniek", "awaydays"],
+    variants: [
+      { id: "1", label: "1 stuk", price: 4.50 },
+      { id: "2", label: "2 stuks", price: 9.00 },
+      { id: "3", label: "3 stuks", price: 10.5 },
+      { id: "5", label: "5 stuks", price: 17.50 },
+    ],
+    extra: "Uniek in nederland · 1 meter lang.",
     group: "accessoires",
   },
 
