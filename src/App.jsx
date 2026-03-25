@@ -270,6 +270,7 @@ const PRODUCTS = [
     ],
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
     group: "normaal",
+    badge: "Populair",
   },
   {
     id: "normal-green-yellow-army",
@@ -290,7 +291,7 @@ const PRODUCTS = [
     id: "normal-betreden-op-eigen-risico",
     title: "Betreden op eigen risico",
     img: "/img/betreden-op-eigen-risico.jpg",
-    tags: ["normaal", "85x55mm", "vinyl"],
+    tags: ["normaal", "100x100mm", "vinyl"],
     variants: [
       { id: "25", label: "25 stuks", price: 4.5 },
       { id: "50", label: "50 stuks", price: 7.5 },
@@ -314,6 +315,7 @@ const PRODUCTS = [
     ],
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
     group: "normaal",
+    badge: "Populair",
     soldOut: false,
   },
   {
@@ -329,6 +331,7 @@ const PRODUCTS = [
     ],
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
     group: "normaal",
+    badge: "Populair",
   },
 
   /* Mix (vanaf 50) – zelfde pricing als 50+ normaal */
@@ -345,6 +348,7 @@ const PRODUCTS = [
     ],
     extra: "Mix van designs · 85×55 mm · Vinyl · UV- & waterbestendig",
     group: "normaal",
+    badge: "Ideaal voor awaydays",
   },
 
   /* ---------------- XXL (A6) ---------------- */
@@ -362,6 +366,7 @@ const PRODUCTS = [
     ],
     extra: "A6 (105×148 mm) · Vinyl · UV- & waterbestendig",
     group: "xxl",
+    badge: "Populair",
   },
   {
     id: "xxl-fcdh-legia",
@@ -377,6 +382,7 @@ const PRODUCTS = [
     ],
     extra: "A6 (105×148 mm) · Vinyl · UV- & waterbestendig",
     group: "xxl",
+    badge: "Populair",
   },
   {
     id: "xxl-fc-den-haag-1905",
@@ -432,6 +438,7 @@ const PRODUCTS = [
     ],
     extra: "Ideaal om mee te nemen naar awaydays · 50 meter lang.",
     group: "accessoires",
+    badge: "Populair",
   },
   {
     id: "tape-rol-on-tour",
@@ -446,6 +453,7 @@ const PRODUCTS = [
     ],
     extra: "Ideaal om mee te nemen naar awaydays · 50 meter lang.",
     group: "accessoires",
+    badge: "Populair",
   },
   {
     id: "den-haag-1-meter-cp",
