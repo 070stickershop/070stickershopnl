@@ -476,6 +476,20 @@ const PRODUCTS = [
     group: "accessoires",
     badge: "Alleen bij 070stickershop.nl !",
   },
+  {
+  id: "combi-tape-meter",
+  title: "Combi Deal – Tape Rol + 1 Meter Sticker !",
+  img: "/img/combi.jpg", // kies ff een afbeelding
+  tags: ["deal", "tape", "1 meter", "voordeel"],
+  variants: [
+    { id: "1", label: "1 set", price: 10.5 },
+    { id: "2", label: "2 sets", price: 20.5 },
+    { id: "3", label: "3 sets", price: 30.0 },
+  ],
+  extra: "Normaal €15.00 · Nu €10.50 🔥",
+  group: "accessoires",
+  badge: "BESPAAR 🔥",
+},
 
   /* ---------------- Vlag ---------------- */
   {
