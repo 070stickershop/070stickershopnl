@@ -678,8 +678,8 @@ export default function App() {
     ) {
       return 3.0;
     }
-    // Alles daarboven -> €4,50
-    return 4.5;
+    // Alles daarboven -> €5,50
+    return 5.5;
   }
 
   const shipping = computeShipping();
@@ -1079,11 +1079,11 @@ export default function App() {
           <div className="rounded-3xl border p-6 shadow-sm">
             <h3 className="font-extrabold text-lg">Verzending</h3>
             <p className="mt-2 text-sm text-neutral-700">
-              Verzendkosten: <strong>€4,50</strong> standaard. <br />
+              Verzendkosten: <strong>€5,50</strong> standaard. <br />
               <em>Uitzondering:</em> bestellingen die uitsluitend bestaan uit{" "}
               <strong>25 stuks</strong> (Normaal) of{" "}
               <strong>10 stuks</strong> (XXL A6) verzenden voor{" "}
-              <strong>€4,00</strong>.
+              <strong>€4,50</strong>.
             </p>
           </div>
           <div className="rounded-3xl border p-6 shadow-sm">
