@@ -414,7 +414,7 @@ const PRODUCTS = [
     },
     extra: "A4 (210×297 mm) · Vinyl · UV- & waterbestendig",
     group: "a4",
-    badge: "Alleen bij 070stickershop !",
+    badge: "Alleen bij 070stickershop.nl !",
   },
 
   /* ---------------- Accessoires (aparte sectie) ---------------- */
@@ -450,7 +450,7 @@ const PRODUCTS = [
     id: "den-haag-1-meter",
     title: "1 Meter Sticker Den Haag",
     img: "/img/den-haag-cp.jpg",
-    tags: ["1meter", "accessoires", "uniek", "awaydays"],
+    tags: ["1 meter lang", "accessoires", "uniek", "awaydays"],
     variants: [
       { id: "1", label: "1 stuk", price: 4.50 },
       { id: "2", label: "2 stuks", price: 9.00 },
@@ -459,12 +459,13 @@ const PRODUCTS = [
     ],
     extra: "Uniek in nederland · 1 meter lang.",
     group: "accessoires",
+    badge: "Alleen bij 070stickershop.nl !",
   },
     {
     id: "den-haag-1-meter",
     title: "1 Meter Sticker Den Haag Geel Groen",
     img: "/img/den-haag-yg.jpg",
-    tags: ["1meter", "accessoires", "uniek", "awaydays"],
+    tags: ["1 meter lang", "accessoires", "uniek", "awaydays"],
     variants: [
       { id: "1", label: "1 stuk", price: 4.50 },
       { id: "2", label: "2 stuks", price: 9.00 },
@@ -473,6 +474,7 @@ const PRODUCTS = [
     ],
     extra: "Uniek in nederland · 1 meter lang.",
     group: "accessoires",
+    badge: "Alleen bij 070stickershop.nl !",
   },
 
   /* ---------------- Vlag ---------------- */
