@@ -868,54 +868,64 @@ export default function App() {
         </div>
       )}
 
-      {/* HERO */}
-      <section className="relative isolate h-[420px] md:h-[650px] lg:h-[750px]">
-        <img
-          src={HERO_BG}
-          alt="Ado sfeer"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/0" />
-        <div className="relative z-10 mx-auto max-w-6xl px-4 h-full flex items-center">
-          <div className="grid md:grid-cols-2 gap-10 items-center w-full">
-            <div>
-              <h1 className="text-4xl md:text-5xl font-black leading-tight text-white drop-shadow">
-                #1 Stickershop in Den Haag sinds 2023
-              </h1>
-              <p className="mt-4 text-white/90 max-w-prose">
-                Welkom bij 070_stickershop – hoogwaardige vinyl stickers in
-                groen-geel. Water- & UV-bestendig.
-              </p>
-              <div className="mt-6 flex flex-wrap gap-3">
-                <a
-                  href="#collectie"
-                  className="rounded-2xl bg-[#f2c200] px-5 py-2.5 font-semibold shadow hover:shadow-md transition"
-                >
-                  Shop nu
-                  
-                </a>
-                <a
-                  href="#info"
-                  className="rounded-2xl bg-white/90 px-5 py-2.5 font-semibold shadow hover:shadow-md transition"
-                >
-                  Verzending & betalen
-                </a>
-              </div>
-            </div>
+{/* HERO */}
+<section className="relative isolate h-[420px] md:h-[650px] lg:h-[750px]">
+  
+  <video
+    autoPlay
+    loop
+    muted
+    playsInline
+    className="absolute inset-0 w-full h-full object-cover"
+  >
+    <source src="/video/ado-sfeer.mp4" type="video/mp4" />
+  </video>
 
-            {/* Rond logo */}
-            <div className="hidden md:flex items-center justify-center">
-              <div className="rounded-full p-2 bg-white/5 ring-1 ring-white/15 backdrop-blur-sm shadow-2xl">
-                <img
-                  src="/img/070-logo.jpeg"
-                  alt="070_stickershop logo"
-                  className="w-56 h-56 rounded-full object-cover object-center"
-                />
-              </div>
-            </div>
-          </div>
+  <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/0" />
+
+  <div className="relative z-10 mx-auto max-w-6xl px-4 h-full flex items-center">
+    <div className="grid md:grid-cols-2 gap-10 items-center w-full">
+      
+      {/* TEXT */}
+      <div>
+        <h1 className="text-4xl md:text-5xl font-black leading-tight text-white drop-shadow">
+          #1 Stickershop in Den Haag sinds 2023
+        </h1>
+        <p className="mt-4 text-white/90 max-w-prose">
+          Welkom bij 070_stickershop – hoogwaardige vinyl stickers in
+          groen-geel. Water- & UV-bestendig.
+        </p>
+        <div className="mt-6 flex flex-wrap gap-3">
+          <a
+            href="#collectie"
+            className="rounded-2xl bg-[#f2c200] px-5 py-2.5 font-semibold shadow hover:shadow-md transition"
+          >
+            Shop nu
+          </a>
+          <a
+            href="#info"
+            className="rounded-2xl bg-white/90 px-5 py-2.5 font-semibold shadow hover:shadow-md transition"
+          >
+            Verzending & betalen
+          </a>
         </div>
-      </section>
+      </div>
+
+      {/* LOGO */}
+      <div className="hidden md:flex items-center justify-center">
+        <div className="rounded-full p-2 bg-white/5 ring-1 ring-white/15 backdrop-blur-sm shadow-2xl">
+          <img
+            src="/img/070-logo.jpeg"
+            alt="070_stickershop logo"
+            className="w-56 h-56 rounded-full object-cover object-center"
+          />
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</section>
 
       {/* Collectie */}
       <section id="collectie" className="bg-white/80 border-t border-black/5">
