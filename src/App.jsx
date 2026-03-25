@@ -128,6 +128,7 @@ const PRODUCTS = [
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
     badge: "Populair",
     group: "normaal",
+    soldOut: true,
   },
    {
     id: "normal-your-city",
