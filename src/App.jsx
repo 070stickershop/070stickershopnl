@@ -475,6 +475,7 @@ const PRODUCTS = [
     extra: "Uniek in nederland · 1 meter lang.",
     group: "accessoires",
     badge: "Alleen bij 070stickershop.nl !",
+    soldOut: true,
   },
   {
   id: "combi-tape-meter",
