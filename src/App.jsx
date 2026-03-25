@@ -448,7 +448,7 @@ const PRODUCTS = [
   },
   {
     id: "den-haag-1-meter-cp",
-    title: "1 Meter Sticker Den Haag",
+    title: "1 Meter Sticker (Den Haag)",
     img: "/img/den-haag-cp.jpg",
     tags: ["1 meter lang", "accessoires", "uniek", "awaydays"],
     variants: [
@@ -463,7 +463,7 @@ const PRODUCTS = [
   },
     {
     id: "den-haag-1-meter-geel-groen",
-    title: "1 Meter Sticker Den Haag Geel Groen",
+    title: "1 Meter Sticker (Stad logo)",
     img: "/img/den-haag-yg.jpg",
     tags: ["1 meter lang", "accessoires", "uniek", "awaydays"],
     variants: [
