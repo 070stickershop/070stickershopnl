@@ -527,8 +527,6 @@ async function fetchProducts() {
     .from("products")
     .select("*");
 
-  console.log("SUPABASE DATA:", data);
-
   if (!error && data.length > 0) {
     const mapped = data.map(p => ({
       id: p.id,
@@ -547,9 +545,8 @@ async function fetchProducts() {
       ]
     }));
 
-    console.log("MAPPED products:", mapped);
-
-    setProducts(mapped);
+    // 👇 BELANGRIJK
+    setProducts([...PRODUCTS, ...mapped]);
   }
 }
   const [query, setQuery] = useState("");
