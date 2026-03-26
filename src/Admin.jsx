@@ -25,34 +25,35 @@ export default function Admin() {
   }
 
   // 🔥 IMAGE UPLOAD (blijft hetzelfde, maar beter gebruikt)
-  async function uploadImage(file) {
-    if (!file.type.includes("image")) {
-      alert("Alleen afbeeldingen toegestaan");
-      return null;
-    }
+async function uploadImage(file) {
+  console.log("START UPLOAD", file);
 
-    if (file.size > 2 * 1024 * 1024) {
-      alert("Bestand te groot (max 2MB)");
-      return null;
-    }
-
-    const fileName = Date.now() + "-" + file.name;
-
-    const { error } = await supabase.storage
-      .from("images")
-      .upload(fileName, file);
-
-    if (error) {
-      alert("Upload mislukt: " + error.message);
-      return null;
-    }
-
-    const { data } = supabase.storage
-      .from("images")
-      .getPublicUrl(fileName);
-
-    return data.publicUrl;
+  if (!file.type.includes("image")) {
+    alert("Alleen afbeeldingen toegestaan");
+    return null;
   }
+
+  const fileName = Date.now() + "-" + file.name;
+
+  const { data, error } = await supabase.storage
+    .from("images")
+    .upload(fileName, file);
+
+  console.log("UPLOAD RESULT:", data, error);
+
+  if (error) {
+    alert("Upload mislukt: " + error.message);
+    return null;
+  }
+
+  const { data: publicUrl } = supabase.storage
+    .from("images")
+    .getPublicUrl(fileName);
+
+  console.log("PUBLIC URL:", publicUrl);
+
+  return publicUrl.publicUrl;
+}
 
   // 🔥 FIXED ADD PRODUCT
 async function addProduct() {
