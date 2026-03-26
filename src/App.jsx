@@ -1,6 +1,7 @@
 /* App.jsx – versie met Haagse winkelwagen & adres-checkout (Matchday versie) */
 import React, { useMemo, useState, useRef, useEffect } from "react";
 import { supabase } from "./lib/supabase";
+import Admin from "./Admin";
 
 /* ================== Helpers ================== */
 function formatPrice(n) {
@@ -831,7 +832,9 @@ const items = useMemo(() => {
     }
     haptic(18);
   }
-
+if (window.location.pathname === "/admin") {
+  return <Admin />;
+}
   return (
     <div className="min-h-screen text-neutral-900 bg-gradient-to-br from-[#0b6e4f] via-[#f2c200]/30 to-[#f2c200]/60">
       {/* Topbar */}
