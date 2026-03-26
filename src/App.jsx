@@ -1,7 +1,6 @@
 /* App.jsx – versie met Haagse winkelwagen & adres-checkout (Matchday versie) */
 import React, { useMemo, useState, useRef, useEffect } from "react";
 import { supabase } from "./lib/supabase";
-console.log("APP RENDER", products);
 
 /* ================== Helpers ================== */
 function formatPrice(n) {
@@ -548,7 +547,7 @@ async function fetchProducts() {
       ]
     }));
 
-    console.log("MAPPED PRODUCTS:", mapped);
+    console.log("MAPPED products:", mapped);
 
     setProducts(mapped);
   }
@@ -599,7 +598,7 @@ async function fetchProducts() {
   const items = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return products;
-    return PRODUCTS.filter(
+    return products.filter(
       (p) =>
         p.title.toLowerCase().includes(q) ||
         p.tags.some((t) => t.toLowerCase().includes(q))
