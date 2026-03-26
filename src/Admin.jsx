@@ -26,8 +26,6 @@ export default function Admin() {
 
   // 🔥 IMAGE UPLOAD (blijft hetzelfde, maar beter gebruikt)
 async function uploadImage(file) {
-  console.log("START UPLOAD", file);
-
   if (!file.type.includes("image")) {
     alert("Alleen afbeeldingen toegestaan");
     return null;
@@ -35,24 +33,20 @@ async function uploadImage(file) {
 
   const fileName = Date.now() + "-" + file.name;
 
-  const { data, error } = await supabase.storage
+  const { error } = await supabase.storage
     .from("images")
-    .upload(fileName, file);
-
-  console.log("UPLOAD RESULT:", data, error);
+    .upload("public/" + fileName, file);
 
   if (error) {
     alert("Upload mislukt: " + error.message);
     return null;
   }
 
-  const { data: publicUrl } = supabase.storage
+  const { data } = supabase.storage
     .from("images")
-    .getPublicUrl(fileName);
+    .getPublicUrl("public/" + fileName);
 
-  console.log("PUBLIC URL:", publicUrl);
-
-  return publicUrl.publicUrl;
+  return data.publicUrl;
 }
 
   // 🔥 FIXED ADD PRODUCT
