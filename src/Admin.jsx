@@ -112,10 +112,22 @@ return (
         value={newProduct.price}
         onChange={e => setNewProduct({ ...newProduct, price: e.target.value })}
       />
-      <input placeholder="Image /img/..."
-        value={newProduct.img}
-        onChange={e => setNewProduct({ ...newProduct, img: e.target.value })}
-      />
+<input
+  type="file"
+  accept="image/*"
+  onChange={async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const url = await uploadImage(file);
+    if (url) {
+      setNewProduct({ ...newProduct, img: url });
+    }
+  }}
+/>
+{newProduct.img && (
+  <img src={newProduct.img} style={{ width: 100, marginTop: 10 }} />
+)}
       <button onClick={addProduct}>Toevoegen</button>
 
       <h2>Producten</h2>
