@@ -1,5 +1,5 @@
 /* App.jsx – versie met Haagse winkelwagen & adres-checkout (Matchday versie) */
-import React, { useMemo, useState, useRef } from "react";
+import React, { useMemo, useState, useRef, useEffect } from "react";
 import { supabase } from "./lib/supabase";
 
 /* ================== Helpers ================== */
@@ -516,13 +516,28 @@ const PRODUCTS = [
 
 /* ================== App ================== */
 export default function App() {
+const [products, setProducts] = useState(PRODUCTS);
+
+useEffect(() => {
+  fetchProducts();
+}, []);
+
+async function fetchProducts() {
+  const { data, error } = await supabase
+    .from("products")
+    .select("*");
+
+  if (!error && data.length > 0) {
+    setProducts(data);
+  }
+}
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
   const [cart, setCart] = useState([]);
   const [openCart, setOpenCart] = useState(false);
   const [selected, setSelected] = useState(() => {
     const o = {};
-    for (const p of PRODUCTS) o[p.id] = p.variants[0]?.id;
+    for (const p of products) o[p.id] = p.variants[0]?.id;
     return o;
   });
 
@@ -561,7 +576,7 @@ export default function App() {
 
   const items = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return PRODUCTS;
+    if (!q) return products;
     return PRODUCTS.filter(
       (p) =>
         p.title.toLowerCase().includes(q) ||
@@ -590,7 +605,7 @@ export default function App() {
   }
 
   function addToCart(productId) {
-    const product = PRODUCTS.find((p) => p.id === productId);
+    const product = products.find((p) => p.id === productId);
     const variantId = selected[productId] ?? product.variants[0].id;
     const { price, label } = resolveVariantPrice(product, variantId);
 
@@ -669,7 +684,7 @@ export default function App() {
 
     if (appliedCoupon.groups?.length) {
       eligibleSubtotal = cart.reduce((sum, item) => {
-        const product = PRODUCTS.find((p) => p.id === item.productId);
+        const product = products.find((p) => p.id === item.productId);
         if (product && appliedCoupon.groups.includes(product.group)) {
           return sum + item.price * item.qty;
         }
