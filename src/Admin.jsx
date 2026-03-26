@@ -22,29 +22,48 @@ export default function Admin() {
     if (data) setProducts(data);
   }
 
-  async function addProduct() {
-    if (!newProduct.title || !newProduct.price) return;
+async function addProduct() {
+  if (!newProduct.title || !newProduct.price) return;
 
-    await supabase.from("products").insert([
-      {
-        title: newProduct.title,
-        price: parseFloat(newProduct.price),
-        img: newProduct.img,
-        group: newProduct.group,
-        badge: newProduct.badge
-      }
-    ]);
+  await supabase.from("products").insert([
+    {
+      title: newProduct.title,
+      price: parseFloat(newProduct.price),
+      img: newProduct.img,
+      group: newProduct.group,
+      badge: newProduct.badge
+    }
+  ]);
 
-    setNewProduct({
-      title: "",
-      price: "",
-      img: "",
-      group: "accessoires",
-      badge: ""
-    });
+  setNewProduct({
+    title: "",
+    price: "",
+    img: "",
+    group: "accessoires",
+    badge: ""
+  });
 
-    fetchProducts();
+  fetchProducts();
+} // 👈 DEZE WAS BELANGRIJK
+
+async function uploadImage(file) {
+  const fileName = Date.now() + "-" + file.name;
+
+  const { data, error } = await supabase.storage
+    .from("images")
+    .upload(fileName, file);
+
+  if (error) {
+    alert("Upload mislukt");
+    return null;
   }
+
+  const { data: publicUrl } = supabase.storage
+    .from("images")
+    .getPublicUrl(fileName);
+
+  return publicUrl.publicUrl;
+}
 
   async function updatePrice(id, price) {
     await supabase
