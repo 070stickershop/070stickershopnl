@@ -32,13 +32,15 @@ async function uploadImage(file) {
     .from("images")
     .upload("public/" + fileName, file);
 
-  console.log("UPLOAD RESULT:", res);
+  console.log("UPLOAD RES:", res);
 
   const { data } = supabase.storage
     .from("images")
     .getPublicUrl("public/" + fileName);
 
-  return data.publicUrl;
+  console.log("PUBLIC URL:", data);
+
+  return data?.publicUrl || null;
 }
 
   // 🔥 FIXED ADD PRODUCT
@@ -47,9 +49,11 @@ async function addProduct() {
 
   let imageUrl = null;
 
-  if (newProduct.file) {
-    imageUrl = await uploadImage(newProduct.file);
-  }
+if (newProduct.file) {
+  imageUrl = await uploadImage(newProduct.file);
+}
+
+console.log("FINAL IMAGE URL:", imageUrl);
 
   await supabase.from("products").insert([
     {
