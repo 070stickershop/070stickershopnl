@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { supabase } from "./lib/supabase";
 
 export default function Admin() {
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [password, setPassword] = useState("");
   const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState({
     title: "",
@@ -53,9 +55,34 @@ export default function Admin() {
     fetchProducts();
   }
 
+if (!loggedIn) {
   return (
     <div style={{ padding: 20 }}>
-      <h1>Admin Panel</h1>
+      <h2>Admin Login</h2>
+      <input
+        type="password"
+        placeholder="Wachtwoord"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <button
+        onClick={() => {
+          if (password === "070admin") {
+            setLoggedIn(true);
+          } else {
+            alert("Fout wachtwoord");
+          }
+        }}
+      >
+        Login
+      </button>
+    </div>
+  );
+}
+
+return (
+  <div style={{ padding: 20 }}>
+    <h1>Admin Panel</h1>
 
       <h2>Nieuw product</h2>
       <input placeholder="Titel"
