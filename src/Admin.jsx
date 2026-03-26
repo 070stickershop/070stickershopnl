@@ -32,10 +32,7 @@ async function uploadImage(file) {
     .from("images")
     .upload("public/" + fileName, file);
 
-  console.log("UPLOAD RESPONSE:", res);
-
-  // ❌ GEEN alert meer hier
-  // we negeren error omdat upload al gelukt kan zijn
+  console.log("UPLOAD RESULT:", res);
 
   const { data } = supabase.storage
     .from("images")
@@ -54,17 +51,9 @@ if (newProduct.file) {
   imageUrl = await uploadImage(newProduct.file);
 }
 
-console.log("FINAL IMAGE URL:", imageUrl);
-
   // 🔥 FORCE upload (BELANGRIJK)
   if (newProduct.file) {
     imageUrl = await uploadImage(newProduct.file);
-  }
-
-  // 🔥 STOP als upload mislukt
-  if (!imageUrl) {
-    alert("Image upload mislukt!");
-    return;
   }
 
   await supabase.from("products").insert([
