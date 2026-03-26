@@ -256,6 +256,7 @@ const PRODUCTS = [
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
     group: "normaal",
     badge: "Populair",
+    soldOut: true,
   },
   {
     id: "normal-den-haag-till",
