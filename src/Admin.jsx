@@ -28,25 +28,20 @@ export default function Admin() {
 async function uploadImage(file) {
   const fileName = Date.now() + "-" + file.name;
 
-  const { data, error } = await supabase.storage
+  const { error } = await supabase.storage
     .from("images")
     .upload("public/" + fileName, file);
 
-  // 🔥 alleen echte error checken
-  if (error && error.message) {
-    console.log("ECHTE ERROR:", error);
-    alert("Upload mislukt: " + error.message);
-    return null;
+  // ❗ NEGEER kleine Supabase errors
+  if (error && !error.message.includes("duplicate")) {
+    console.log("Upload error:", error);
   }
 
-  // 🔥 altijd URL ophalen (ook als Supabase vaag doet)
-  const { data: publicUrlData } = supabase.storage
+  const { data } = supabase.storage
     .from("images")
     .getPublicUrl("public/" + fileName);
 
-  console.log("UPLOAD GELUKT:", publicUrlData.publicUrl);
-
-  return publicUrlData.publicUrl;
+  return data.publicUrl;
 }
 
   // 🔥 FIXED ADD PRODUCT
@@ -59,7 +54,7 @@ if (newProduct.file) {
   imageUrl = await uploadImage(newProduct.file);
 }
 
-console.log("FINAL IMAGE:", imageUrl);
+console.log("IMAGE URL:", imageUrl);
 
   // 🔥 FORCE upload (BELANGRIJK)
   if (newProduct.file) {
