@@ -32,11 +32,11 @@ async function uploadImage(file) {
     .from("images")
     .upload("public/" + fileName, file);
 
-  const { data } = supabase.storage
+  const publicUrlData = supabase.storage
     .from("images")
-    .getPublicUrl(fileName); // 🔥 FIX
+    .getPublicUrl("public/" + fileName);
 
-  return data.publicUrl;
+  return publicUrlData.data.publicUrl;
 }
 
   // 🔥 FIXED ADD PRODUCT
