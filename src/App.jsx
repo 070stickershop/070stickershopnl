@@ -359,7 +359,7 @@ const PRODUCTS = [
     img: "/img/den-haag-zone-a6.jpg",
     tags: ["A6", "xxl", "zone"],
     variants: [
-      { id: "10", label: "10 stuks", price: 3.5 },
+      { id: "10", label: "10 stuks", price: 4.0 },
       { id: "25", label: "25 stuks", price: 7.5 },
       { id: "50", label: "50 stuks", price: 12.0 },
       { id: "75", label: "75 stuks", price: 16.5 },
@@ -375,7 +375,7 @@ const PRODUCTS = [
     img: "/img/fc-den-haag-legia-a6.jpg",
     tags: ["A6", "xxl", "denhaag", "legia"],
     variants: [
-      { id: "10", label: "10 stuks", price: 3.5 },
+      { id: "10", label: "10 stuks", price: 4.0 },
       { id: "25", label: "25 stuks", price: 7.5 },
       { id: "50", label: "50 stuks", price: 12.0 },
       { id: "75", label: "75 stuks", price: 16.5 },
@@ -391,7 +391,7 @@ const PRODUCTS = [
     img: "/img/fc-den-haag.jpg",
     tags: ["rond", "xxl", "1905", "denhaag"],
     variants: [
-      { id: "10", label: "10 stuks", price: 3.5 },
+      { id: "10", label: "10 stuks", price: 4.0 },
       { id: "25", label: "25 stuks", price: 7.5 },
       { id: "50", label: "50 stuks", price: 12.0 },
       { id: "75", label: "75 stuks", price: 16.5 },
