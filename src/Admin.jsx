@@ -28,19 +28,15 @@ export default function Admin() {
 async function uploadImage(file) {
   const fileName = Date.now() + "-" + file.name;
 
-  const res = await supabase.storage
+  await supabase.storage
     .from("images")
     .upload("public/" + fileName, file);
 
-  console.log("UPLOAD RES:", res);
-
   const { data } = supabase.storage
     .from("images")
-    .getPublicUrl("public/" + fileName);
+    .getPublicUrl(fileName); // 🔥 FIX
 
-  console.log("PUBLIC URL:", data);
-
-  return data?.publicUrl || null;
+  return data.publicUrl;
 }
 
   // 🔥 FIXED ADD PRODUCT
