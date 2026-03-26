@@ -1,6 +1,7 @@
 /* App.jsx – versie met Haagse winkelwagen & adres-checkout (Matchday versie) */
 import React, { useMemo, useState, useRef, useEffect } from "react";
 import { supabase } from "./lib/supabase";
+console.log("APP RENDER", products);
 
 /* ================== Helpers ================== */
 function formatPrice(n) {
@@ -527,23 +528,27 @@ async function fetchProducts() {
     .from("products")
     .select("*");
 
+  console.log("SUPABASE DATA:", data);
+
   if (!error && data.length > 0) {
-const mapped = data.map(p => ({
-  id: p.id,
-  title: p.title,
-  img: p.img,
-  group: p.group || "normaal",
-  badge: p.badge,
-  tags: ["accessoires"],
-  extra: "",
-  variants: [
-    {
-      id: "1",
-      label: "1 stuk",
-      price: p.price
-    }
-  ]
-}));
+    const mapped = data.map(p => ({
+      id: p.id,
+      title: p.title,
+      img: p.img,
+      group: p.group || "normaal",
+      badge: p.badge,
+      tags: ["accessoires"],
+      extra: "",
+      variants: [
+        {
+          id: "1",
+          label: "1 stuk",
+          price: p.price
+        }
+      ]
+    }));
+
+    console.log("MAPPED PRODUCTS:", mapped);
 
     setProducts(mapped);
   }
