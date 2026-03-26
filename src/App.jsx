@@ -595,15 +595,16 @@ async function fetchProducts() {
 
   const [successMsg, setSuccessMsg] = useState("");
 
-  const items = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return products;
-    return products.filter(
-      (p) =>
-        p.title.toLowerCase().includes(q) ||
-        p.tags.some((t) => t.toLowerCase().includes(q))
-    );
-  }, [query]);
+const items = useMemo(() => {
+  const q = query.trim().toLowerCase();
+  if (!q) return products;
+
+  return products.filter(
+    (p) =>
+      p.title.toLowerCase().includes(q) ||
+      (p.tags || []).some((t) => t.toLowerCase().includes(q))
+  );
+}, [query, products]);
 
   const visibleItems = useMemo(() => {
     return items.filter((p) => {
