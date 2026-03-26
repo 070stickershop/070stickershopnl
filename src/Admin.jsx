@@ -47,22 +47,33 @@ async function addProduct() {
 } // 👈 DEZE WAS BELANGRIJK
 
 async function uploadImage(file) {
+  // 🔥 bestand check
+  if (!file.type.includes("image")) {
+    alert("Alleen afbeeldingen toegestaan");
+    return null;
+  }
+
+  if (file.size > 2 * 1024 * 1024) {
+    alert("Bestand te groot (max 2MB)");
+    return null;
+  }
+
   const fileName = Date.now() + "-" + file.name;
 
-  const { data, error } = await supabase.storage
+  const { error } = await supabase.storage
     .from("images")
     .upload(fileName, file);
 
   if (error) {
-    alert("Upload mislukt");
+    alert("Upload mislukt: " + error.message);
     return null;
   }
 
-  const { data: publicUrl } = supabase.storage
+  const { data } = supabase.storage
     .from("images")
     .getPublicUrl(fileName);
 
-  return publicUrl.publicUrl;
+  return data.publicUrl;
 }
 
   async function updatePrice(id, price) {
