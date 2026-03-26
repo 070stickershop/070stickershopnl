@@ -528,22 +528,22 @@ async function fetchProducts() {
     .select("*");
 
   if (!error && data.length > 0) {
-    const mapped = data.map(p => ({
-      id: p.id,
-      title: p.title,
-      img: p.img,
-      group: p.group,
-      badge: p.badge,
-      tags: [],
-      extra: "",
-      variants: [
-        {
-          id: "1",
-          label: "1 stuk",
-          price: p.price
-        }
-      ]
-    }));
+const mapped = data.map(p => ({
+  id: p.id,
+  title: p.title,
+  img: p.img,
+  group: p.group || "normaal",
+  badge: p.badge,
+  tags: ["accessoires"],
+  extra: "",
+  variants: [
+    {
+      id: "1",
+      label: "1 stuk",
+      price: p.price
+    }
+  ]
+}));
 
     setProducts(mapped);
   }
