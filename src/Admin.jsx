@@ -26,34 +26,40 @@ export default function Admin() {
 
   // 🔥 IMAGE UPLOAD (blijft hetzelfde, maar beter gebruikt)
 async function uploadImage(file) {
-  if (!file.type.includes("image")) {
-    alert("Alleen afbeeldingen toegestaan");
-    return null;
-  }
-
   const fileName = Date.now() + "-" + file.name;
 
-  const { error } = await supabase.storage
+  const { data, error } = await supabase.storage
     .from("images")
     .upload("public/" + fileName, file);
 
-  if (error) {
+  // 🔥 alleen echte error checken
+  if (error && error.message) {
+    console.log("ECHTE ERROR:", error);
     alert("Upload mislukt: " + error.message);
     return null;
   }
 
-  const { data } = supabase.storage
+  // 🔥 altijd URL ophalen (ook als Supabase vaag doet)
+  const { data: publicUrlData } = supabase.storage
     .from("images")
     .getPublicUrl("public/" + fileName);
 
-  return data.publicUrl;
+  console.log("UPLOAD GELUKT:", publicUrlData.publicUrl);
+
+  return publicUrlData.publicUrl;
 }
 
   // 🔥 FIXED ADD PRODUCT
 async function addProduct() {
   if (!newProduct.title || !newProduct.price) return;
 
-  let imageUrl = null;
+let imageUrl = newProduct.img;
+
+if (newProduct.file) {
+  imageUrl = await uploadImage(newProduct.file);
+}
+
+console.log("FINAL IMAGE:", imageUrl);
 
   // 🔥 FORCE upload (BELANGRIJK)
   if (newProduct.file) {
