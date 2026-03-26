@@ -832,7 +832,7 @@ const items = useMemo(() => {
     }
     haptic(18);
   }
-if (window.location.pathname === "/admin") {
+if (window.location.pathname.includes("/admin")) {
   return <Admin />;
 }
   return (
