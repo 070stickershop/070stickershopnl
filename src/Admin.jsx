@@ -55,38 +55,43 @@ export default function Admin() {
   }
 
   // 🔥 FIXED ADD PRODUCT
-  async function addProduct() {
-    if (!newProduct.title || !newProduct.price) return;
+async function addProduct() {
+  if (!newProduct.title || !newProduct.price) return;
 
-    let imageUrl = newProduct.img;
+  let imageUrl = null;
 
-    // 🔥 upload alleen als er file is
-    if (newProduct.file) {
-      imageUrl = await uploadImage(newProduct.file);
-    }
-
-    await supabase.from("products").insert([
-      {
-        title: newProduct.title,
-        price: parseFloat(newProduct.price),
-        img: imageUrl,
-        group: newProduct.group,
-        badge: newProduct.badge
-      }
-    ]);
-
-    // reset form
-    setNewProduct({
-      title: "",
-      price: "",
-      img: "",
-      file: null,
-      group: "accessoires",
-      badge: ""
-    });
-
-    fetchProducts();
+  // 🔥 FORCE upload (BELANGRIJK)
+  if (newProduct.file) {
+    imageUrl = await uploadImage(newProduct.file);
   }
+
+  // 🔥 STOP als upload mislukt
+  if (!imageUrl) {
+    alert("Image upload mislukt!");
+    return;
+  }
+
+  await supabase.from("products").insert([
+    {
+      title: newProduct.title,
+      price: parseFloat(newProduct.price),
+      img: imageUrl,
+      group: newProduct.group,
+      badge: newProduct.badge
+    }
+  ]);
+
+  setNewProduct({
+    title: "",
+    price: "",
+    img: "",
+    file: null,
+    group: "accessoires",
+    badge: ""
+  });
+
+  fetchProducts();
+}
 
   async function updatePrice(id, price) {
     await supabase
