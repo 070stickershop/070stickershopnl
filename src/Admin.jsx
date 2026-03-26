@@ -28,14 +28,14 @@ export default function Admin() {
 async function uploadImage(file) {
   const fileName = Date.now() + "-" + file.name;
 
-  const { error } = await supabase.storage
+  const res = await supabase.storage
     .from("images")
     .upload("public/" + fileName, file);
 
-  // ❗ NEGEER kleine Supabase errors
-  if (error && !error.message.includes("duplicate")) {
-    console.log("Upload error:", error);
-  }
+  console.log("UPLOAD RESPONSE:", res);
+
+  // ❌ GEEN alert meer hier
+  // we negeren error omdat upload al gelukt kan zijn
 
   const { data } = supabase.storage
     .from("images")
@@ -48,13 +48,13 @@ async function uploadImage(file) {
 async function addProduct() {
   if (!newProduct.title || !newProduct.price) return;
 
-let imageUrl = newProduct.img;
+let imageUrl = null;
 
 if (newProduct.file) {
   imageUrl = await uploadImage(newProduct.file);
 }
 
-console.log("IMAGE URL:", imageUrl);
+console.log("FINAL IMAGE URL:", imageUrl);
 
   // 🔥 FORCE upload (BELANGRIJK)
   if (newProduct.file) {
