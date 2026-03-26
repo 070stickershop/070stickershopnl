@@ -45,13 +45,8 @@ async function uploadImage(file) {
 async function addProduct() {
   if (!newProduct.title || !newProduct.price) return;
 
-let imageUrl = null;
+  let imageUrl = null;
 
-if (newProduct.file) {
-  imageUrl = await uploadImage(newProduct.file);
-}
-
-  // 🔥 FORCE upload (BELANGRIJK)
   if (newProduct.file) {
     imageUrl = await uploadImage(newProduct.file);
   }
