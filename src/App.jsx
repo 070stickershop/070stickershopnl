@@ -518,9 +518,13 @@ const PRODUCTS = [
 /* ================== App ================== */
 export default function App() {
 const [products, setProducts] = useState(PRODUCTS);
-
+const [reviews, setReviews] = useState([]);
+const [name, setName] = useState("");
+const [text, setText] = useState("");
+const [rating, setRating] = useState(5);
 useEffect(() => {
   fetchProducts();
+  fetchReviews(); // 👈 DEZE TOEVOEGEN
 }, []);
 
 async function fetchProducts() {
@@ -549,6 +553,33 @@ async function fetchProducts() {
     // 👇 BELANGRIJK
     setProducts([...PRODUCTS, ...mapped]);
   }
+
+  async function fetchReviews() {
+  const { data } = await supabase
+    .from("reviews")
+    .select("*");
+
+  if (data) setReviews(data);
+}
+
+async function addReview() {
+  if (!name || !text) return;
+
+  await supabase.from("reviews").insert([
+    {
+      name,
+      text,
+      rating: parseInt(rating),
+    }
+  ]);
+
+  setName("");
+  setText("");
+  setRating(5);
+
+  fetchReviews();
+}
+
 }
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
@@ -861,6 +892,43 @@ if (window.location.pathname.includes("/admin")) {
             <a href="#contact" className="hover:underline">
               Contact
             </a>
+
+            <h2>Laat een review achter</h2>
+
+<input
+  placeholder="Naam"
+  value={name}
+  onChange={(e) => setName(e.target.value)}
+/>
+
+<textarea
+  placeholder="Jouw review"
+  value={text}
+  onChange={(e) => setText(e.target.value)}
+/>
+
+<select
+  value={rating}
+  onChange={(e) => setRating(e.target.value)}
+>
+  <option value="5">⭐⭐⭐⭐⭐</option>
+  <option value="4">⭐⭐⭐⭐</option>
+  <option value="3">⭐⭐⭐</option>
+  <option value="2">⭐⭐</option>
+  <option value="1">⭐</option>
+</select>
+
+<button onClick={addReview}>Plaatsen</button>
+
+<h2>Reviews</h2>
+
+{reviews.map((r) => (
+  <div key={r.id} style={{ marginBottom: 10 }}>
+    <b>{r.name}</b> - {"⭐".repeat(r.rating)}
+    <br />
+    {r.text}
+  </div>
+))}
 
             {/* Instagram */}
             <a
