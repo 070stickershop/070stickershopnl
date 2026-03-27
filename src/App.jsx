@@ -525,8 +525,18 @@ const [rating, setRating] = useState(5);
 useEffect(() => {
   fetchProducts();
   fetchReviews();
-  
-  async function addReview() {
+}, []);
+
+async function fetchReviews() {
+  const { data } = await supabase
+    .from("reviews")
+    .select("*");
+
+  if (data) setReviews(data);
+}
+
+// 👇 HIER PLAKKEN
+async function addReview() {
   if (!name || !text) return;
 
   await supabase.from("reviews").insert([
@@ -543,7 +553,6 @@ useEffect(() => {
 
   fetchReviews();
 }
-}, []);
 
 async function fetchProducts() {
   const { data, error } = await supabase
@@ -571,32 +580,6 @@ async function fetchProducts() {
     // 👇 BELANGRIJK
     setProducts([...PRODUCTS, ...mapped]);
   }
-
-  async function fetchReviews() {
-  const { data } = await supabase
-    .from("reviews")
-    .select("*");
-
-  if (data) setReviews(data);
-}
-
-async function addReview() {
-  if (!name || !text) return;
-
-  await supabase.from("reviews").insert([
-    {
-      name,
-      text,
-      rating: parseInt(rating),
-    }
-  ]);
-
-  setName("");
-  setText("");
-  setRating(5);
-
-  fetchReviews();
-}
 
 }
   const [query, setQuery] = useState("");
