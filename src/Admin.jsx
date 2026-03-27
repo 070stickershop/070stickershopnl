@@ -46,7 +46,7 @@ async function uploadImage(file) {
 
   console.log("PUBLIC URL RESULT:", result);
 
-return result.data.publicUrl;
+return result.publicUrl;
 }
 
   // 🔥 FIXED ADD PRODUCT
