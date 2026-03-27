@@ -524,7 +524,25 @@ const [text, setText] = useState("");
 const [rating, setRating] = useState(5);
 useEffect(() => {
   fetchProducts();
-  fetchReviews(); // 👈 DEZE TOEVOEGEN
+  fetchReviews();
+  
+  async function addReview() {
+  if (!name || !text) return;
+
+  await supabase.from("reviews").insert([
+    {
+      name,
+      text,
+      rating: parseInt(rating),
+    }
+  ]);
+
+  setName("");
+  setText("");
+  setRating(5);
+
+  fetchReviews();
+}
 }, []);
 
 async function fetchProducts() {
