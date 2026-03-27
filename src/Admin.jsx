@@ -31,7 +31,7 @@ async function uploadImage(file) {
   // upload
   const { error } = await supabase.storage
     .from("images")
-    .upload("public/" + fileName, file);
+.upload(fileName, file);
 
   if (error) {
     console.error("UPLOAD ERROR:", error);
@@ -42,11 +42,11 @@ async function uploadImage(file) {
   // 🔥 BELANGRIJK: GEEN await hier
   const result = supabase.storage
     .from("images")
-    .getPublicUrl("public/" + fileName);
+    .getPublicUrl(fileName);
 
   console.log("PUBLIC URL RESULT:", result);
 
-  return result.data.publicUrl;
+return result.data.publicUrl;
 }
 
   // 🔥 FIXED ADD PRODUCT
