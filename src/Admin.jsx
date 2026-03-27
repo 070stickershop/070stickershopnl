@@ -26,8 +26,6 @@ export default function Admin() {
 
   // 🔥 IMAGE UPLOAD (blijft hetzelfde, maar beter gebruikt)
 async function uploadImage(file) {
-  console.log("UPLOAD START");
-
   const fileName = Date.now() + "-" + file.name;
 
   await supabase.storage
@@ -40,7 +38,7 @@ async function uploadImage(file) {
 
   console.log("RESULT:", result);
 
-  return result.publicUrl;
+  return result.data.publicUrl; // 🔥 FIX
 }
 
   // 🔥 FIXED ADD PRODUCT
