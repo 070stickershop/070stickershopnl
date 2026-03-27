@@ -28,9 +28,14 @@ export default function Admin() {
 async function uploadImage(file) {
   const fileName = Date.now() + "-" + file.name;
 
-  await supabase.storage
+  const { error } = await supabase.storage
     .from("images")
     .upload(fileName, file);
+
+  if (error) {
+    alert("Upload mislukt: " + error.message);
+    return null;
+  }
 
   const result = supabase.storage
     .from("images")
@@ -38,7 +43,7 @@ async function uploadImage(file) {
 
   console.log("RESULT:", result);
 
-  return result.data.publicUrl; // 🔥 FIX
+  return result.publicUrl; // ✅ DIT IS DE JUISTE
 }
 
   // 🔥 FIXED ADD PRODUCT
