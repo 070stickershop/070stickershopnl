@@ -894,43 +894,6 @@ if (window.location.pathname.includes("/admin")) {
               Contact
             </a>
 
-            <h2>Laat een review achter</h2>
-
-<input
-  placeholder="Naam"
-  value={name}
-  onChange={(e) => setName(e.target.value)}
-/>
-
-<textarea
-  placeholder="Jouw review"
-  value={text}
-  onChange={(e) => setText(e.target.value)}
-/>
-
-<select
-  value={rating}
-  onChange={(e) => setRating(e.target.value)}
->
-  <option value="5">⭐⭐⭐⭐⭐</option>
-  <option value="4">⭐⭐⭐⭐</option>
-  <option value="3">⭐⭐⭐</option>
-  <option value="2">⭐⭐</option>
-  <option value="1">⭐</option>
-</select>
-
-<button onClick={addReview}>Plaatsen</button>
-
-<h2>Reviews</h2>
-
-{reviews.map((r) => (
-  <div key={r.id} style={{ marginBottom: 10 }}>
-    <b>{r.name}</b> - {"⭐".repeat(r.rating)}
-    <br />
-    {r.text}
-  </div>
-))}
-
             {/* Instagram */}
             <a
               href={INSTAGRAM_URL}
