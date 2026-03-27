@@ -26,61 +26,46 @@ export default function Admin() {
 
   // 🔥 IMAGE UPLOAD (blijft hetzelfde, maar beter gebruikt)
 async function uploadImage(file) {
+  console.log("UPLOAD START");
+
   const fileName = Date.now() + "-" + file.name;
 
-  // upload
-  const { error } = await supabase.storage
+  await supabase.storage
     .from("images")
-.upload(fileName, file);
+    .upload(fileName, file);
 
-  if (error) {
-    console.error("UPLOAD ERROR:", error);
-    alert("Upload mislukt: " + error.message);
-    return null;
-  }
-
-  // 🔥 BELANGRIJK: GEEN await hier
   const result = supabase.storage
     .from("images")
     .getPublicUrl(fileName);
 
-  console.log("PUBLIC URL RESULT:", result);
+  console.log("RESULT:", result);
 
-return result.publicUrl;
+  return result.publicUrl;
 }
 
   // 🔥 FIXED ADD PRODUCT
 async function addProduct() {
-  if (!newProduct.title || !newProduct.price) return;
+  console.log("ADD PRODUCT START");
 
-  let imageUrl = null; // 🔥 NIET newProduct.img
+  let imageUrl = null;
 
   if (newProduct.file) {
-    imageUrl = await uploadImage(newProduct.file);
-  }
+    console.log("FILE FOUND");
 
-  console.log("IMAGE URL BEFORE INSERT:", imageUrl);
+    imageUrl = await uploadImage(newProduct.file);
+
+    console.log("IMAGE URL NA UPLOAD:", imageUrl);
+  } else {
+    console.log("GEEN FILE!");
+  }
 
   await supabase.from("products").insert([
     {
       title: newProduct.title,
       price: parseFloat(newProduct.price),
-      img: imageUrl, // 🔥 HIER GAAT HET OM
-      group: newProduct.group,
-      badge: newProduct.badge
+      img: imageUrl
     }
   ]);
-
-  setNewProduct({
-    title: "",
-    price: "",
-    img: "",
-    file: null,
-    group: "accessoires",
-    badge: ""
-  });
-
-  fetchProducts();
 }
 
   async function updatePrice(id, price) {
