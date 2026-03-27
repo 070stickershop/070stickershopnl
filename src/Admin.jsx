@@ -28,15 +28,25 @@ export default function Admin() {
 async function uploadImage(file) {
   const fileName = Date.now() + "-" + file.name;
 
-  await supabase.storage
+  // upload
+  const { error } = await supabase.storage
     .from("images")
     .upload("public/" + fileName, file);
 
-  const publicUrlData = supabase.storage
+  if (error) {
+    console.error("UPLOAD ERROR:", error);
+    alert("Upload mislukt: " + error.message);
+    return null;
+  }
+
+  // 🔥 BELANGRIJK: GEEN await hier
+  const result = supabase.storage
     .from("images")
     .getPublicUrl("public/" + fileName);
 
-  return publicUrlData.data.publicUrl;
+  console.log("PUBLIC URL RESULT:", result);
+
+  return result.data.publicUrl;
 }
 
   // 🔥 FIXED ADD PRODUCT
@@ -49,7 +59,7 @@ if (newProduct.file) {
   imageUrl = await uploadImage(newProduct.file);
 }
 
-console.log("FINAL IMAGE URL:", imageUrl);
+console.log("IMAGE URL BEFORE INSERT:", imageUrl);
 
   await supabase.from("products").insert([
     {
