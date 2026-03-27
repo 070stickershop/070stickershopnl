@@ -53,19 +53,19 @@ return result.publicUrl;
 async function addProduct() {
   if (!newProduct.title || !newProduct.price) return;
 
-  let imageUrl = null;
+  let imageUrl = null; // 🔥 NIET newProduct.img
 
-if (newProduct.file) {
-  imageUrl = await uploadImage(newProduct.file);
-}
+  if (newProduct.file) {
+    imageUrl = await uploadImage(newProduct.file);
+  }
 
-console.log("IMAGE URL BEFORE INSERT:", imageUrl);
+  console.log("IMAGE URL BEFORE INSERT:", imageUrl);
 
   await supabase.from("products").insert([
     {
       title: newProduct.title,
       price: parseFloat(newProduct.price),
-      img: imageUrl,
+      img: imageUrl, // 🔥 HIER GAAT HET OM
       group: newProduct.group,
       badge: newProduct.badge
     }
