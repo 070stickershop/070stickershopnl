@@ -1201,8 +1201,7 @@ if (window.location.pathname.includes("/admin")) {
           <div className="rounded-3xl border p-6 shadow-sm">
             <h3 className="font-extrabold text-lg">Kwaliteit</h3>
             <p className="mt-2 text-sm text-neutral-700">
-              Polymeer vinyl, outdoor-laminaat, krasvast. Met liefde gemaakt in
-              070.
+              Polymeer Vinyl, Uv-Waterbestendigd, krasvast. Voor een Hagenees door een Hagenees !.
             </p>
           </div>
         </div>
