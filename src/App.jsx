@@ -127,7 +127,6 @@ const PRODUCTS = [
       { id: "200", label: "200 stuks", price: 23.0 },
     ],
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
-    badge: "Populair",
     group: "normaal",
     soldOut: true,
   },
@@ -143,7 +142,6 @@ const PRODUCTS = [
       { id: "200", label: "200 stuks", price: 23.0 },
     ],
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
-    badge: "Populair",
     group: "normaal",
   },
    {
@@ -174,7 +172,6 @@ const PRODUCTS = [
     ],
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
     badge: "Nieuw !",
-    badge: "Populair",
     group: "normaal",
     soldOut: false,
   },
@@ -191,7 +188,6 @@ const PRODUCTS = [
     ],
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
     badge: "Nieuw",
-    badge: "Populair",
     group: "normaal",
     soldOut: false,
   },
@@ -208,7 +204,6 @@ const PRODUCTS = [
     ],
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
     badge: "Nieuw",
-    badge: "Populair",
     group: "normaal",
     soldOut: false,
   },
@@ -224,7 +219,6 @@ const PRODUCTS = [
       { id: "200", label: "200 stuks", price: 23.0 },
     ],
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
-    badge: "Populair",
     group: "normaal",
   },
   {
@@ -239,7 +233,6 @@ const PRODUCTS = [
       { id: "200", label: "200 stuks", price: 23.0 },
     ],
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
-    badge: "Populair",
     group: "normaal",
     soldOut: false,
   },
@@ -256,7 +249,6 @@ const PRODUCTS = [
     ],
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
     group: "normaal",
-    badge: "Populair",
     soldOut: true,
   },
   {
@@ -272,7 +264,6 @@ const PRODUCTS = [
     ],
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
     group: "normaal",
-    badge: "Populair",
   },
   {
     id: "normal-green-yellow-army",
@@ -317,7 +308,6 @@ const PRODUCTS = [
     ],
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
     group: "normaal",
-    badge: "Populair",
     soldOut: false,
   },
   {
@@ -333,7 +323,6 @@ const PRODUCTS = [
     ],
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
     group: "normaal",
-    badge: "Populair",
   },
 
   /* Mix (vanaf 50) – zelfde pricing als 50+ normaal */
@@ -368,7 +357,6 @@ const PRODUCTS = [
     ],
     extra: "A6 (105×148 mm) · Vinyl · UV- & waterbestendig",
     group: "xxl",
-    badge: "Populair",
   },
   {
     id: "xxl-fcdh-legia",
@@ -384,7 +372,6 @@ const PRODUCTS = [
     ],
     extra: "A6 (105×148 mm) · Vinyl · UV- & waterbestendig",
     group: "xxl",
-    badge: "Populair",
   },
   {
     id: "xxl-fc-den-haag-1905",
@@ -440,7 +427,6 @@ const PRODUCTS = [
     ],
     extra: "Ideaal om mee te nemen naar awaydays · 50 meter lang.",
     group: "accessoires",
-    badge: "Populair",
   },
   {
     id: "tape-rol-on-tour",
@@ -455,7 +441,6 @@ const PRODUCTS = [
     ],
     extra: "Ideaal om mee te nemen naar awaydays · 50 meter lang.",
     group: "accessoires",
-    badge: "Populair",
   },
   {
     id: "den-haag-1-meter-cp",
@@ -1051,7 +1036,7 @@ if (window.location.pathname.includes("/admin")) {
       {/* Collectie */}
       <section id="collectie" className="bg-white/80 border-t border-black/5">
       <p className="text-sm text-green-600 font-semibold mt-2">
-  ⭐ 4.8/5 uit 100+ klanten
+  ⭐ 4.8/5 uit 600+ klanten
 </p>
         <div className="mx-auto max-w-7xl px-4 py-12">
           <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
