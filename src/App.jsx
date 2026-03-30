@@ -1599,14 +1599,7 @@ if (window.location.pathname.includes("/admin")) {
                   </button>
                 </div>
               ))}
-              <a
-  href="https://wa.me/31624729671"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="fixed bottom-0 left-0 w-full bg-green-500 text-white text-center py-4 font-bold z-50"
->
-  💬 Bestel via WhatsApp
-</a>
+
             </div>
 
             {/* totals + checkout */}
