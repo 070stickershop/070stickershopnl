@@ -1138,11 +1138,12 @@ if (window.location.pathname.includes("/admin")) {
 
                   <div className="p-4">
                     <h3 className="font-bold text-lg">{p.title}</h3>
-                    <p className="text-sm text-red-500 font-semibold">
-                    ⚡ nog 500 beschikbaar
-                    </p>
-                    <p className="text-xs text-yellow-500">
-  🔥 {Math.floor(Math.random() * 10) + 3} mensen bekijken dit nu
+                    <p className="text-sm text-yellow-500">
+  🔥 Populair bij klanten
+</p>
+
+<p className="text-sm text-red-500 font-semibold">
+  ⚡ Beperkte voorraad
 </p>
                     <p className="mt-1 text-sm text-neutral-600">
                       {p.tags.join(" · ")}
