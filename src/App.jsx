@@ -993,12 +993,13 @@ if (window.location.pathname.includes("/admin")) {
       {/* TEXT */}
       <div>
         <h1 className="text-4xl font-black text-white">
-  🔥 Stickers binnen 24 uur geleverd
+  🔥 Stickers binnen 24 uur verzonden
 </h1>
 
 <p className="text-white mt-2">
-  ✔ Water- & UV-bestendig  
+  🔰 070stickershop.nl ©
   📍 Since 2023   
+  ✔ Water- & UV-bestendig   
   💬 Bestel gemakkelijk en snel
 </p>
         <div className="mt-6 flex flex-wrap gap-3">
@@ -1223,7 +1224,7 @@ if (window.location.pathname.includes("/admin")) {
           <div className="rounded-3xl border p-6 shadow-sm">
             <h3 className="font-extrabold text-lg">Kwaliteit</h3>
             <p className="mt-2 text-sm text-neutral-700">
-              Polymeer Vinyl, Uv-Waterbestendigd, krasvast. Voor een Hagenees door een Hagenees !.
+              Polymeer Vinyl, Uv-Waterbestendigd, Krasvast. Voor een Hagenees door een Hagenees !
             </p>
           </div>
         </div>
