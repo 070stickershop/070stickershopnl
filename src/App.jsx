@@ -1007,13 +1007,15 @@ if (window.location.pathname.includes("/admin")) {
       
       {/* TEXT */}
       <div>
-        <h1 className="text-4xl md:text-5xl font-black leading-tight text-white drop-shadow">
-          #1 Stickershop in Den Haag sinds 2023
-        </h1>
-        <p className="mt-4 text-white/90 max-w-prose">
-          Welkom bij 070_stickershop – hoogwaardige vinyl stickers in
-          groen-geel. Water- & UV-bestendig.
-        </p>
+        <h1 className="text-4xl font-black text-white">
+  🔥 Stickers binnen 24 uur geleverd
+</h1>
+
+<p className="text-white mt-2">
+  ✔ Water- & UV-bestendig  
+  📍 Since 2023   
+  💬 Bestel gemakkelijk en snel
+</p>
         <div className="mt-6 flex flex-wrap gap-3">
           <a
             href="#collectie"
@@ -1048,6 +1050,9 @@ if (window.location.pathname.includes("/admin")) {
 
       {/* Collectie */}
       <section id="collectie" className="bg-white/80 border-t border-black/5">
+      <p className="text-sm text-green-600 font-semibold mt-2">
+  ⭐ 4.8/5 uit 100+ klanten
+</p>
         <div className="mx-auto max-w-7xl px-4 py-12">
           <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
             <h2 className="text-2xl md:text-3xl font-black tracking-tight">
@@ -1133,6 +1138,12 @@ if (window.location.pathname.includes("/admin")) {
 
                   <div className="p-4">
                     <h3 className="font-bold text-lg">{p.title}</h3>
+                    <p className="text-sm text-red-500 font-semibold">
+                    ⚡ nog 500 beschikbaar
+                    </p>
+                    <p className="text-xs text-yellow-500">
+  🔥 {Math.floor(Math.random() * 10) + 3} mensen bekijken dit nu
+</p>
                     <p className="mt-1 text-sm text-neutral-600">
                       {p.tags.join(" · ")}
                     </p>
@@ -1602,6 +1613,14 @@ if (window.location.pathname.includes("/admin")) {
                   </button>
                 </div>
               ))}
+              <a
+  href="https://wa.me/31624729671"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="fixed bottom-0 left-0 w-full bg-green-500 text-white text-center py-4 font-bold z-50"
+>
+  💬 Bestel via WhatsApp
+</a>
             </div>
 
             {/* totals + checkout */}
