@@ -997,10 +997,9 @@ if (window.location.pathname.includes("/admin")) {
 </h1>
 
 <p className="text-white mt-2">
-  🔰 070stickershop.nl ©
-  📍 Since 2023   
-  ✔ Water- & UV-bestendig   
-  💬 Bestel gemakkelijk en snel
+  📍 Since 2023 !
+  ✔ Water- & UV-bestendig !   
+  💬 Bestel gemakkelijk en snel !
 </p>
         <div className="mt-6 flex flex-wrap gap-3">
           <a
