@@ -535,6 +535,31 @@ async function fetchReviews() {
   if (data) setReviews(data);
 }
 
+async function sendContact() {
+  console.log("CLICK WERKT"); // test
+
+  if (!name || !text) {
+    alert("Vul alles in");
+    return;
+  }
+
+  const { error } = await supabase.from("contact").insert([
+    {
+      name: name,
+      message: text
+    }
+  ]);
+
+  if (error) {
+    console.error(error);
+    alert("Fout bij verzenden");
+  } else {
+    alert("Bericht verzonden!");
+    setName("");
+    setText("");
+  }
+}
+
 // 👇 HIER PLAKKEN
 async function addReview() {
   if (!name || !text) return;
@@ -1259,22 +1284,34 @@ if (window.location.pathname.includes("/admin")) {
               </a>
             </div>
 
-            <form className="mt-4 grid gap-3">
+            <form
+  onSubmit={(e) => {
+    e.preventDefault();
+    sendContact();
+  }}
+  className="mt-4 grid gap-3"
+>
               <input
-                className="rounded-xl border border-white/10 bg-white/10 px-4 py-2.5 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-[#f2c200]"
-                placeholder="E-mail"
-              />
-              <textarea
-                className="rounded-xl border border-white/10 bg-white/10 px-4 py-2.5 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-[#f2c200]"
-                placeholder="Bericht"
-                rows={4}
-              />
-              <button
-                type="button"
-                className="rounded-2xl bg-[#f2c200] px-5 py-2.5 font-bold text-neutral-900 shadow hover:shadow-md transition"
-              >
-                Versturen
-              </button>
+  placeholder="E-mail"
+  value={name}
+  onChange={(e) => setName(e.target.value)}
+/>
+
+<textarea
+  placeholder="Bericht"
+  value={text}
+  onChange={(e) => setText(e.target.value)}
+/>
+<button
+  type="button"
+  onClick={() => {
+    console.log("BUTTON GEKLIKT");
+    sendContact();
+  }}
+  className="rounded-2xl bg-[#f2c200] px-5 py-2.5 font-bold text-neutral-900"
+>
+  Versturen
+</button>
             </form>
           </div>
 
