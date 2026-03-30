@@ -1124,7 +1124,7 @@ if (window.location.pathname.includes("/admin")) {
                   <div className="p-4">
                     <h3 className="font-bold text-lg">{p.title}</h3>
                     <p className="text-sm text-yellow-500">
-  🔥 Populair bij klanten
+   🔰 Populair bij klanten
 </p>
 
 <p className="text-sm text-red-500 font-semibold">
