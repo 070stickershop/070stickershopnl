@@ -1291,14 +1291,16 @@ if (window.location.pathname.includes("/admin")) {
   }}
   className="mt-4 grid gap-3"
 >
-              <input
+<input
+  className="rounded-xl border border-white/10 bg-white/10 px-4 py-2.5 text-white placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-yellow-400"
   placeholder="E-mail"
   value={name}
   onChange={(e) => setName(e.target.value)}
 />
-
 <textarea
+  className="rounded-xl border border-white/10 bg-white/10 px-4 py-2.5 text-white placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-yellow-400"
   placeholder="Bericht"
+  rows={4}
   value={text}
   onChange={(e) => setText(e.target.value)}
 />
