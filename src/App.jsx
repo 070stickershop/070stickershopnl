@@ -428,6 +428,18 @@ const PRODUCTS = [
     extra: "Ideaal om mee te nemen naar awaydays · 50 meter lang.",
     group: "accessoires",
   },
+    {
+    id: "sjaal-1team-1taak",
+    title: "1 team 1 taak sjaal",
+    img: "/img/1-team-1-taak.jpg",
+    tags: ["sjaal", "accessoires", "limited edition", "awaydays"],
+    variants: [
+      { id: "1", label: "1 sjaal", price: 19.99 },
+      { id: "2", label: "2 sjaal", price: 27.99 },
+    ],
+    extra: "Ideaal om mee te nemen naar awaydays · Tijdelijk Verkrijgbaar.",
+    group: "accessoires",
+  },
   {
     id: "tape-rol-on-tour",
     title: "Tape rol Den Haag On Tour",
