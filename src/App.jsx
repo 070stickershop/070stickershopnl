@@ -999,7 +999,7 @@ if (window.location.pathname.includes("/admin")) {
 <p className="text-white mt-2">
   📍 Since 2023 !
   ✔ Water- & UV-bestendig !   
-  💬 Bestel gemakkelijk en snel !
+  💬 Bestel gemakkelijk en snel
 </p>
         <div className="mt-6 flex flex-wrap gap-3">
           <a
