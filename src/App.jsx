@@ -521,6 +521,11 @@ const PRODUCTS = [
     group: "accessoires",
   },
 ];
+const FREQUENTLY_BOUGHT = {
+  "normal-your-city": ["tape-rol-groeten", "zonnebril-dh"],
+  "normal-goodnight": ["den-haag-1-meter-cp"],
+  "xxl-zone": ["tape-rol-groeten"],
+};
 
 /* ================== App ================== */
 export default function App() {
