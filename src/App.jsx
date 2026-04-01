@@ -845,6 +845,15 @@ function addSelectedUpsells() {
   const shipping = computeShipping();
   const discount = computeDiscount(subtotal, cart);
   const total = Math.max(0, subtotal - discount) + shipping;
+  const upsellItems = getFrequentlyBought();
+
+const upsellTotal = upsellItems.reduce((sum, product) => {
+  const price = resolveVariantPrice(product, product.variants[0].id).price;
+  return sum + price;
+}, 0);
+
+const bundleDiscount = upsellTotal * 0.1;
+const bundlePrice = upsellTotal - bundleDiscount;
 
   function buildOrderText() {
     const lines = cart.map(
@@ -1666,15 +1675,15 @@ if (window.location.pathname.includes("/admin")) {
             </div>
 
             {/* totals + checkout */}
-            {cart.length > 0 && getFrequentlyBought().length > 0 && (
+            {cart.length > 0 && upsellItems.length > 0 && (
   <div className="mt-4 p-4 border rounded-2xl bg-white">
     
     <h4 className="font-bold mb-2">
-      🤝 Vaak samen gekocht
+      🔥 Klanten combineren dit vaak
     </h4>
 
     <div className="space-y-2">
-      {getFrequentlyBought().map(product => (
+      {upsellItems.length(product => (
         <label key={product.id} className="flex items-center justify-between text-sm">
           
           <div className="flex items-center gap-2">
