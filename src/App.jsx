@@ -1115,7 +1115,7 @@ if (window.location.pathname.includes("/admin")) {
 
           {/* Product grid */}
           <h3 className="text-xl font-bold mb-4">
-  🔥 Meest gekozen
+  🔥 ASSORTIMENT
 </h3>
           <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {visibleItems.map((p) => {
