@@ -67,6 +67,11 @@ const COUPONS = {
     groups: ["a4", "xxl", "accessoires"],
     onlyToday: true,
   },
+  WELCOME10: {
+  type: "percent",
+  value: 10,
+  description: "10% korting op je eerste bestelling",
+},
 };
 
 /* Kleine helpers voor ‘vandaag’ en eligibility */
@@ -515,7 +520,7 @@ const PRODUCTS = [
   ],
   extra: "Normaal €15.00 · Nu €10.50 🔥",
   group: "accessoires",
-  badge: "BESPAAR 🔥",
+  badge: "🔥 BESTE DEAL",
 },
 
   /* ---------------- Vlag ---------------- */
@@ -618,7 +623,7 @@ async function fetchProducts() {
     }));
 
     // 👇 BELANGRIJK
-    setProducts([...PRODUCTS, ...mapped]);
+setProducts(mapped.length ? mapped : PRODUCTS);
   }
 
 }
@@ -1109,6 +1114,9 @@ if (window.location.pathname.includes("/admin")) {
           </div>
 
           {/* Product grid */}
+          <h3 className="text-xl font-bold mb-4">
+  🔥 Meest gekozen
+</h3>
           <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {visibleItems.map((p) => {
               const variantId = selected[p.id] ?? p.variants[0]?.id;
@@ -1335,7 +1343,7 @@ if (window.location.pathname.includes("/admin")) {
   onChange={(e) => setText(e.target.value)}
 />
 <button
-  type="button"
+  type="submit"
   onClick={() => {
     console.log("BUTTON GEKLIKT");
     sendContact();
@@ -1639,6 +1647,17 @@ if (window.location.pathname.includes("/admin")) {
 
             {/* totals + checkout */}
             <div className="border-t pt-4">
+              {cart.length > 0 && (
+  <div className="mt-3 p-3 bg-yellow-50 border rounded-xl text-sm">
+    🔥 Voeg een tape rol toe voor €9.99  
+    <button
+      onClick={() => addToCart("tape-rol-groeten")}
+      className="ml-2 underline font-semibold"
+    >
+      Voeg toe
+    </button>
+  </div>
+)}
               <div className="flex items-center justify-between">
                 <span className="font-semibold">Subtotaal</span>
                 <span>{formatPrice(subtotal)}</span>
