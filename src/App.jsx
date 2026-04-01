@@ -622,6 +622,20 @@ setProducts(mapped.length ? mapped : PRODUCTS);
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
   const [cart, setCart] = useState([]);
+  function getFrequentlyBought() {
+  const ids = new Set();
+
+  cart.forEach(item => {
+    const related = FREQUENTLY_BOUGHT[item.productId];
+    if (related) {
+      related.forEach(id => ids.add(id));
+    }
+  });
+
+  return Array.from(ids)
+    .map(id => products.find(p => p.id === id))
+    .filter(Boolean);
+}
   const [selectedUpsells, setSelectedUpsells] = useState([]);
   const [openCart, setOpenCart] = useState(false);
   const [selected, setSelected] = useState(() => {
@@ -698,20 +712,6 @@ const visibleItems = useMemo(() => {
   }
 
   function addToCart(productId) {
-    function getFrequentlyBought() {
-  const ids = new Set();
-
-  cart.forEach(item => {
-    const related = FREQUENTLY_BOUGHT[item.productId];
-    if (related) {
-      related.forEach(id => ids.add(id));
-    }
-  });
-
-  return Array.from(ids)
-    .map(id => products.find(p => p.id === id))
-    .filter(Boolean);
-}
     const product = products.find((p) => p.id === productId);
     const variantId = selected[productId] ?? product.variants[0].id;
     const { price, label } = resolveVariantPrice(product, variantId);
@@ -1674,7 +1674,7 @@ if (window.location.pathname.includes("/admin")) {
     </h4>
 
     <div className="space-y-2">
-      {getFrequentlyBought().map(product => product && (
+      {getFrequentlyBought().map(product => (
         <label key={product.id} className="flex items-center justify-between text-sm">
           
           <div className="flex items-center gap-2">
