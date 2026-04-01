@@ -15,28 +15,9 @@ function haptic(ms = 30) {
   }
 }
 function beep() {
-  if (typeof window === "undefined") return;
-
-  const AudioCtx = window.AudioContext || window.webkitAudioContext;
-  if (!AudioCtx) return;
-
-  const ctx = new AudioCtx();
-
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-
-  osc.type = "triangle"; // zachter dan sine
-  osc.frequency.setValueAtTime(600, ctx.currentTime);
-  osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.08);
-
-  gain.gain.setValueAtTime(0.2, ctx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
-
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-
-  osc.start();
-  osc.stop(ctx.currentTime + 0.1);
+  const audio = new Audio("/sounds/add.mp3");
+  audio.volume = 0.4;
+  audio.play();
 }
 
 /* ================== Config ================== */
