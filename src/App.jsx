@@ -622,6 +622,7 @@ setProducts(mapped.length ? mapped : PRODUCTS);
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
   const [cart, setCart] = useState([]);
+  const [selectedUpsells, setSelectedUpsells] = useState([]);
   const [openCart, setOpenCart] = useState(false);
   const [selected, setSelected] = useState(() => {
     const o = {};
@@ -697,6 +698,20 @@ const visibleItems = useMemo(() => {
   }
 
   function addToCart(productId) {
+    function getFrequentlyBought() {
+  const ids = new Set();
+
+  cart.forEach(item => {
+    const related = FREQUENTLY_BOUGHT[item.productId];
+    if (related) {
+      related.forEach(id => ids.add(id));
+    }
+  });
+
+  return Array.from(ids)
+    .map(id => products.find(p => p.id === id))
+    .filter(Boolean);
+}
     const product = products.find((p) => p.id === productId);
     const variantId = selected[productId] ?? product.variants[0].id;
     const { price, label } = resolveVariantPrice(product, variantId);
@@ -738,6 +753,19 @@ const visibleItems = useMemo(() => {
       )
     );
   }
+
+  function toggleUpsell(id) {
+  setSelectedUpsells(prev =>
+    prev.includes(id)
+      ? prev.filter(x => x !== id)
+      : [...prev, id]
+  );
+}
+
+function addSelectedUpsells() {
+  selectedUpsells.forEach(id => addToCart(id));
+  setSelectedUpsells([]);
+}
 
   // ---- Coupon helpers ----
   function handleApplyCoupon() {
@@ -1638,6 +1666,51 @@ if (window.location.pathname.includes("/admin")) {
             </div>
 
             {/* totals + checkout */}
+            {cart.length > 0 && getFrequentlyBought().length > 0 && (
+  <div className="mt-4 p-4 border rounded-2xl bg-white">
+    
+    <h4 className="font-bold mb-2">
+      🤝 Vaak samen gekocht
+    </h4>
+
+    <div className="space-y-2">
+      {getFrequentlyBought().map(product => (
+        <label key={product.id} className="flex items-center justify-between text-sm">
+          
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={selectedUpsells.includes(product.id)}
+              onChange={() => toggleUpsell(product.id)}
+            />
+            <img
+              src={product.img}
+              alt=""
+              className="w-10 h-10 rounded object-cover"
+            />
+            <div>
+              <span>{product.title}</span>
+              <div className="text-xs text-neutral-500">
+                €{product.variants[0].price}
+              </div>
+            </div>
+          </div>
+
+        </label>
+      ))}
+    </div>
+
+    {selectedUpsells.length > 0 && (
+      <button
+        onClick={addSelectedUpsells}
+        className="mt-3 w-full bg-[#0b6e4f] text-white py-2 rounded-xl font-semibold"
+      >
+        Voeg geselecteerde producten toe
+      </button>
+    )}
+
+  </div>
+)}
             <div className="border-t pt-4">
 {cart.length > 0 && (
   <div className="mt-3 space-y-2">
