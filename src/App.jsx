@@ -48,12 +48,13 @@ const INSTAGRAM_URL = `https://www.instagram.com/${INSTAGRAM_HANDLE}/`;
 const TIKTOK_HANDLE = "070_stickershop";
 const TIKTOK_URL = `https://www.tiktok.com/@${TIKTOK_HANDLE}`;
 
-// Filters
 const CATEGORIES = [
   { id: "all", label: "Alles" },
   { id: "normaal", label: "Normaal" },
   { id: "xxl", label: "XXL A6" },
   { id: "a4", label: "A4" },
+  { id: "meter", label: "1 Meter Stickers" },
+  { id: "accessoires", label: "Accessoires" },
 ];
 
 /* ---- KORTINGSCODES ----
@@ -483,7 +484,7 @@ const PRODUCTS = [
       { id: "5", label: "5 stuks", price: 17.50 },
     ],
     extra: "Uniek in nederland · 1 meter lang.",
-    group: "accessoires",
+    group: "meter",
     badge: "Alleen bij 070stickershop.nl !",
   },
     {
@@ -498,7 +499,7 @@ const PRODUCTS = [
       { id: "5", label: "5 stuks", price: 17.50 },
     ],
     extra: "Uniek in nederland · 1 meter lang.",
-    group: "accessoires",
+    group: "meter",
     badge: "Alleen bij 070stickershop.nl !",
     soldOut: true,
   },
@@ -675,14 +676,17 @@ const items = useMemo(() => {
   );
 }, [query, products]);
 
-  const visibleItems = useMemo(() => {
-    return items.filter((p) => {
-      if (category === "all") return true;
-      if (category === "a4") return p.id === "a4-stickers";
-      if (category === "xxl") return p.id.startsWith("xxl-");
-      return p.id.startsWith("normal-") || p.group === "accessoires";
-    });
-  }, [items, category]);
+const visibleItems = useMemo(() => {
+  return items.filter((p) => {
+    if (category === "all") return true;
+    if (category === "a4") return p.id === "a4-stickers";
+    if (category === "xxl") return p.id.startsWith("xxl-");
+    if (category === "meter") return p.group === "meter";
+    if (category === "accessoires") return p.group === "accessoires";
+    if (category === "normaal") return p.group === "normaal";
+    return true;
+  });
+}, [items, category]);
 
   function resolveVariantPrice(product, variantId) {
     const v =
