@@ -634,6 +634,11 @@ setProducts(mapped.length ? mapped : PRODUCTS);
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
   const [cart, setCart] = useState([]);
+  useEffect(() => {
+  if (cart.length === 0 && openCart) {
+    setTimeout(() => setOpenCart(false), 150);
+  }
+}, [cart]);
   const ids = new Set();
 
 function getFrequentlyBought() {
