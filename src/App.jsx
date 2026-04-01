@@ -845,7 +845,7 @@ function addSelectedUpsells() {
   const shipping = computeShipping();
   const discount = computeDiscount(subtotal, cart);
   const total = Math.max(0, subtotal - discount) + shipping;
-  const upsellItems = getFrequentlyBought();
+  const upsellItems = upsellItems.length
 
 const upsellTotal = upsellItems.reduce((sum, product) => {
   const price = resolveVariantPrice(product, product.variants[0].id).price;
