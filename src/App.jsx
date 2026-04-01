@@ -634,19 +634,43 @@ setProducts(mapped.length ? mapped : PRODUCTS);
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
   const [cart, setCart] = useState([]);
-  function getFrequentlyBought() {
   const ids = new Set();
 
+function getFrequentlyBought() {
+  const scores = {};
+
   cart.forEach(item => {
-    const related = FREQUENTLY_BOUGHT[item.productId];
-    if (related) {
-      related.forEach(id => ids.add(id));
+    const product = products.find(p => p.id === item.productId);
+    if (!product) return;
+
+    // 🎯 NORMAAL → upsell 1 meter + tape
+    if (product.group === "normaal") {
+      scores["den-haag-1-meter-cp"] = (scores["den-haag-1-meter-cp"] || 0) + 3;
+      scores["tape-rol-groeten"] = (scores["tape-rol-groeten"] || 0) + 2;
+    }
+
+    // 🎯 1 meter → upsell mix + tape
+    if (product.group === "meter") {
+      scores["normal-mix"] = (scores["normal-mix"] || 0) + 3;
+      scores["tape-rol-groeten"] = (scores["tape-rol-groeten"] || 0) + 2;
+    }
+
+    // 🎯 XXL → tape + zonnebril
+    if (product.group === "xxl") {
+      scores["tape-rol-groeten"] = (scores["tape-rol-groeten"] || 0) + 2;
+      scores["zonnebril-dh"] = (scores["zonnebril-dh"] || 0) + 1;
     }
   });
 
-  return Array.from(ids)
+  // 🔥 Sorteer op score (hoogste eerst)
+  const sorted = Object.entries(scores)
+    .sort((a, b) => b[1] - a[1])
+    .map(([id]) => id);
+
+  return sorted
     .map(id => products.find(p => p.id === id))
-    .filter(Boolean);
+    .filter(Boolean)
+    .slice(0, 3); // max 3 upsells
 }
   const [selectedUpsells, setSelectedUpsells] = useState([]);
   const [openCart, setOpenCart] = useState(false);
