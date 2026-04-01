@@ -1712,44 +1712,6 @@ if (window.location.pathname.includes("/admin")) {
   </div>
 )}
             <div className="border-t pt-4">
-{cart.length > 0 && (
-  <div className="mt-3 space-y-2">
-
-    {/* Tape */}
-    <div className="p-3 bg-yellow-50 border rounded-xl text-sm flex justify-between items-center">
-      <span>🔥 Tape rol – €9.99</span>
-      <button
-        onClick={() => addToCart("tape-rol-groeten")}
-        className="underline font-semibold"
-      >
-        Voeg toe
-      </button>
-    </div>
-
-    {/* Zonnebril */}
-    <div className="p-3 bg-yellow-50 border rounded-xl text-sm flex justify-between items-center">
-      <span>😎 Zonnebril geel/groen – €9.99</span>
-      <button
-        onClick={() => addToCart("zonnebril-dh")}
-        className="underline font-semibold"
-      >
-        Voeg toe
-      </button>
-    </div>
-
-    {/* 1 meter sticker */}
-    <div className="p-3 bg-yellow-50 border rounded-xl text-sm flex justify-between items-center">
-      <span>📏 1 Meter Sticker – €4.50</span>
-      <button
-        onClick={() => addToCart("den-haag-1-meter-cp")}
-        className="underline font-semibold"
-      >
-        Voeg toe
-      </button>
-    </div>
-
-  </div>
-)}
               <div className="flex items-center justify-between">
                 <span className="font-semibold">Subtotaal</span>
                 <span>{formatPrice(subtotal)}</span>
