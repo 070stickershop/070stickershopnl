@@ -1674,7 +1674,7 @@ if (window.location.pathname.includes("/admin")) {
     </h4>
 
     <div className="space-y-2">
-      {getFrequentlyBought().map(product => (
+      {getFrequentlyBought().map(product => product && (
         <label key={product.id} className="flex items-center justify-between text-sm">
           
           <div className="flex items-center gap-2">
@@ -1691,7 +1691,7 @@ if (window.location.pathname.includes("/admin")) {
             <div>
               <span>{product.title}</span>
               <div className="text-xs text-neutral-500">
-                €{product.variants[0].price}
+                {formatPrice(resolveVariantPrice(product, product.variants[0].id).price)}
               </div>
             </div>
           </div>
