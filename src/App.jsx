@@ -50,9 +50,9 @@ const TIKTOK_URL = `https://www.tiktok.com/@${TIKTOK_HANDLE}`;
 
 const CATEGORIES = [
   { id: "all", label: "Alles" },
-  { id: "normaal", label: "Normaal" },
-  { id: "xxl", label: "XXL A6" },
-  { id: "a4", label: "A4" },
+  { id: "normaal", label: "Normaal Formaat" },
+  { id: "xxl", label: "XXL A6 Formaat" },
+  { id: "a4", label: "A4 Formaat" },
   { id: "meter", label: "1 Meter Stickers" },
   { id: "accessoires", label: "Accessoires" },
 ];
