@@ -447,7 +447,7 @@ const PRODUCTS = [
   },
   {
     id: "zonnebril-dh",
-    title: "zonnebril-geel-groen",
+    title: "Zonnebril geel groen ",
     img: "/img/1312-zonnebril.jpg",
     tags: ["zonnebril", "accessoires", "limited edition", "zomercollectie"],
     variants: [
@@ -1541,6 +1541,7 @@ if (window.location.pathname.includes("/admin")) {
                 className="w-full h-48 object-cover object-center"
               />
             </div>
+            
             <div className="overflow-hidden rounded-2xl shadow-sm hover:shadow-lg transition">
               <img
                 src="/img/reviews/foto2.jpg"
@@ -1555,6 +1556,7 @@ if (window.location.pathname.includes("/admin")) {
                 className="w-full h-48 object-cover object-center"
               />
             </div>
+            
             <div className="overflow-hidden rounded-2xl shadow-sm hover:shadow-lg transition">
               <img
                 src="/img/reviews/foto4.jpg"
