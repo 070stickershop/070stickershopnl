@@ -142,6 +142,7 @@ const PRODUCTS = [
       { id: "200", label: "200 stuks", price: 23.0 },
     ],
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
+    badge: "Nieuw !",
     group: "normaal",
   },
    {
@@ -219,6 +220,7 @@ const PRODUCTS = [
       { id: "200", label: "200 stuks", price: 23.0 },
     ],
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
+    badge: "Nieuw !",
     group: "normaal",
   },
   {
@@ -263,6 +265,7 @@ const PRODUCTS = [
       { id: "200", label: "200 stuks", price: 23.0 },
     ],
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
+    badge: "Nieuw !",
     group: "normaal",
   },
   {
@@ -307,6 +310,7 @@ const PRODUCTS = [
       { id: "200", label: "200 stuks", price: 23.0 },
     ],
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
+    badge: "Nieuw !",
     group: "normaal",
     soldOut: false,
   },
@@ -332,10 +336,10 @@ const PRODUCTS = [
     img: "/img/mix.jpg",
     tags: ["normaal", "85x55mm", "vinyl"],
     variants: [
-      { id: "50", label: "50 stuks", price: 7.5 },
-      { id: "100", label: "100 stuks", price: 12.0 },
-      { id: "150", label: "150 stuks", price: 17.5 },
-      { id: "200", label: "200 stuks", price: 23.0 },
+      { id: "50", label: "50 stuks", price: 8.5 },
+      { id: "100", label: "100 stuks", price: 13.0 },
+      { id: "150", label: "150 stuks", price: 18.5 },
+      { id: "200", label: "200 stuks", price: 24.0 },
     ],
     extra: "Mix van designs · 85×55 mm · Vinyl · UV- & waterbestendig",
     group: "normaal",
@@ -1116,7 +1120,7 @@ if (window.location.pathname.includes("/admin")) {
                   className="group rounded-3xl bg-white shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 border border-black/5 overflow-hidden"
                 >
                   {/* Afbeelding */}
-                  <div className="relative aspect-[4/3] w-full overflow-hidden">
+                  <div className="relative w-full h-[300px] overflow-hidden bg-black">
                     <img
                       src={p.img}
                       alt={p.title}
