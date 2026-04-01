@@ -14,23 +14,29 @@ function haptic(ms = 30) {
     navigator.vibrate(ms);
   }
 }
-function beep(duration = 120, frequency = 880, volume = 0.12) {
+function beep() {
   if (typeof window === "undefined") return;
+
   const AudioCtx = window.AudioContext || window.webkitAudioContext;
   if (!AudioCtx) return;
+
   const ctx = new AudioCtx();
+
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();
-  osc.type = "sine";
-  osc.frequency.value = frequency;
-  gain.gain.value = volume;
+
+  osc.type = "triangle"; // zachter dan sine
+  osc.frequency.setValueAtTime(600, ctx.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.08);
+
+  gain.gain.setValueAtTime(0.2, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
+
   osc.connect(gain);
   gain.connect(ctx.destination);
+
   osc.start();
-  setTimeout(() => { 
-    osc.stop();
-    ctx.close();
-  }, duration);
+  osc.stop(ctx.currentTime + 0.1);
 }
 
 /* ================== Config ================== */
