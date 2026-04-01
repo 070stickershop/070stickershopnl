@@ -1026,13 +1026,13 @@ if (window.location.pathname.includes("/admin")) {
       {/* TEXT */}
       <div>
         <h1 className="text-4xl font-black text-white">
-  🔥 Stickers binnen 24 uur verzonden
+  🔥 Jouw Stickershop voor Stickers & Meer !
 </h1>
 
 <p className="text-white mt-2">
-  📍 Since 2023 !
-  ✔ Water- & UV-bestendig !   
-  💬 Bestel gemakkelijk en snel
+  ✔ Sinds 2023 actief 
+  ✔ 600+ tevreden klanten 
+  ✔ Binnen 24 uur verzonden
 </p>
         <div className="mt-6 flex flex-wrap gap-3">
           <a
