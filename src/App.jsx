@@ -522,9 +522,21 @@ const PRODUCTS = [
   },
 ];
 const FREQUENTLY_BOUGHT = {
-  "normal-your-city": ["tape-rol-groeten", "zonnebril-dh"],
-  "normal-goodnight": ["den-haag-1-meter-cp"],
+  // 🔥 NORMALE STICKERS → upsell tape + 1 meter
+  "normal-your-city": ["tape-rol-groeten", "den-haag-1-meter-cp"],
+  "normal-goodnight": ["tape-rol-groeten", "den-haag-1-meter-cp"],
+  "normal-groeten-uit-den-haag": ["tape-rol-groeten", "den-haag-1-meter-cp"],
+  "normal-denhaag-culture": ["tape-rol-groeten", "den-haag-1-meter-cp"],
+  "normal-coming-for-you": ["tape-rol-groeten", "den-haag-1-meter-cp"],
+
+  // 🔥 1 METER → upsell tape + mix
+  "den-haag-1-meter-cp": ["tape-rol-groeten", "normal-mix"],
+  "den-haag-1-meter-geel-groen": ["tape-rol-groeten", "normal-mix"],
+
+  // 🔥 XXL → upsell tape
   "xxl-zone": ["tape-rol-groeten"],
+
+  // fallback (optioneel)
 };
 
 /* ================== App ================== */
@@ -1679,7 +1691,7 @@ if (window.location.pathname.includes("/admin")) {
   <div className="mt-4 p-4 border rounded-2xl bg-white">
     
     <h4 className="font-bold mb-2">
-      🔥 Klanten combineren dit vaak
+      🔰 Maak je bestelling compleet
     </h4>
 
     <div className="space-y-2">
