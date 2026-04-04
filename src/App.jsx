@@ -751,6 +751,7 @@ const visibleItems = useMemo(() => {
     if (category === "xxl") return p.id.startsWith("xxl-");
     if (category === "meter") return p.group === "meter";
     if (category === "accessoires") return p.group === "accessoires";
+    if (category === "kleding") return p.group === "kleding";
     if (category === "normaal") return p.group === "normaal";
     return true;
   });
@@ -1260,16 +1261,19 @@ if (window.location.pathname.includes("/admin")) {
                       {p.tags.join(" · ")}
                     </p>
                     <p className="text-xs text-neutral-500 mt-1">
-                      {p.id.startsWith("normal-")
-                        ? "Formaat: 85×55mm"
-                        : p.id.startsWith("xxl-")
-                        ? "Formaat: A6 (105×148mm)"
-                        : p.id === "a4-stickers"
-                        ? "Formaat: A4 (210×297mm)"
-                        : p.group === "accessoires"
-                        ? "Accessoire"
-                        : "-"}
-                      {" · "}Vinyl · UV- & waterbestendig
+{p.group === "kleding"
+  ? "Kleding"
+  : p.id.startsWith("normal-")
+  ? "Formaat: 85×55mm"
+  : p.id.startsWith("xxl-")
+  ? "Formaat: A6 (105×148mm)"
+  : p.id === "a4-stickers"
+  ? "Formaat: A4 (210×297mm)"
+  : p.group === "accessoires"
+  ? "Accessoire"
+  : "-"}
+
+{p.group !== "kleding" && " · Vinyl · UV- & waterbestendig"}
                     </p>
 
                     {/* Variant selector */}
