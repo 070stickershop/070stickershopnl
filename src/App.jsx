@@ -42,6 +42,7 @@ const CATEGORIES = [
   { id: "a4", label: "A4 Formaat" },
   { id: "meter", label: "1 Meter Stickers" },
   { id: "accessoires", label: "Accessoires" },
+  { id: "kleding", label: "Kleding" }
 ];
 
 /* ---- KORTINGSCODES ----
@@ -424,6 +425,20 @@ const PRODUCTS = [
     ],
     extra: "Ideaal om mee te nemen naar awaydays · 50 meter lang.",
     group: "accessoires",
+  },
+  {
+    id: "t-shirt-did-you-miss-us",
+    title: "Promotie 26/26 T-Shirt",
+    img: "/img/did-you-miss-us.jpg",
+    tags: ["t-shirt", "accessoires", "promotie", "eredivise"],
+    variants: [
+{ id: "S", label: "Maat S", price: 23.99 },
+{ id: "M", label: "Maat M", price: 23.99 },
+{ id: "L", label: "Maat L", price: 23.99 },
+{ id: "XL", label: "Maat XL", price: 23.99 },
+    ],
+    extra: "Promotie shirt · Verkrijgbaar in S t/m XL · Did You Miss Us ?.",
+    group: "kleding",
   },
   {
     id: "sjaal-1team-1taak",
