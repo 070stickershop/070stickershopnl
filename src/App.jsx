@@ -752,7 +752,6 @@ const visibleItems = useMemo(() => {
     if (category === "meter") return p.group === "meter";
     if (category === "accessoires") return p.group === "accessoires";
     if (category === "normaal") return p.group === "normaal";
-    if (category === "kleding") return p.group === "kleding";
     return true;
   });
 }, [items, category]);
@@ -1260,21 +1259,18 @@ if (window.location.pathname.includes("/admin")) {
                     <p className="mt-1 text-sm text-neutral-600">
                       {p.tags.join(" · ")}
                     </p>
-<p className="text-xs text-neutral-500 mt-1">
-  {p.group === "kleding"
-    ? "Kleding"
-    : p.id.startsWith("normal-")
-    ? "Formaat: 85×55mm"
-    : p.id.startsWith("xxl-")
-    ? "Formaat: A6 (105×148mm)"
-    : p.id === "a4-stickers"
-    ? "Formaat: A4 (210×297mm)"
-    : p.group === "accessoires"
-    ? "Accessoire"
-    : "-"}
-
-  {p.group !== "kleding" && " · Vinyl · UV- & waterbestendig"}
-</p>
+                    <p className="text-xs text-neutral-500 mt-1">
+                      {p.id.startsWith("normal-")
+                        ? "Formaat: 85×55mm"
+                        : p.id.startsWith("xxl-")
+                        ? "Formaat: A6 (105×148mm)"
+                        : p.id === "a4-stickers"
+                        ? "Formaat: A4 (210×297mm)"
+                        : p.group === "accessoires"
+                        ? "Accessoire"
+                        : "-"}
+                      {" · "}Vinyl · UV- & waterbestendig
+                    </p>
 
                     {/* Variant selector */}
                     <div className="mt-3 flex items-center gap-2">
