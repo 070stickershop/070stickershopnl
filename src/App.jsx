@@ -1220,11 +1220,14 @@ if (window.location.pathname.includes("/admin")) {
                   {/* Afbeelding */}
                   <div className="relative w-full h-[300px] overflow-hidden bg-black">
                     <img
-                      src={p.img}
-                      alt={p.title}
-                      className="absolute inset-0 w-full h-full object-cover object-center"
-                      loading="lazy"
-                    />
+  src={p.img}
+  alt={p.title}
+  className={`absolute inset-0 w-full h-full ${
+    p.group === "kleding"
+      ? "object-contain bg-neutral-100 p-6"
+      : "object-cover"
+  } object-center`}
+/>
                     {/* Linker badge */}
                     {p.badge && (
                       <span className="absolute left-3 top-3 z-10 rounded-xl bg-[#0b6e4f] px-2.5 py-1 text-xs font-bold text-white shadow">
@@ -1710,7 +1713,7 @@ if (window.location.pathname.includes("/admin")) {
 <img
   src={p.img}
   alt={p.title}
-  className="absolute inset-0 w-full h-full object-contain object-center bg-black"
+  className="h-14 w-14 rounded-xl object-cover"
 />
                   <div className="flex-1">
                     <div className="font-semibold">{item.title}</div>
