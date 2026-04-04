@@ -1222,11 +1222,7 @@ if (window.location.pathname.includes("/admin")) {
                     <img
   src={p.img}
   alt={p.title}
-  className={`absolute inset-0 w-full h-full ${
-    p.group === "kleding"
-      ? "object-contain bg-neutral-100 p-6"
-      : "object-cover"
-  } object-center`}
+className="h-14 w-14 rounded-xl object-cover"
 />
                     {/* Linker badge */}
                     {p.badge && (
