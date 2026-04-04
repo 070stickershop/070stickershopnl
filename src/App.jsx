@@ -428,7 +428,7 @@ const PRODUCTS = [
   },
   {
     id: "t-shirt-did-you-miss-us",
-    title: "Promotie 26/26 T-Shirt",
+    title: "Promotie 25/26 T-Shirt",
     img: "/img/did-you-miss-us.jpg",
     tags: ["t-shirt", "accessoires", "promotie", "eredivise"],
     variants: [
