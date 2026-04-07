@@ -444,7 +444,7 @@ const PRODUCTS = [
     id: "t-shirt-brothers-juve",
     title: "Brothers Den Haag x Juventus T-Shirt",
     img: "/img/brothers-juve.jpg",
-    tags: ["t-shirt", "accessoires", "promotie", "eredivise"],
+    tags: ["t-shirt", "accessoires", "denhaag", "juventus"],
     variants: [
 { id: "S", label: "Maat S", price: 23.99 },
 { id: "M", label: "Maat M", price: 23.99 },
