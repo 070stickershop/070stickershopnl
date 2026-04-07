@@ -440,6 +440,20 @@ const PRODUCTS = [
     extra: "Promotie shirt · Verkrijgbaar in S t/m XL · Did You Miss Us ?.",
     group: "kleding",
   },
+   {
+    id: "t-shirt-brothers-juve",
+    title: "Brothers Den Haag x Juventus T-Shirt",
+    img: "/img/brothers-juve.jpg",
+    tags: ["t-shirt", "accessoires", "promotie", "eredivise"],
+    variants: [
+{ id: "S", label: "Maat S", price: 23.99 },
+{ id: "M", label: "Maat M", price: 23.99 },
+{ id: "L", label: "Maat L", price: 23.99 },
+{ id: "XL", label: "Maat XL", price: 23.99 },
+    ],
+    extra: "Brothers Den Haag x Juventus shirt · Verkrijgbaar in S t/m XL ·.",
+    group: "kleding",
+  },
   {
     id: "sjaal-1team-1taak",
     title: "1 team 1 taak sjaal",
