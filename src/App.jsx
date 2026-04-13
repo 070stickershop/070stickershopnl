@@ -442,7 +442,7 @@ const PRODUCTS = [
   },
   {
     id: "t-shirt-schilden-en-de-schaal",
-    title: "Kampioen 25/26 T-Shirt",
+    title: "kampioensshirt 25/26 🏆🔰",
     img: "/img/tshirt-kampioen.jpg",
     tags: ["t-shirt", "accessoires", "kampioen", "eredivise"],
     variants: [
