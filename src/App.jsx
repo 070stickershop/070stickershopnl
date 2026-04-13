@@ -440,6 +440,20 @@ const PRODUCTS = [
     extra: "Promotie shirt · Verkrijgbaar in S t/m XL · Did You Miss Us ?.",
     group: "kleding",
   },
+  {
+    id: "t-shirt-schilden-en-de-schaal",
+    title: "Kampioen 25/26 T-Shirt",
+    img: "/img/tshirt-kampioen.jpg",
+    tags: ["t-shirt", "accessoires", "kampioen", "eredivise"],
+    variants: [
+{ id: "S", label: "Maat S", price: 23.99 },
+{ id: "M", label: "Maat M", price: 23.99 },
+{ id: "L", label: "Maat L", price: 23.99 },
+{ id: "XL", label: "Maat XL", price: 23.99 },
+    ],
+    extra: "Kampioens shirt · Verkrijgbaar in S t/m XL · De schilden en de schaal ? · Den Haag heeft het allemaal !",
+    group: "kleding",
+  },
    {
     id: "t-shirt-brothers-juve",
     title: "Brothers Den Haag x Juventus T-Shirt",
