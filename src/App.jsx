@@ -60,6 +60,12 @@ const COUPONS = {
   value: 10,
   description: "10% korting op je eerste bestelling",
 },
+ANTIDB20: {
+    type: "percent",
+    value: 20,
+    description: "20% korting op Goodnight m-s*de stickers",
+    productIds: ["normal-goodnight"], // 👈 jouw product ID
+  },
 };
 
 /* Kleine helpers voor ‘vandaag’ en eligibility */
@@ -915,19 +921,30 @@ function addSelectedUpsells() {
     }
 
     // Subtotaal van items die in de juiste groepen vallen
-    let eligibleSubtotal = 0;
+let eligibleSubtotal = 0;
 
-    if (appliedCoupon.groups?.length) {
-      eligibleSubtotal = cart.reduce((sum, item) => {
-        const product = products.find((p) => p.id === item.productId);
-        if (product && appliedCoupon.groups.includes(product.group)) {
-          return sum + item.price * item.qty;
-        }
-        return sum;
-      }, 0);
-    } else {
-      eligibleSubtotal = subtotal;
+if (appliedCoupon.productIds?.length) {
+  // 🎯 Alleen specifieke producten
+  eligibleSubtotal = cart.reduce((sum, item) => {
+    if (appliedCoupon.productIds.includes(item.productId)) {
+      return sum + item.price * item.qty;
     }
+    return sum;
+  }, 0);
+
+} else if (appliedCoupon.groups?.length) {
+  // bestaande logica (matchday etc)
+  eligibleSubtotal = cart.reduce((sum, item) => {
+    const product = products.find((p) => p.id === item.productId);
+    if (product && appliedCoupon.groups.includes(product.group)) {
+      return sum + item.price * item.qty;
+    }
+    return sum;
+  }, 0);
+
+} else {
+  eligibleSubtotal = subtotal;
+}
 
     let d = 0;
 
