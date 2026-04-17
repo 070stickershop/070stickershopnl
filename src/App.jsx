@@ -154,6 +154,21 @@ const PRODUCTS = [
     badge: "Nieuw !",
     group: "normaal",
   },
+  {
+    id: "13-12-sticker",
+    title: "A.C.A.B",
+    img: "/img/1312-peuken.jpg",
+    tags: ["normaal", "100x70mm", "vinyl"],
+    variants: [
+      { id: "25", label: "25 stuks", price: 4.5 },
+      { id: "50", label: "50 stuks", price: 7.5 },
+      { id: "100", label: "100 stuks", price: 12.0 },
+      { id: "200", label: "200 stuks", price: 23.0 },
+    ],
+    extra: "100×70 mm · Vinyl · UV- & waterbestendig",
+    badge: "Nieuw !",
+    group: "normaal",
+  },
    {
     id: "normal-goodnight",
     title: "Good Night M-S*de",
