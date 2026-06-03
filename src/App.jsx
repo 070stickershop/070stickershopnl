@@ -326,7 +326,7 @@ const PRODUCTS = [
     ],
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
     group: "normaal",
-    soldOut: false,
+    soldOut: true,
   },
   {
     id: "normal-coming-for-you",
