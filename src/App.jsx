@@ -314,21 +314,6 @@ const PRODUCTS = [
     soldOut: true,
   },
   {
-    id: "normal-betreden-op-eigen-risico",
-    title: "Betreden op eigen risico",
-    img: "/img/betreden-op-eigen-risico.jpg",
-    tags: ["normaal", "100x100mm", "vinyl"],
-    variants: [
-      { id: "25", label: "25 stuks", price: 4.5 },
-      { id: "50", label: "50 stuks", price: 7.5 },
-      { id: "100", label: "100 stuks", price: 12.0 },
-      { id: "200", label: "200 stuks", price: 23.0 },
-    ],
-    extra: "85×55 mm · Vinyl · UV- & waterbestendig",
-    group: "normaal",
-    soldOut: true,
-  },
-  {
     id: "normal-coming-for-you",
     title: "Coming for you",
     img: "/img/coming-for-you.jpg",
