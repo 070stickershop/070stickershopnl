@@ -144,6 +144,7 @@ const PRODUCTS = [
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
     badge: "Nieuw !",
     group: "normaal",
+    soldOut: true,
   },
   {
     id: "mooie-stad-achter-duinen",
@@ -266,7 +267,7 @@ const PRODUCTS = [
     ],
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
     group: "normaal",
-    soldOut: false,
+    soldOut: true,
   },
   {
     id: "normal-fuck-den-bosch",
@@ -297,6 +298,7 @@ const PRODUCTS = [
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
     badge: "Nieuw !",
     group: "normaal",
+    soldOut: true,
   },
   {
     id: "normal-green-yellow-army",
