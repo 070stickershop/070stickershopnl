@@ -1494,14 +1494,24 @@ if (window.location.pathname.includes("/admin")) {
       <section id="info" className="bg-white/90">
         <div className="mx-auto max-w-6xl px-4 py-12 grid md:grid-cols-3 gap-6">
           <div className="rounded-3xl border p-6 shadow-sm">
-            <h3 className="font-extrabold text-lg">Verzending</h3>
-            <p className="mt-2 text-sm text-neutral-700">
-              Verzendkosten: <strong>€5,50</strong> standaard. <br />
-              <em>Uitzondering:</em> bestellingen die uitsluitend bestaan uit{" "}
-              <strong>25 stuks</strong> (Normaal) of{" "}
-              <strong>10 stuks</strong> (XXL A6) verzenden voor{" "}
-              <strong>€4,50</strong>.
-            </p>
+<h3 className="font-extrabold text-lg">Verzending</h3>
+
+<p className="mt-2 text-sm text-neutral-700">
+  📮 Tot 20 normale stickers:
+  <strong> €2,95</strong>
+  <br />
+
+  📬 25 normale stickers:
+  <strong> €3,95</strong>
+  <br />
+
+  📦 50 t/m 100 normale stickers:
+  <strong> €4,95</strong>
+  <br />
+
+  📦 Vanaf 200 normale stickers of XXL, A4, 1 meter, kleding en accessoires:
+  <strong> €5,95</strong>
+</p>
           </div>
           <div className="rounded-3xl border p-6 shadow-sm">
             <h3 className="font-extrabold text-lg">Betalen</h3>
