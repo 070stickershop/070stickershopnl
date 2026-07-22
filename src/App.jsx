@@ -121,7 +121,8 @@ const PRODUCTS = [
     img: "/img/den-haag-territory.jpg",
     tags: ["normaal", "85x55mm", "vinyl"],
     variants: [
-      { id: "25", label: "25 stuks", price: 4.5 },
+      { id: "10", label: "10 stuks", price: 2.95 },
+      { id: "25", label: "25 stuks", price: 4.95 },
       { id: "50", label: "50 stuks", price: 8.95 },
       { id: "100", label: "100 stuks", price: 14.95 },
       { id: "200", label: "200 stuks", price: 27.95 },
@@ -136,6 +137,7 @@ const PRODUCTS = [
     img: "/img/your-city.jpg",
     tags: ["normaal", "85x55mm", "vinyl"],
     variants: [
+      { id: "10", label: "10 stuks", price: 2.95 },
       { id: "25", label: "25 stuks", price: 4.95 },
       { id: "50", label: "50 stuks", price: 8.95 },
       { id: "100", label: "100 stuks", price: 14.95 },
@@ -152,7 +154,8 @@ const PRODUCTS = [
     img: "/img/fuck-amsterdam.jpg",
     tags: ["normaal", "85x55mm", "vinyl"],
     variants: [
-      { id: "25", label: "25 stuks", price: 4.5 },
+      { id: "10", label: "10 stuks", price: 2.95 },
+      { id: "25", label: "25 stuks", price: 4.95 },
       { id: "50", label: "50 stuks", price: 8.95 },
       { id: "100", label: "100 stuks", price: 14.95 },
       { id: "200", label: "200 stuks", price: 27.95 },
@@ -168,6 +171,7 @@ const PRODUCTS = [
     img: "/img/did-you-miss-us-sticker.jpg",
     tags: ["normaal", "85x55mm", "vinyl"],
     variants: [
+      { id: "10", label: "10 stuks", price: 2.95 },
       { id: "25", label: "25 stuks", price: 4.95 },
       { id: "50", label: "50 stuks", price: 8.95 },
       { id: "100", label: "100 stuks", price: 14.95 },
@@ -184,6 +188,7 @@ const PRODUCTS = [
     img: "/img/schilden-schaal.jpg",
     tags: ["normaal", "85x55mm", "vinyl"],
     variants: [
+      { id: "10", label: "10 stuks", price: 2.95 },
       { id: "25", label: "25 stuks", price: 4.95 },
       { id: "50", label: "50 stuks", price: 8.95 },
       { id: "100", label: "100 stuks", price: 14.95 },
@@ -200,6 +205,7 @@ const PRODUCTS = [
     img: "/img/mooie-stad.jpg",
     tags: ["normaal", "100x70mm", "vinyl"],
     variants: [
+      { id: "10", label: "10 stuks", price: 2.95 },
       { id: "25", label: "25 stuks", price: 4.95 },
       { id: "50", label: "50 stuks", price: 8.95 },
       { id: "100", label: "100 stuks", price: 14.95 },
@@ -215,6 +221,7 @@ const PRODUCTS = [
     img: "/img/1312-peuken.jpg",
     tags: ["normaal", "100x70mm", "vinyl"],
     variants: [
+      { id: "10", label: "10 stuks", price: 2.95 },
       { id: "25", label: "25 stuks", price: 4.95 },
       { id: "50", label: "50 stuks", price: 8.95 },
       { id: "100", label: "100 stuks", price: 14.95 },
@@ -230,6 +237,7 @@ const PRODUCTS = [
     img: "/img/good-night-m.jpg",
     tags: ["normaal", "85x55mm", "vinyl"],
     variants: [
+      { id: "10", label: "10 stuks", price: 2.95 },
       { id: "25", label: "25 stuks", price: 4.95 },
       { id: "50", label: "50 stuks", price: 8.95 },
       { id: "100", label: "100 stuks", price: 14.95 },
@@ -245,6 +253,7 @@ const PRODUCTS = [
     img: "/img/den-haag-overplakt.jpg",
     tags: ["normaal", "85x55mm", "vinyl"],
     variants: [
+      { id: "10", label: "10 stuks", price: 2.95 },
       { id: "25", label: "25 stuks", price: 4.95 },
       { id: "50", label: "50 stuks", price: 8.95 },
       { id: "100", label: "100 stuks", price: 14.95 },
@@ -261,6 +270,7 @@ const PRODUCTS = [
     img: "/img/groeten-uit-den-haag.jpg",
     tags: ["normaal", "85x55mm", "vinyl"],
     variants: [
+      { id: "10", label: "10 stuks", price: 2.95 },
       { id: "25", label: "25 stuks", price: 4.95 },
       { id: "50", label: "50 stuks", price: 8.95 },
       { id: "100", label: "100 stuks", price: 14.95 },
@@ -277,6 +287,7 @@ const PRODUCTS = [
     img: "/img/denhaag-culture.jpg",
     tags: ["normaal", "85x55mm", "vinyl"],
     variants: [
+      { id: "10", label: "10 stuks", price: 2.95 },
       { id: "25", label: "25 stuks", price: 4.95 },
       { id: "50", label: "50 stuks", price: 8.95 },
       { id: "100", label: "100 stuks", price: 14.95 },
@@ -293,6 +304,7 @@ const PRODUCTS = [
     img: "/img/door-de-generaties.jpg",
     tags: ["normaal", "85x55mm", "vinyl"],
     variants: [
+      { id: "10", label: "10 stuks", price: 2.95 },
       { id: "25", label: "25 stuks", price: 4.95 },
       { id: "50", label: "50 stuks", price: 8.95 },
       { id: "100", label: "100 stuks", price: 14.95 },
@@ -308,6 +320,7 @@ const PRODUCTS = [
     img: "/img/mijn-club-fc-den-haag.jpg",
     tags: ["normaal", "85x55mm", "vinyl"],
     variants: [
+      { id: "10", label: "10 stuks", price: 2.95 },
       { id: "25", label: "25 stuks", price: 4.95 },
       { id: "50", label: "50 stuks", price: 8.95 },
       { id: "100", label: "100 stuks", price: 14.95 },
@@ -323,6 +336,7 @@ const PRODUCTS = [
     img: "/img/fuck-den-bosch.jpg",
     tags: ["normaal", "85x55mm", "vinyl"],
     variants: [
+      { id: "10", label: "10 stuks", price: 2.95 },
       { id: "25", label: "25 stuks", price: 4.95 },
       { id: "50", label: "50 stuks", price: 8.95 },
       { id: "100", label: "100 stuks", price: 14.95 },
@@ -338,6 +352,7 @@ const PRODUCTS = [
     img: "/img/den-haag-till.jpg",
     tags: ["normaal", "85x55mm", "vinyl"],
     variants: [
+      { id: "10", label: "10 stuks", price: 2.95 },
       { id: "25", label: "25 stuks", price: 4.95 },
       { id: "50", label: "50 stuks", price: 8.95 },
       { id: "100", label: "100 stuks", price: 14.95 },
@@ -354,6 +369,7 @@ const PRODUCTS = [
     img: "/img/green-yellow-army.jpg",
     tags: ["normaal", "85x55mm", "vinyl"],
     variants: [
+      { id: "10", label: "10 stuks", price: 2.95 },
       { id: "25", label: "25 stuks", price: 4.95 },
       { id: "50", label: "50 stuks", price: 8.95 },
       { id: "100", label: "100 stuks", price: 14.95 },
@@ -369,6 +385,7 @@ const PRODUCTS = [
     img: "/img/coming-for-you.jpg",
     tags: ["normaal", "85x55mm", "vinyl"],
     variants: [
+      { id: "10", label: "10 stuks", price: 2.95 },
       { id: "25", label: "25 stuks", price: 4.95 },
       { id: "50", label: "50 stuks", price: 8.95 },
       { id: "100", label: "100 stuks", price: 14.95 },
@@ -385,6 +402,7 @@ const PRODUCTS = [
     img: "/img/fuck-espn.jpg",
     tags: ["normaal", "85x55mm", "vinyl"],
     variants: [
+      { id: "10", label: "10 stuks", price: 2.95 },
       { id: "25", label: "25 stuks", price: 4.95 },
       { id: "50", label: "50 stuks", price: 8.95 },
       { id: "100", label: "100 stuks", price: 14.95 },
@@ -401,10 +419,10 @@ const PRODUCTS = [
     img: "/img/mix.jpg",
     tags: ["normaal", "85x55mm", "vinyl"],
     variants: [
-      { id: "50", label: "50 stuks", price: 8.5 },
-      { id: "100", label: "100 stuks", price: 13.0 },
+      { id: "50", label: "50 stuks", price: 9.5 },
+      { id: "100", label: "100 stuks", price: 14.95 },
       { id: "150", label: "150 stuks", price: 18.5 },
-      { id: "200", label: "200 stuks", price: 24.0 },
+      { id: "200", label: "200 stuks", price: 28.95 },
     ],
     extra: "Mix van designs · 85×55 mm · Vinyl · UV- & waterbestendig",
     group: "normaal",
@@ -994,20 +1012,53 @@ if (appliedCoupon.productIds?.length) {
 
   const subtotal = cart.reduce((s, x) => s + x.price * x.qty, 0);
 
-  function computeShipping() {
-    if (cart.length === 0) return 0;
-    // Alleen 1 product in winkelwagen EN exact 25 stuks normaal
-    if (
-      cart.length === 1 &&
-      cart[0].productId.startsWith("normal-") &&
-      cart[0].variantId === "25" &&
-      cart[0].qty === 1
-    ) {
-      return 3.0;
+function computeShipping() {
+  if (cart.length === 0) return 0;
+
+  let normalStickers = 0;
+  let hasLargeItem = false;
+
+  cart.forEach(item => {
+    const product = products.find(p => p.id === item.productId);
+    if (!product) return;
+
+    // Normale stickers optellen
+    if (product.group === "normaal") {
+      normalStickers += (parseInt(item.variantId, 10) || 0) * item.qty;
     }
-    // Alles daarboven -> €5,50
-    return 5.5;
+
+    // Grote producten
+    if (
+      product.group === "xxl" ||
+      product.group === "a4" ||
+      product.group === "meter" ||
+      product.group === "accessoires" ||
+      product.group === "kleding"
+    ) {
+      hasLargeItem = true;
+    }
+  });
+
+  // XXL, A4, kleding, tape enz.
+  if (hasLargeItem) {
+    return 5.95;
   }
+
+  // Alleen normale stickers
+  if (normalStickers <= 20) {
+    return 2.95;
+  }
+
+  if (normalStickers <= 25) {
+    return 3.95;
+  }
+
+  if (normalStickers <= 100) {
+    return 4.95;
+  }
+
+  return 5.95;
+}
 
   const shipping = computeShipping();
   const discount = computeDiscount(subtotal, cart);
