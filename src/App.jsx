@@ -162,10 +162,26 @@ const PRODUCTS = [
     group: "normaal",
     soldOut: false,
   },
-     {
+  {
     id: "normal-did-you-miss-us",
     title: "Did You Miss Us",
     img: "/img/did-you-miss-us-sticker.jpg",
+    tags: ["normaal", "85x55mm", "vinyl"],
+    variants: [
+      { id: "25", label: "25 stuks", price: 4.5 },
+      { id: "50", label: "50 stuks", price: 7.5 },
+      { id: "100", label: "100 stuks", price: 12.0 },
+      { id: "200", label: "200 stuks", price: 23.0 },
+    ],
+    extra: "85×55 mm · Vinyl · UV- & waterbestendig",
+    badge: "Nieuw !",
+    group: "normaal",
+    soldOut: false,
+  },
+   {
+    id: "normal-schilden-schaal",
+    title: "Den Haag heeft het allemaal",
+    img: "/img/schilden-schaal.jpg",
     tags: ["normaal", "85x55mm", "vinyl"],
     variants: [
       { id: "25", label: "25 stuks", price: 4.5 },
