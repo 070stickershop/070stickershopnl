@@ -129,7 +129,7 @@ const PRODUCTS = [
     ],
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
     group: "normaal",
-    soldOut: true,
+    soldOut: false,
   },
    {
     id: "normal-your-city",
@@ -146,7 +146,7 @@ const PRODUCTS = [
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
     badge: "Nieuw !",
     group: "normaal",
-    soldOut: true,
+    soldOut: false,
   },
   {
     id: "normal-fuck-amsterd*m",
@@ -279,7 +279,7 @@ const PRODUCTS = [
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
     badge: "Nieuw",
     group: "normaal",
-    soldOut: true,
+    soldOut: false,
   },
   {
     id: "normal-denhaag-culture",
@@ -328,7 +328,7 @@ const PRODUCTS = [
     ],
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
     group: "normaal",
-    soldOut: true,
+    soldOut: false,
   },
   {
     id: "normal-fuck-den-bosch",
