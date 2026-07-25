@@ -464,7 +464,23 @@ const PRODUCTS = [
     id: "xxl-fc-den-haag-1905",
     title: "XXL stickers – FC Den Haag / 1905",
     img: "/img/fc-den-haag.jpg",
-    tags: ["rond", "xxl", "1905", "denhaag"],
+    tags: ["rond", "xxl", "vinyl", "denhaag"],
+    variants: [
+      { id: "10", label: "10 stuks", price: 4.99 },
+      { id: "25", label: "25 stuks", price: 7.99 },
+      { id: "50", label: "50 stuks", price: 13.99 },
+      { id: "75", label: "75 stuks", price: 18.99 },
+      { id: "100", label: "100 stuks", price: 24.99 },
+    ],
+    extra: "Vinyl · UV- & waterbestendig",
+    badge: "Ronde Stickers !",
+    group: "xxl"
+  },
+  {
+    id: "xxl-good-night",
+    title: "XXL stickers – Good Night / Red & White",
+    img: "/img/good-night.jpg",
+    tags: ["rond", "xxl", "vinyl", "denhaag"],
     variants: [
       { id: "10", label: "10 stuks", price: 4.99 },
       { id: "25", label: "25 stuks", price: 7.99 },
