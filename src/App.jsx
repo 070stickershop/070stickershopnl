@@ -1829,7 +1829,7 @@ p.id === "xxl-good-night"
               <div className="flex items-center gap-3 mb-3">
                 <img
                   src="/img/reviews/malgorzata.jpg"
-                  alt="Delano"
+                  alt="Malgorzata"
                   className="w-12 h-12 rounded-full object-cover"
                 />
                 <div>
@@ -1842,7 +1842,7 @@ p.id === "xxl-good-night"
                 “Very good quality and the material of the flag is really nice, i will definitely buy more in the future. greets from poland!”
               </p>
             </div>
-            
+
         {/* ---------------------------------- Community Foto's ---------------------------------- */}
         <section className="max-w-6xl mx-auto px-4 py-12">
           <div className="text-center mb-8">
