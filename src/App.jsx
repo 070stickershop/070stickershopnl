@@ -144,6 +144,7 @@ const PRODUCTS = [
       { id: "200", label: "200 stuks", price: 27.95 },
     ],
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
+    badge: "Nieuw !",
     group: "normaal",
     soldOut: false,
   },
