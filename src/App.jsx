@@ -1442,6 +1442,9 @@ if (window.location.pathname.includes("/admin")) {
   ? "Kleding"
   : p.id.startsWith("normal-")
   ? "Formaat: 85×55mm"
+  : p.id === "xxl-fc-den-haag-1905" ||
+p.id === "xxl-good-night"
+  ? "Formaat: 100×100mm"
   : p.id.startsWith("xxl-")
   ? "Formaat: A6 (105×148mm)"
   : p.id === "a4-stickers"
