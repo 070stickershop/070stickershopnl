@@ -182,6 +182,23 @@ const PRODUCTS = [
     group: "normaal",
     soldOut: false,
   },
+    {
+    id: "normal-door-het-land-gevreesd",
+    title: "Door Heel Het Land Gevreesd !",
+    img: "/img/door-het-land-gevreesd.jpg",
+    tags: ["normaal", "85x55mm", "vinyl"],
+    variants: [
+      { id: "10", label: "10 stuks", price: 2.95 },
+      { id: "25", label: "25 stuks", price: 4.95 },
+      { id: "50", label: "50 stuks", price: 8.95 },
+      { id: "100", label: "100 stuks", price: 14.95 },
+      { id: "200", label: "200 stuks", price: 27.95 },
+    ],
+    extra: "85×55 mm · Vinyl · UV- & waterbestendig",
+    badge: "Nieuw !",
+    group: "normaal",
+    soldOut: false,
+  },
   {
     id: "normal-did-you-miss-us",
     title: "Did You Miss Us",
