@@ -79,25 +79,40 @@ function localISODate() {
 
 // Lijst met wedstrijddagen (YYYY-MM-DD)
 const MATCH_DAYS = [
-  "2025-12-12",
-  "2025-12-19",
-  "2026-01-09",
-  "2026-01-16",
-  "2026-01-23",
-  "2026-01-26",
-  "2026-01-30",
-  "2026-02-13",
-  "2026-02-20",
-  "2026-02-27",
-  "2026-03-07",
-  "2026-03-13",
-  "2026-03-17",
-  "2026-03-22",
-  "2026-04-03",
-  "2026-04-06",
-  "2026-04-12",
-  "2026-04-17",
-  "2026-04-24",
+  "2026-08-08",
+  "2026-08-16",
+  "2026-08-23",
+  "2026-08-30",
+  "2026-09-06",
+  "2026-09-12",
+  "2026-09-19",
+  "2026-10-11",
+  "2026-10-17",
+  "2026-10-24",
+  "2026-11-01",
+  "2026-11-07",
+  "2026-11-22",
+  "2026-11-29",
+  "2026-12-06",
+  "2026-12-13",
+  "2026-12-20",
+  "2027-01-10",
+  "2027-01-17",
+  "2027-01-24",
+  "2027-01-31",
+  "2027-02-14",
+  "2027-02-21",
+  "2027-02-28",
+  "2027-03-07",
+  "2027-03-14",
+  "2027-03-21",
+  "2027-04-04",
+  "2027-04-11",
+  "2027-04-25",
+  "2027-05-02",
+  "2027-05-09",
+  "2027-05-16",
+  "2027-05-23",
   // vul hier zelf jouw wedstrijddagen toe
 ];
 
@@ -622,16 +637,18 @@ const PRODUCTS = [
     extra: "Ideaal om mee te nemen naar awaydays · Tijdelijk Verkrijgbaar.",
     group: "accessoires",
   },
-  {
-    id: "zonnebril-dh",
-    title: "Zonnebril geel groen ",
-    img: "/img/1312-zonnebril.jpg",
-    tags: ["zonnebril", "accessoires", "limited edition", "zomercollectie"],
-    variants: [
-      { id: "1", label: "1 Zonnebril", price: 9.99 },
-      { id: "2", label: "2 Zonnebrillen", price: 19.99 },
-      { id: "3", label: "3 Zonnebrillen", price: 27.99 },
-    ],
+{
+  id: "zonnebril-dh",
+  title: "Zonnebril geel groen",
+  img: "/img/1312-zonnebril.jpg",
+  oldPrice: 9.99,
+  saleBadge: "-40%",
+  tags: ["zonnebril", "accessoires", "limited edition", "zomercollectie"],
+  variants: [
+    { id: "1", label: "1 Zonnebril", price: 5.99 },
+    { id: "2", label: "2 Zonnebrillen", price: 11.98 },
+    { id: "3", label: "3 Zonnebrillen", price: 17.97 },
+  ],
     extra: "Ideaal voor de zomer · Tijdelijk Verkrijgbaar.",
     group: "accessoires",
   },
@@ -1439,27 +1456,35 @@ if (window.location.pathname.includes("/admin")) {
                       className="absolute inset-0 w-full h-full object-cover object-center"
                       loading="lazy"
                     />
-                    {/* Linker badge */}
-                    {p.badge && (
-                      <span className="absolute left-3 top-3 z-10 rounded-xl bg-[#0b6e4f] px-2.5 py-1 text-xs font-bold text-white shadow">
-                        {p.badge}
-                      </span>
-                    )}
-                    {/* Rechter badge: MATCHDAY10 */}
-                    {showMatchday && (
-                      <span
-                        className="absolute right-3 top-3 z-10 rounded-xl bg-green-500 px-2.5 py-1 text-xs font-bold text-white shadow"
-                        title="Matchday: 10% korting op A4, XXL en Tape/Vlag met MATCHDAY10"
-                      >
-                        -10% met MATCHDAY10
-                      </span>
-                    )}
-                    {/* Uitverkocht badge */}
-                    {isSoldOut && (
-                      <span className="absolute right-3 top-3 z-10 rounded-xl bg-red-600 px-2.5 py-1 text-xs font-bold text-white shadow">
-                        Uitverkocht
-                      </span>
-                    )}
+{/* Linker badge */}
+{p.badge && (
+  <span className="absolute left-3 top-3 z-10 rounded-xl bg-[#0b6e4f] px-2.5 py-1 text-xs font-bold text-white shadow">
+    {p.badge}
+  </span>
+)}
+
+{/* Rechter badge: MATCHDAY10 */}
+{showMatchday && (
+  <span
+    className="absolute right-3 top-3 z-10 rounded-xl bg-green-500 px-2.5 py-1 text-xs font-bold text-white shadow"
+  >
+    -10% met MATCHDAY10
+  </span>
+)}
+
+{/* SALE BADGE */}
+{p.saleBadge && (
+  <span className="absolute right-3 bottom-3 z-10 rounded-xl bg-red-600 px-3 py-1 text-sm font-bold text-white shadow-lg animate-pulse">
+    {p.saleBadge}
+  </span>
+)}
+
+{/* Uitverkocht badge */}
+{isSoldOut && (
+  <span className="absolute right-3 top-3 z-10 rounded-xl bg-red-600 px-2.5 py-1 text-xs font-bold text-white shadow">
+    Uitverkocht
+  </span>
+)}
                   </div>
 
                   <div className="p-4">
@@ -1523,9 +1548,17 @@ p.id === "xxl-good-night"
                     )}
 
                     <div className="mt-3 flex items-center justify-between">
-                      <span className="text-lg font-extrabold tracking-tight">
-                        {formatPrice(price)}
-                      </span>
+<div className="flex items-center gap-2">
+  {p.oldPrice && (
+    <span className="text-sm text-gray-400 line-through">
+      {formatPrice(p.oldPrice)}
+    </span>
+  )}
+
+  <span className="text-lg font-extrabold tracking-tight text-red-600">
+    {formatPrice(price)}
+  </span>
+</div>
                       <button
                         onClick={() => !isSoldOut && addToCart(p.id)}
                         disabled={isSoldOut}
