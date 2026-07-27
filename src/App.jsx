@@ -646,8 +646,8 @@ const PRODUCTS = [
   tags: ["zonnebril", "accessoires", "limited edition", "zomercollectie"],
   variants: [
     { id: "1", label: "1 Zonnebril", price: 5.99 },
-    { id: "2", label: "2 Zonnebrillen", price: 11.98 },
-    { id: "3", label: "3 Zonnebrillen", price: 17.97 },
+    { id: "2", label: "2 Zonnebrillen", price: 11.90 },
+    { id: "3", label: "3 Zonnebrillen", price: 17.90 },
   ],
     extra: "Ideaal voor de zomer · Tijdelijk Verkrijgbaar.",
     group: "accessoires",
