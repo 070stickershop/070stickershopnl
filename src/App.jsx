@@ -2,6 +2,7 @@
 import React, { useMemo, useState, useRef, useEffect } from "react";
 import { supabase } from "./lib/supabase";
 import Admin from "./Admin";
+import zomerSale from "./assets/zomer-sale.jpg";
 
 /* ================== Helpers ================== */
 function formatPrice(n) {
@@ -758,9 +759,47 @@ const [reviews, setReviews] = useState([]);
 const [name, setName] = useState("");
 const [text, setText] = useState("");
 const [rating, setRating] = useState(5);
+const [showSalePopup, setShowSalePopup] = useState(true);
+const SALE_END = new Date("2026-08-31T23:59:59");
+
+const [timeLeft, setTimeLeft] = useState({
+  days: 0,
+  hours: 0,
+  minutes: 0,
+  seconds: 0,
+});
 useEffect(() => {
   fetchProducts();
   fetchReviews();
+}, []);
+useEffect(() => {
+  const updateCountdown = () => {
+    const now = new Date();
+    const diff = SALE_END - now;
+
+    if (diff <= 0) {
+      setTimeLeft({
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+      });
+      return;
+    }
+
+    setTimeLeft({
+      days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+      hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+      minutes: Math.floor((diff / (1000 * 60)) % 60),
+      seconds: Math.floor((diff / 1000) % 60),
+    });
+  };
+
+  updateCountdown();
+
+  const interval = setInterval(updateCountdown, 1000);
+
+  return () => clearInterval(interval);
 }, []);
 
 async function fetchReviews() {
@@ -1243,7 +1282,44 @@ if (window.location.pathname.includes("/admin")) {
   return <Admin />;
 }
   return (
-    <div className="min-h-screen text-neutral-900 bg-gradient-to-br from-[#0b6e4f] via-[#f2c200]/30 to-[#f2c200]/60">
+  <>
+  {showSalePopup && (
+  <div
+    className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 p-4"
+    onClick={() => setShowSalePopup(false)}
+  >
+    <div
+      className="relative max-w-3xl w-full animate-[popup_.35s_ease]"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <button
+        onClick={() => setShowSalePopup(false)}
+        className="absolute -top-4 -right-4 h-10 w-10 rounded-full bg-white text-2xl font-bold text-black shadow-lg"
+      >
+        ×
+      </button>
+
+      <img
+        src={zomerSale}
+        alt="Zomer Sale"
+        className="w-full rounded-2xl shadow-2xl"
+      />
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/80 text-white rounded-2xl px-6 py-3 text-center shadow-xl">
+  <p className="text-xs uppercase tracking-widest text-yellow-400 font-bold">
+    Zomer Sale eindigt over
+  </p>
+
+  <div className="mt-1 text-2xl font-extrabold">
+    {timeLeft.days}d {String(timeLeft.hours).padStart(2, "0")}u{" "}
+    {String(timeLeft.minutes).padStart(2, "0")}m{" "}
+    {String(timeLeft.seconds).padStart(2, "0")}s
+  </div>
+</div>
+    </div>
+  </div>
+)}
+
+<div className="min-h-screen text-neutral-900 bg-gradient-to-br from-[#0b6e4f] via-[#f2c200]/30 to-[#f2c200]/60">
       {/* Topbar */}
       <header className="sticky top-0 z-30 backdrop-blur supports-backdrop-blur:bg-white/70 bg-white/60 border-b border-black/5">
         <div className="mx-auto max-w-6xl px-4 py-3 flex items-center gap-3">
@@ -2454,5 +2530,6 @@ p.id === "xxl-good-night"
         </div>
       )}
     </div>
-  );
+  </>
+);
 }
