@@ -582,6 +582,7 @@ const PRODUCTS = [
     ],
     extra: "Ideaal om mee te nemen naar awaydays · 50 meter lang.",
     group: "accessoires",
+    soldOut: true,
   },
   {
     id: "t-shirt-did-you-miss-us",
