@@ -1563,9 +1563,13 @@ p.id === "xxl-good-night"
     </span>
   )}
 
-  <span className="text-lg font-extrabold tracking-tight text-red-600">
-    {formatPrice(price)}
-  </span>
+<span
+  className={`text-lg font-extrabold tracking-tight ${
+    p.oldPrice ? "text-red-600" : "text-neutral-900"
+  }`}
+>
+  {formatPrice(price)}
+</span>
 </div>
                       <button
                         onClick={() => !isSoldOut && addToCart(p.id)}
@@ -1884,7 +1888,7 @@ p.id === "xxl-good-night"
               </p>
             </div>
         </div>
-        
+
         </section>
 
         {/* ---------------------------------- Community Foto's ---------------------------------- */}
