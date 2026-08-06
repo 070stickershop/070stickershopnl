@@ -164,6 +164,23 @@ const PRODUCTS = [
     group: "normaal",
     soldOut: false,
   },
+    {
+    id: "normal-den-haag-regeert",
+    title: "Den Haag Regeert!",
+    img: "/img/den-haag-regeert.jpg",
+    tags: ["normaal", "105x40mm", "vinyl"],
+    variants: [
+      { id: "10", label: "10 stuks", price: 2.95 },
+      { id: "25", label: "25 stuks", price: 4.5 },
+      { id: "50", label: "50 stuks", price: 8.50 },
+      { id: "100", label: "100 stuks", price: 12.95 },
+      { id: "200", label: "200 stuks", price: 24.95 },
+    ],
+    extra: "105×40 mm · Vinyl · UV- & waterbestendig",
+    badge: "Nieuw !",
+    group: "normaal",
+    soldOut: false,
+  },
    {
     id: "normal-your-city",
     title: "Your City Our Rules",
