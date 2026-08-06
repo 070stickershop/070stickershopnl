@@ -180,7 +180,7 @@ const PRODUCTS = [
     badge: "Nieuw !",
     group: "normaal",
     soldOut: false,
-  },
+    },
    {
     id: "normal-your-city",
     title: "Your City Our Rules",
@@ -525,6 +525,21 @@ const PRODUCTS = [
       { id: "100", label: "100 stuks", price: 24.99 },
     ],
     extra: "A6 (105×148 mm) · Vinyl · UV- & waterbestendig",
+    group: "xxl",
+  },
+    {
+    id: "xxl-den-haag-regeert",
+    title: "XXL stickers – Den Haag Regeert!",
+    img: "/img/den-haag-regeert-xxl.jpg",
+    tags: ["20cm", "xxl", "denhaag", "regeert"],
+    variants: [
+      { id: "10", label: "10 stuks", price: 4.99 },
+      { id: "25", label: "25 stuks", price: 7.99 },
+      { id: "50", label: "50 stuks", price: 13.99 },
+      { id: "75", label: "75 stuks", price: 18.99 },
+      { id: "100", label: "100 stuks", price: 24.99 },
+    ],
+    extra: "(210x80mm) · Vinyl · UV- & waterbestendig",
     group: "xxl",
   },
   {
