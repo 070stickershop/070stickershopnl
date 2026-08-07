@@ -540,6 +540,7 @@ const PRODUCTS = [
       { id: "100", label: "100 stuks", price: 24.99 },
     ],
     extra: "(200x80mm) · Vinyl · UV- & waterbestendig",
+    badge: "Extra Groot !",
     group: "xxl",
   },
   {
