@@ -539,7 +539,7 @@ const PRODUCTS = [
       { id: "75", label: "75 stuks", price: 18.99 },
       { id: "100", label: "100 stuks", price: 24.99 },
     ],
-    extra: "(210x80mm) · Vinyl · UV- & waterbestendig",
+    extra: "(200x80mm) · Vinyl · UV- & waterbestendig",
     group: "xxl",
   },
   {
@@ -1606,38 +1606,43 @@ if (window.location.pathname.includes("/admin")) {
 )}
                   </div>
 
-                  <div className="p-4">
-                    <h3 className="font-bold text-lg">{p.title}</h3>
-                    <p className="text-sm text-yellow-500">
-   🔰 Populair bij klanten
-</p>
+<div className="p-4">
+  <h3 className="font-bold text-lg">{p.title}</h3>
 
-<p className="text-sm text-red-500 font-semibold">
-  ⚡ Beperkte voorraad
-</p>
-                    <p className="mt-1 text-sm text-neutral-600">
-                      {p.tags.join(" · ")}
-                    </p>
-                    <p className="text-xs text-neutral-500 mt-1">
-{p.group === "kleding"
-  ? "Kleding"
-  : p.id.startsWith("normal-")
-  ? "Formaat: 85×55mm"
-  : p.id === "xxl-fc-den-haag-1905" ||
-p.id === "xxl-good-night"
-  ? "Formaat: 100×100mm"
-  : p.id.startsWith("xxl-")
-  ? "Formaat: A6 (105×148mm)"
-  : p.id === "a4-stickers"
-  ? "Formaat: A4 (210×297mm)"
-  : p.group === "accessoires"
-  ? "Accessoire"
-  : "-"}
+  <p className="text-sm text-yellow-500">
+    🔰 Populair bij klanten
+  </p>
 
-{p.group !== "kleding" && " · Vinyl · UV- & waterbestendig"}
-                    </p>
+  <p className="text-sm text-red-500">
+    ⚡ Beperkte voorraad
+  </p>
 
-                    {/* Variant selector */}
+  <p className="mt-1 text-sm text-neutral-600">
+    {p.tags.join(" · ")}
+  </p>
+
+  <p className="text-xs text-neutral-500 mt-1">
+    {
+      p.group === "kleding"
+        ? "Kleding"
+        : p.id.startsWith("normal-")
+        ? "Formaat: 85x55mm"
+        : p.id === "xxl-den-haag-regeert"
+        ? "Formaat: 210×80mm"
+        : p.id === "xxxl-fc-den-haag-1905" || p.id === "xxl-good-night"
+        ? "Formaat: 100×20mm"
+        : p.id.startsWith("xxl-")
+        ? "Formaat: A6 (105×148mm)"
+        : p.id === "a4-stickers"
+        ? "Formaat: A4 (210×297mm)"
+        : p.group === "accessoires"
+        ? "Accessoire"
+        : ""
+    }
+    {p.group !== "kleding" && " · Vinyl · UV- & waterbestendig"}
+  </p>
+
+  {/* Variant selector */}
                     <div className="mt-3 flex items-center gap-2">
                       <label
                         htmlFor={`variant-${p.id}`}
