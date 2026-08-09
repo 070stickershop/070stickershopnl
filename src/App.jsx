@@ -770,18 +770,18 @@ const PRODUCTS = [
 ];
 const FREQUENTLY_BOUGHT = {
   // 🔥 NORMALE STICKERS → upsell tape + 1 meter
-  "normal-your-city": ["tape-rol-groeten", "den-haag-1-meter-cp"],
-  "normal-goodnight": ["tape-rol-groeten", "den-haag-1-meter-cp"],
-  "normal-groeten-uit-den-haag": ["tape-rol-groeten", "den-haag-1-meter-cp"],
-  "normal-denhaag-culture": ["tape-rol-groeten", "den-haag-1-meter-cp"],
-  "normal-coming-for-you": ["tape-rol-groeten", "den-haag-1-meter-cp"],
+  "normal-your-city": ["tape-rol-on-tour", "den-haag-1-meter-cp"],
+  "normal-goodnight": ["tape-rol-on-tour", "den-haag-1-meter-cp"],
+  "normal-groeten-uit-den-haag": ["tape-rol-on-tour", "den-haag-1-meter-cp"],
+  "normal-denhaag-culture": ["tape-rol-on-tour", "den-haag-1-meter-cp"],
+  "normal-coming-for-you": ["tape-rol-on-tour", "den-haag-1-meter-cp"],
 
   // 🔥 1 METER → upsell tape + mix
-  "den-haag-1-meter-cp": ["tape-rol-groeten", "normal-mix"],
-  "den-haag-1-meter-geel-groen": ["tape-rol-groeten", "normal-mix"],
+  "den-haag-1-meter-cp": ["tape-rol-on-tour", "normal-mix"],
+  "den-haag-1-meter-geel-groen": ["tape-rol-on-tour", "normal-mix"],
 
   // 🔥 XXL → upsell tape
-  "xxl-zone": ["tape-rol-groeten"],
+  "xxl-zone": ["tape-rol-on-tour"],
 
   // fallback (optioneel)
 };
