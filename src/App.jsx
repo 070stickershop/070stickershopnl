@@ -936,18 +936,18 @@ function getFrequentlyBought() {
     // 🎯 NORMAAL → upsell 1 meter + tape
     if (product.group === "normaal") {
       scores["den-haag-1-meter-cp"] = (scores["den-haag-1-meter-cp"] || 0) + 3;
-      scores["tape-rol-groeten"] = (scores["tape-rol-groeten"] || 0) + 2;
+      scores["tape-rol-on-tour"] = (scores["tape-rol-on-tour"] || 0) + 2;
     }
 
     // 🎯 1 meter → upsell mix + tape
     if (product.group === "meter") {
       scores["normal-mix"] = (scores["normal-mix"] || 0) + 3;
-      scores["tape-rol-groeten"] = (scores["tape-rol-groeten"] || 0) + 2;
+      scores["tape-rol-on-tour"] = (scores["tape-rol-on-tour"] || 0) + 2;
     }
 
     // 🎯 XXL → tape + zonnebril
     if (product.group === "xxl") {
-      scores["tape-rol-groeten"] = (scores["tape-rol-groeten"] || 0) + 2;
+      scores["tape-rol-on-tour"] = (scores["tape-rol-on-tour"] || 0) + 2;
       scores["zonnebril-dh"] = (scores["zonnebril-dh"] || 0) + 1;
     }
   });
