@@ -502,7 +502,7 @@ const PRODUCTS = [
     id: "xxl-zone",
     title: "XL stickers A6 – Den Haag zone",
     img: "/img/den-haag-zone-a6.jpg",
-    tags: ["A6", "xxl", "zone"],
+    tags: ["A6", "xl", "zone"],
     variants: [
       { id: "10", label: "10 stuks", price: 4.99 },
       { id: "25", label: "25 stuks", price: 7.99 },
@@ -517,7 +517,7 @@ const PRODUCTS = [
     id: "xxl-fcdh-legia",
     title: "XL stickers A6 – FC Den Haag / Legia",
     img: "/img/fc-den-haag-legia-a6.jpg",
-    tags: ["A6", "xxl", "denhaag", "legia"],
+    tags: ["A6", "xl", "denhaag", "legia"],
     variants: [
       { id: "10", label: "10 stuks", price: 4.99 },
       { id: "25", label: "25 stuks", price: 7.99 },
@@ -532,7 +532,7 @@ const PRODUCTS = [
     id: "xxl-den-haag-regeert",
     title: "XL stickers 20CM – Den Haag Regeert!",
     img: "/img/den-haag-regeert-xxl.jpg",
-    tags: ["20cm", "xxl", "denhaag", "regeert"],
+    tags: ["20cm", "xl", "denhaag", "regeert"],
     variants: [
       { id: "10", label: "10 stuks", price: 4.99 },
       { id: "25", label: "25 stuks", price: 7.99 },
@@ -603,7 +603,7 @@ const PRODUCTS = [
   /* ---------------- XXL ---------------- */
   {
   id: "xxl-coming-soon",
-  title: "XXL Stickers – Coming Soon!",
+  title: "XXL Stickers 190X32CM – Coming Soon!",
   img: "/img/coming-soon.jpg",
   tags: ["xxl", "coming soon"],
   variants: [
@@ -614,6 +614,33 @@ const PRODUCTS = [
   group: "xxl",
   soldOut: true,
 },
+  {
+  id: "xxl-coming-soon-2",
+  title: "XXL Stickers 75X75CM – Coming Soon!",
+  img: "/img/coming-soon.jpg",
+  tags: ["xxl", "coming soon"],
+  variants: [
+    { id: "1", label: "Binnenkort beschikbaar", price: 0 }
+  ],
+  extra: "Nieuwe XXL stickers komen binnenkort! Houd onze Instagram in de gaten.",
+  badge: "COMING SOON 🔥",
+  group: "xxl",
+  soldOut: true,
+},
+  {
+  id: "xxl-coming-soon-3",
+  title: "XXL Stickers 75X32CM – Coming Soon!",
+  img: "/img/coming-soon.jpg",
+  tags: ["xxl", "coming soon"],
+  variants: [
+    { id: "1", label: "Binnenkort beschikbaar", price: 0 }
+  ],
+  extra: "Nieuwe XXL stickers komen binnenkort! Houd onze Instagram in de gaten.",
+  badge: "COMING SOON 🔥",
+  group: "xxl",
+  soldOut: true,
+},
+
 
   /* ---------------- Accessoires (aparte sectie) ---------------- */
   {
@@ -1648,6 +1675,12 @@ if (window.location.pathname.includes("/admin")) {
         ? "Formaat: 85x55mm"
         : p.id === "xxl-den-haag-regeert"
         ? "Formaat: 210×80mm"
+        : p.id === "xxl-coming-soon"
+        ? "Formaat: 190×32cm"
+        : p.id === "xxl-coming-soon-1"
+        ? "Formaat: 75×75cm"
+        : p.id === "xxl-coming-soon-2"
+        ? "Formaat: 75×32cm"
         : p.id === "xxl-fc-den-haag-1905" || p.id === "xxl-good-night"
         ? "Formaat: 100×100mm"
         : p.id.startsWith("xxl-")
