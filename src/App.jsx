@@ -39,6 +39,7 @@ const TIKTOK_URL = `https://www.tiktok.com/@${TIKTOK_HANDLE}`;
 const CATEGORIES = [
   { id: "all", label: "Alles" },
   { id: "normaal", label: "Normaal Formaat" },
+  { id: "xl", label: "XL Formaat!" },
   { id: "xxl", label: "XXL Formaat!" },
   { id: "a4", label: "A4 Formaat!" },
   { id: "meter", label: "1 Meter Stickers!" },
@@ -52,8 +53,8 @@ const COUPONS = {
   MATCHDAY10: {
     type: "percent",
     value: 10,
-    description: "10% korting op A4, XXL en Tape/Vlag (alleen matchdays)",
-    groups: ["a4", "xxl", "accessoires"],
+    description: "10% korting op A4, XL, XXL en Tape/Vlag (alleen matchdays)",
+    groups: ["a4", "xl", "xxl", "accessoires"],
     onlyToday: true,
   },
   WELCOME10: {
@@ -499,7 +500,7 @@ const PRODUCTS = [
   /* ---------------- XXL (A6) ---------------- */
   {
     id: "xxl-zone",
-    title: "XXL stickers A6 – Den Haag zone",
+    title: "XL stickers A6 – Den Haag zone",
     img: "/img/den-haag-zone-a6.jpg",
     tags: ["A6", "xxl", "zone"],
     variants: [
@@ -510,11 +511,11 @@ const PRODUCTS = [
       { id: "100", label: "100 stuks", price: 24.99 },
     ],
     extra: "A6 (105×148 mm) · Vinyl · UV- & waterbestendig",
-    group: "xxl",
+    group: "xl",
   },
   {
     id: "xxl-fcdh-legia",
-    title: "XXL stickers A6 – FC Den Haag / Legia",
+    title: "XL stickers A6 – FC Den Haag / Legia",
     img: "/img/fc-den-haag-legia-a6.jpg",
     tags: ["A6", "xxl", "denhaag", "legia"],
     variants: [
@@ -525,11 +526,11 @@ const PRODUCTS = [
       { id: "100", label: "100 stuks", price: 24.99 },
     ],
     extra: "A6 (105×148 mm) · Vinyl · UV- & waterbestendig",
-    group: "xxl",
+    group: "xl",
   },
     {
     id: "xxl-den-haag-regeert",
-    title: "XXL stickers – Den Haag Regeert!",
+    title: "XL stickers 20CM – Den Haag Regeert!",
     img: "/img/den-haag-regeert-xxl.jpg",
     tags: ["20cm", "xxl", "denhaag", "regeert"],
     variants: [
@@ -541,13 +542,13 @@ const PRODUCTS = [
     ],
     extra: "(200x80mm) · Vinyl · UV- & waterbestendig",
     badge: "Extra Groot !",
-    group: "xxl",
+    group: "xl",
   },
   {
     id: "xxl-fc-den-haag-1905",
-    title: "XXL stickers – FC Den Haag / 1905",
+    title: "XL stickers – FC Den Haag / 1905",
     img: "/img/fc-den-haag.jpg",
-    tags: ["rond", "xxl", "vinyl", "denhaag"],
+    tags: ["rond", "xl", "vinyl", "denhaag"],
     variants: [
       { id: "10", label: "10 stuks", price: 4.99 },
       { id: "25", label: "25 stuks", price: 7.99 },
@@ -557,13 +558,13 @@ const PRODUCTS = [
     ],
     extra: "Vinyl · UV- & waterbestendig",
     badge: "Ronde Stickers !",
-    group: "xxl"
+    group: "xl"
   },
   {
     id: "xxl-good-night",
-    title: "XXL stickers – Good Night / Red & White",
+    title: "XL stickers – Good Night / Red & White",
     img: "/img/good-night.jpg",
-    tags: ["rond", "xxl", "vinyl", "denhaag"],
+    tags: ["rond", "xl", "vinyl", "denhaag"],
     variants: [
       { id: "10", label: "10 stuks", price: 4.99 },
       { id: "25", label: "25 stuks", price: 7.99 },
@@ -573,7 +574,7 @@ const PRODUCTS = [
     ],
     extra: "Vinyl · UV- & waterbestendig",
     badge: "Ronde Stickers !",
-    group: "xxl"
+    group: "xl"
   },
 
   /* ---------------- A4 ---------------- */
@@ -946,7 +947,7 @@ function getFrequentlyBought() {
     }
 
     // 🎯 XXL → tape + zonnebril
-    if (product.group === "xxl") {
+    if (product.group === "xl" || product.group === "xxl") {
       scores["tape-rol-on-tour"] = (scores["tape-rol-on-tour"] || 0) + 2;
       scores["zonnebril-dh"] = (scores["zonnebril-dh"] || 0) + 1;
     }
@@ -1018,7 +1019,8 @@ const visibleItems = useMemo(() => {
   return items.filter((p) => {
     if (category === "all") return true;
     if (category === "a4") return p.id === "a4-stickers";
-    if (category === "xxl") return p.id.startsWith("xxl-");
+    if (category === "xl") return p.group === "xl";
+    if (category === "xxl") return p.group === "xxl";
     if (category === "meter") return p.group === "meter";
     if (category === "accessoires") return p.group === "accessoires";
     if (category === "kleding") return p.group === "kleding";
@@ -1182,6 +1184,7 @@ function computeShipping() {
 
     // Grote producten
     if (
+      product.group === "xl" ||
       product.group === "xxl" ||
       product.group === "a4" ||
       product.group === "meter" ||
@@ -1630,8 +1633,8 @@ if (window.location.pathname.includes("/admin")) {
         ? "Formaat: 85x55mm"
         : p.id === "xxl-den-haag-regeert"
         ? "Formaat: 210×80mm"
-        : p.id === "xxxl-fc-den-haag-1905" || p.id === "xxl-good-night"
-        ? "Formaat: 100×20mm"
+        : p.id === "xxl-fc-den-haag-1905" || p.id === "xxl-good-night"
+        ? "Formaat: 100×100mm"
         : p.id.startsWith("xxl-")
         ? "Formaat: A6 (105×148mm)"
         : p.id === "a4-stickers"
@@ -1742,7 +1745,7 @@ if (window.location.pathname.includes("/admin")) {
           <div className="rounded-3xl border p-6 shadow-sm">
             <h3 className="font-extrabold text-lg">Kwaliteit</h3>
             <p className="mt-2 text-sm text-neutral-700">
-              Polymeer Vinyl, Uv-Waterbestendigd, Krasvast. Voor een Hagenees door een Hagenees !
+              Polymeer Vinyl, Uv-Waterbestendigd, Krasvast. Voor Hagenezen door Hagenezen !
             </p>
           </div>
         </div>
