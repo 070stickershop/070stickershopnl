@@ -600,6 +600,21 @@ const PRODUCTS = [
     badge: "Alleen bij 070stickershop.nl !",
   },
 
+  /* ---------------- XXL ---------------- */
+  {
+  id: "xxl-coming-soon",
+  title: "XXL Stickers – Coming Soon!",
+  img: "/img/coming-soon.jpg",
+  tags: ["xxl", "coming soon"],
+  variants: [
+    { id: "1", label: "Binnenkort beschikbaar", price: 0 }
+  ],
+  extra: "Nieuwe XXL stickers komen binnenkort! Houd onze Instagram in de gaten.",
+  badge: "COMING SOON 🔥",
+  group: "xxl",
+  soldOut: true,
+},
+
   /* ---------------- Accessoires (aparte sectie) ---------------- */
   {
     id: "tape-rol-groeten",
