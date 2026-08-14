@@ -1518,7 +1518,7 @@ if (window.location.pathname.includes("/admin")) {
 
 <p className="text-white mt-2">
   ✔ Sinds 2023 actief 
-  ✔ 600+ tevreden klanten 
+  ✔ 700+ tevreden klanten 
   ✔ Binnen 24 uur verzonden
 </p>
         <div className="mt-6 flex flex-wrap gap-3">
