@@ -711,6 +711,23 @@ const PRODUCTS = [
     extra: "Brothers Den Haag x Juventus shirt · Verkrijgbaar in S t/m XL ·.",
     group: "kleding",
   },
+     {
+    id: "t-shirt-1905",
+    title: "1905 T-Shirt",
+    img: "/img/1905-tshirt.jpg",
+    tags: ["t-shirt", "accessoires", "denhaag", "1905"],
+    oldPrice: 23.99,
+    saleBadge: "-17%",
+    variants: [
+{ id: "S", label: "Maat S", price: 19.99 },
+{ id: "M", label: "Maat M", price: 19.99 },
+{ id: "L", label: "Maat L", price: 19.99 },
+{ id: "XL", label: "Maat XL", price: 19.99 },
+{ id: "XXL", label: "Maat XXL", price: 19.99 },
+    ],
+    extra: "Brothers Den Haag x Juventus shirt · Verkrijgbaar in S t/m XL ·.",
+    group: "kleding",
+  },
   {
     id: "sjaal-1team-1taak",
     title: "1 team 1 taak sjaal",
