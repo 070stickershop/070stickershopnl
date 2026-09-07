@@ -602,34 +602,40 @@ const PRODUCTS = [
 
   /* ---------------- XXL ---------------- */
   {
-  id: "xxl-coming-soon",
-  title: "XXL Stickers 190X32CM – Coming Soon!",
-  img: "/img/coming-soon.jpg",
-  tags: ["xxl", "coming soon"],
+  id: "xxl-den-haag-warszawa",
+  title: "XXL Den Haag x Warszawa 190X32CM – Extra groot!",
+  img: "/img/xxl-den-haag-warszawa.jpg",
+  tags: ["xxl","uniek","awaydays","denhaag","warszawa" ],
   variants: [
-    { id: "1", label: "Binnenkort beschikbaar", price: 0 }
+      { id: "1", label: "1 stuk", price: 12.49 }
+      { id: "2", label: "2 stuks", price: 24.99 },
+      { id: "3", label: "3 stuks", price: 29.99 },
+      { id: "5", label: "5 stuks", price:  49.95},
   ],
-  extra: "Nieuwe XXL stickers komen binnenkort! Houd onze Instagram in de gaten.",
-  badge: "COMING SOON 🔥",
+  extra: "Uniek in nederland · bijna 2 meter lang.",
+  badge: "Uniek Formaat 🔥",
   group: "xxl",
-  soldOut: true,
+  soldOut: false,
 },
   {
-  id: "xxl-coming-soon-2",
-  title: "XXL Stickers 75X75CM – Coming Soon!",
-  img: "/img/coming-soon.jpg",
-  tags: ["xxl", "coming soon"],
+  id: "xxl-1905",
+  title: "XXL 1905 75X32CM – Extra groot!",
+  img: "/img/xxl-1905.jpg",
+  tags: ["xxl","uniek","awaydays","1905" ],
   variants: [
-    { id: "1", label: "Binnenkort beschikbaar", price: 0 }
+      { id: "1", label: "1 stuk", price: 7.99 }
+      { id: "2", label: "2 stuks", price: 15.99 },
+      { id: "3", label: "3 stuks", price: 23.99 },
+      { id: "5", label: "5 stuks", price:  39.95},
   ],
-  extra: "Nieuwe XXL stickers komen binnenkort! Houd onze Instagram in de gaten.",
-  badge: "COMING SOON 🔥",
+  extra: "Uniek in nederland · XXL Formaat!.",
+  badge: "Uniek Formaat 🔥",
   group: "xxl",
-  soldOut: true,
+  soldOut: false,
 },
   {
   id: "xxl-coming-soon-3",
-  title: "XXL Stickers 75X32CM – Coming Soon!",
+  title: "XXL Stickers 75X75CM – Coming Soon!",
   img: "/img/coming-soon.jpg",
   tags: ["xxl", "coming soon"],
   variants: [
