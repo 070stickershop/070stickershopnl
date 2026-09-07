@@ -607,7 +607,7 @@ const PRODUCTS = [
   img: "/img/xxl-den-haag-warszawa.jpg",
   tags: ["xxl","uniek","awaydays","denhaag","warszawa" ],
   variants: [
-      { id: "1", label: "1 stuk", price: 12.49 }
+      { id: "1", label: "1 stuk", price: 12.49 },
       { id: "2", label: "2 stuks", price: 24.99 },
       { id: "3", label: "3 stuks", price: 29.99 },
       { id: "5", label: "5 stuks", price:  49.95},
@@ -623,7 +623,7 @@ const PRODUCTS = [
   img: "/img/xxl-1905.jpg",
   tags: ["xxl","uniek","awaydays","1905" ],
   variants: [
-      { id: "1", label: "1 stuk", price: 7.99 }
+      { id: "1", label: "1 stuk", price: 7.99 },
       { id: "2", label: "2 stuks", price: 15.99 },
       { id: "3", label: "3 stuks", price: 23.99 },
       { id: "5", label: "5 stuks", price:  39.95},
