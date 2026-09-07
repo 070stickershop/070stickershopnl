@@ -1723,6 +1723,10 @@ if (window.location.pathname.includes("/admin")) {
         ? "Formaat: 75×32cm"
         : p.id === "xxl-fc-den-haag-1905" || p.id === "xxl-good-night"
         ? "Formaat: 100×100mm"
+        : p.id === "xxl-den-haag-warszawa"
+        ? "Formaat: 184×32cm"
+        : p.id === "xxl-1905"
+        ? "Formaat: 75×32cm"
         : p.id.startsWith("xxl-")
         ? "Formaat: A6 (105×148mm)"
         : p.id === "a4-stickers"
