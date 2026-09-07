@@ -603,7 +603,7 @@ const PRODUCTS = [
   /* ---------------- XXL ---------------- */
   {
   id: "xxl-den-haag-warszawa",
-  title: "XXL Den Haag x Warszawa 190X32CM – Extra groot!",
+  title: "XXL Den Haag x Warszawa 184X32CM – Extra groot!",
   img: "/img/xxl-den-haag-warszawa.jpg",
   tags: ["xxl","uniek","awaydays","denhaag","warszawa" ],
   variants: [
