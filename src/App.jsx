@@ -634,6 +634,22 @@ const PRODUCTS = [
   soldOut: false,
 },
   {
+  id: "xxl-den-haag-betreden",
+  title: "XXL betreden op eigen risico 30X30CM – Extra groot!",
+  img: "/img/xxl-betreden.jpg",
+  tags: ["xxl","uniek","awaydays","fcdh" ],
+  variants: [
+      { id: "1", label: "1 stuk", price: 1.99 },
+      { id: "2", label: "2 stuks", price: 3.99 },
+      { id: "3", label: "3 stuks", price: 4.50 },
+      { id: "5", label: "5 stuks", price:  5.99},
+  ],
+  extra: "Uniek in nederland · XXL Formaat!.",
+  badge: "Uniek Formaat 🔥",
+  group: "xxl",
+  soldOut: false,
+},
+  {
   id: "xxl-coming-soon-3",
   title: "XXL Stickers 75X75CM – Coming Soon!",
   img: "/img/coming-soon.jpg",
