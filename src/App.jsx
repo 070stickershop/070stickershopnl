@@ -1741,6 +1741,8 @@ if (window.location.pathname.includes("/admin")) {
         ? "Formaat: 100×100mm"
         : p.id === "xxl-den-haag-warszawa"
         ? "Formaat: 184×32cm"
+        : p.id === "xxl-den-haag-betreden"
+        ? "Formaat: 30×30cm"
         : p.id === "xxl-1905"
         ? "Formaat: 75×32cm"
         : p.id.startsWith("xxl-")
