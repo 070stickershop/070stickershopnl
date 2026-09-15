@@ -39,7 +39,7 @@ const TIKTOK_URL = `https://www.tiktok.com/@${TIKTOK_HANDLE}`;
 const CATEGORIES = [
   { id: "all", label: "Alles" },
   { id: "normaal", label: "Normaal Formaat" },
-  { id: "graffiti", label: "Graffiti Stickers" }
+  { id: "graffiti", label: "Graffiti Stickers" },
   { id: "xl", label: "XL Formaat!" },
   { id: "xxl", label: "XXL Formaat!" },
   { id: "a4", label: "A4 Formaat!" },
