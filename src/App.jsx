@@ -39,12 +39,13 @@ const TIKTOK_URL = `https://www.tiktok.com/@${TIKTOK_HANDLE}`;
 const CATEGORIES = [
   { id: "all", label: "Alles" },
   { id: "normaal", label: "Normaal Formaat" },
+  { id: "graffiti", label: "Graffiti Stickers" }
   { id: "xl", label: "XL Formaat!" },
   { id: "xxl", label: "XXL Formaat!" },
   { id: "a4", label: "A4 Formaat!" },
   { id: "meter", label: "1 Meter Stickers!" },
   { id: "accessoires", label: "Accessoires" },
-  { id: "kleding", label: "Kleding" }
+  { id: "kleding", label: "Kleding" },
 ];
 
 /* ---- KORTINGSCODES ----
@@ -479,6 +480,24 @@ const PRODUCTS = [
     extra: "85×55 mm · Vinyl · UV- & waterbestendig",
     group: "normaal",
   },
+
+  {
+  id: "graffiti-stickers-set",
+  title: "Graffiti Stickers Set (4 verschillende)",
+  img: "/img/graffiti-sticker.jpg",
+  tags: ["graffiti", "streetart", "vinyl"],
+  variants: [
+    { id: "20", label: "1 set", price: 5.99 },
+    { id: "40", label: "2 sets", price: 11.99 },
+    { id: "60", label: "3 sets", price: 17.99 },
+    { id: "80", label: "4 sets", price: 23.95 },
+    { id: "100", label: "5 sets", price: 29.95 },
+  ],
+  extra: "4 Verschillende designs · Contour gesneden · Vinyl · UV- & waterbestendig",
+  badge: "Nieuw!",
+  group: "graffiti",
+  soldOut: false,
+},
 
   /* Mix (vanaf 50) – zelfde pricing als 50+ normaal */
   {
@@ -1116,6 +1135,7 @@ const items = useMemo(() => {
 const visibleItems = useMemo(() => {
   return items.filter((p) => {
     if (category === "all") return true;
+    if (category === "graffiti") return p.group === "graffiti";
     if (category === "a4") return p.id === "a4-stickers";
     if (category === "xl") return p.group === "xl";
     if (category === "xxl") return p.group === "xxl";
