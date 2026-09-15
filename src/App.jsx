@@ -1446,23 +1446,7 @@ if (window.location.pathname.includes("/admin")) {
 }
   return (
   <>
-  {showSalePopup && (
-  <div
-    className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 p-4"
-    onClick={() => setShowSalePopup(false)}
-  >
-    <div
-      className="relative max-w-3xl w-full animate-[popup_.35s_ease]"
-      onClick={(e) => e.stopPropagation()}
-    >
-      <button
-        onClick={() => setShowSalePopup(false)}
-        className="absolute -top-4 -right-4 h-10 w-10 rounded-full bg-white text-2xl font-bold text-black shadow-lg"
-      >
-        ×
-      </button>
-}
-
+  
 <div className="min-h-screen text-neutral-900 bg-gradient-to-br from-[#0b6e4f] via-[#f2c200]/30 to-[#f2c200]/60">
       {/* Topbar */}
       <header className="sticky top-0 z-30 backdrop-blur supports-backdrop-blur:bg-white/70 bg-white/60 border-b border-black/5">
