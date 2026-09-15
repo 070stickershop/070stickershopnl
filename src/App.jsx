@@ -1461,17 +1461,7 @@ if (window.location.pathname.includes("/admin")) {
       >
         ×
       </button>
-      
-
-  <div className="mt-1 text-2xl font-extrabold">
-    {timeLeft.days}d {String(timeLeft.hours).padStart(2, "0")}u{" "}
-    {String(timeLeft.minutes).padStart(2, "0")}m{" "}
-    {String(timeLeft.seconds).padStart(2, "0")}s
-  </div>
-</div>
-    </div>
-  </div>
-)}
+}
 
 <div className="min-h-screen text-neutral-900 bg-gradient-to-br from-[#0b6e4f] via-[#f2c200]/30 to-[#f2c200]/60">
       {/* Topbar */}
