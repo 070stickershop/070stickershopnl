@@ -483,9 +483,9 @@ const PRODUCTS = [
 
   {
   id: "graffiti-stickers-set",
-  title: "Graffiti Stickers Set (4 verschillende)",
+  title: "Graffiti Stickerset",
   img: "/img/graffiti-sticker.jpg",
-  tags: ["graffiti", "streetart", "vinyl"],
+  tags: ["graffiti", "streetart", "vinyl", "070", "denhaag"],
   variants: [
     { id: "20", label: "1 set", price: 5.99 },
     { id: "40", label: "2 sets", price: 11.99 },
@@ -1749,6 +1749,8 @@ if (window.location.pathname.includes("/admin")) {
         ? "Kleding"
         : p.id.startsWith("normal-")
         ? "Formaat: 85x55mm"
+        : p.id === "graffit-stickers-set"
+        ? "4 Verschillende designs · Contour gesneden · Vinyl · UV- & waterbestendig",
         : p.id === "xxl-den-haag-regeert"
         ? "Formaat: 210×80mm"
         : p.id === "xxl-coming-soon"
