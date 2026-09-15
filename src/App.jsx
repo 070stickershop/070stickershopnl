@@ -1750,7 +1750,7 @@ if (window.location.pathname.includes("/admin")) {
         : p.id.startsWith("normal-")
         ? "Formaat: 85x55mm"
         : p.id === "graffit-stickers-set"
-        ? "4 Verschillende designs · Contour gesneden · Vinyl · UV- & waterbestendig"
+        ? "Formaat: 4 Verschillende designs · Contour gesneden · Vinyl · UV- & waterbestendig"
         : p.id === "xxl-den-haag-regeert"
         ? "Formaat: 210×80mm"
         : p.id === "xxl-coming-soon"
