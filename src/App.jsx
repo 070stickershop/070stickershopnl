@@ -1461,16 +1461,7 @@ if (window.location.pathname.includes("/admin")) {
       >
         ×
       </button>
-
-      <img
-        src={zomerSale}
-        alt="Zomer Sale"
-        className="w-full rounded-2xl shadow-2xl"
-      />
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/80 text-white rounded-2xl px-6 py-3 text-center shadow-xl">
-  <p className="text-xs uppercase tracking-widest text-yellow-400 font-bold">
-    Zomer Sale eindigt over
-  </p>
+      
 
   <div className="mt-1 text-2xl font-extrabold">
     {timeLeft.days}d {String(timeLeft.hours).padStart(2, "0")}u{" "}
