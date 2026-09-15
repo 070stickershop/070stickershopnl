@@ -2,7 +2,7 @@
 import React, { useMemo, useState, useRef, useEffect } from "react";
 import { supabase } from "./lib/supabase";
 import Admin from "./Admin";
-import zomerSale from "./assets/zomer-sale.jpg";
+import zomerSale from "./assets/graffiti-stickers.jpg";
 
 /* ================== Helpers ================== */
 function formatPrice(n) {
@@ -1290,17 +1290,20 @@ function computeShipping() {
 
   let normalStickers = 0;
   let hasLargeItem = false;
+  let hasGraffiti = false;
 
   cart.forEach(item => {
     const product = products.find(p => p.id === item.productId);
     if (!product) return;
 
-    // Normale stickers optellen
     if (product.group === "normaal") {
       normalStickers += (parseInt(item.variantId, 10) || 0) * item.qty;
     }
 
-    // Grote producten
+    if (product.group === "graffiti") {
+      hasGraffiti = true;
+    }
+
     if (
       product.group === "xl" ||
       product.group === "xxl" ||
@@ -1312,6 +1315,11 @@ function computeShipping() {
       hasLargeItem = true;
     }
   });
+
+  // Graffiti stickers
+  if (hasGraffiti && !hasLargeItem) {
+    return 4.50;
+  }
 
   // XXL, A4, kleding, tape enz.
   if (hasLargeItem) {
